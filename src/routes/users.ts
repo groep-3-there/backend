@@ -13,9 +13,13 @@ usersRouter.get('/', async(req : Request, res : Response) => {
     res.send(data)
 });
 
-usersRouter.get('/:id', (req, res) => {
+usersRouter.get('/:id', async(req, res) => {
+    const userRepository = AppDataSource.getRepository(User)
     const id = req.params.id
-    res.send(id);
+    const user = await userRepository.findOneBy({
+        id: id,
+    })
+    res.send(user);
 });
 
 usersRouter.post('/create', async(req : Request, res : Response) => {
