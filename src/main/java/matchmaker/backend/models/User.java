@@ -35,4 +35,21 @@ public class User {
     public User(){
 
     }
+
+
+    public UUID getUUID() {
+        return UUID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public String getTags() {
+        return tags;
+    }
 }
