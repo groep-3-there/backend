@@ -4,14 +4,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import org.hibernate.annotations.UuidGenerator;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
 import java.util.Date;
 import java.util.UUID;
 
 @Entity
 @Table(name = "users")
-@EnableAutoConfiguration
 public class User {
 
     @Id
