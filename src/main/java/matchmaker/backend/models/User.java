@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.UuidGenerator;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
 import java.util.Date;
 import java.util.UUID;
@@ -12,24 +13,29 @@ import java.util.UUID;
 @Table(name = "users")
 @Getter
 @Setter
+@EnableAutoConfiguration
 public class User {
 
     @Id
-    @UuidGenerator
-    public UUID UUID;
+    @GeneratedValue
+    public Long id;
 
     public String name;
     public String info;
     public String tags;
-    public Date created_at;
-    public Date last_seen;
-    public Long avatar_image_id;
-    public boolean is_email_public;
-    public boolean is_phone_number_public;
-    public Date accepted_tos_date;
-    public Long role_id;
-    public Long department_id;
-    @ManyToOne
+    public Date createdAt;
+    public Date lastSeen;
+    @OneToOne
+    public Image avatarImage;
+    public boolean isEmailPublic;
+    public boolean isPhoneNumberPublic;
+    public Date acceptedTosDate;
+    @OneToOne
+    public Role role;
+    @OneToOne
+    public Department department;
+
+    @OneToOne
     Company company;
 
     public User(String name) {
@@ -40,24 +46,4 @@ public class User {
 
     }
 
-
-    public UUID getUUID() {
-        return UUID;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getInfo() {
-        return info;
-    }
-
-    public String getTags() {
-        return tags;
-    }
-
-    public void setCompanyId(Company company) {
-        this.company = company;
-    }
 }

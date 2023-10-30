@@ -19,8 +19,8 @@ public class Company {
     public Company(){
 
     }
-    public Company(String name, UUID owner){
-        this.ownerUUID = owner;
+    public Company(String name, User owner){
+        this.owner = owner;
         this.name = name;
     }
 
@@ -30,10 +30,12 @@ public class Company {
 
     public String name;
     public String info;
-    public String profileImageId;
-    public String bannerImageId;
+    public String profileImage;
+    public String bannerImage;
     public String tags;
     public String branch;
     public Date createdAt;
-    public UUID ownerUUID;
+
+    @OneToOne
+    public User owner;
 }

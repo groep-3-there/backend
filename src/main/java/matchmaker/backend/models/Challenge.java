@@ -17,8 +17,8 @@ public class Challenge {
     public Challenge(){
 
     }
-    public Challenge(String title, UUID authorUUID){
-        this.authorId = authorUUID;
+    public Challenge(String title, User author){
+        this.author = author;
         this.title = title;
     }
 
@@ -26,11 +26,14 @@ public class Challenge {
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long id;
 
-    public UUID authorId;
+    @OneToOne
+    public User author;
 
-    public Long departmentId;
+    @OneToOne
+    public Department department;
 
-    public Long company_Id;
+    @OneToOne
+    public Company company;
 
     public String title;
     public String description;
@@ -44,7 +47,4 @@ public class Challenge {
     public boolean canReact;
     public boolean isPublicVisible;
     public boolean isPublicReactable;
-
-
-
 }

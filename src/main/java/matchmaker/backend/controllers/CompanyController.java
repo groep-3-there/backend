@@ -27,11 +27,5 @@ public class CompanyController {
 
     @GetMapping("/companies/join/{userId}/{companyId}")
     public void joinCompany(@PathVariable UUID userId, @PathVariable Long companyId){
-        Company company = repository.findById(companyId).get();
-        User user = userRepository.findByUUID(userId);
-        System.out.println(user.name + " is joining " + company.getName());
-        user.setCompanyId(company);
-        System.out.println(user.name + " is in " + user.getCompany().getName());
-        userRepository.save(user);
     }
 }
