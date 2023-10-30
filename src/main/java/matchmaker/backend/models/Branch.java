@@ -1,6 +1,7 @@
 package matchmaker.backend.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -8,6 +9,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
 @EnableAutoConfiguration
 @Table(name = "branches")
 public class Branch {
@@ -17,4 +19,7 @@ public class Branch {
 
     public String name;
 
+    public Branch() {
+
+    }
 }

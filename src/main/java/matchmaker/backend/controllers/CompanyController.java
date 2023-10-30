@@ -17,9 +17,6 @@ public class CompanyController {
     @Autowired
     private CompanyRepository repository;
 
-    @Autowired
-    private UserRepository userRepository;
-
     @GetMapping("/companies")
     public Iterable<Company> getCompanies() {
         return repository.findAll();

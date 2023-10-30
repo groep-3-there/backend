@@ -1,6 +1,7 @@
 package matchmaker.backend.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -10,6 +11,7 @@ import java.util.Date;
 @Entity
 @Table(name = "roles")
 @EnableAutoConfiguration
+@AllArgsConstructor
 @Getter
 @Setter
 public class Role {
@@ -24,4 +26,7 @@ public class Role {
     public Date createdAt;
     public boolean isMatchmaker;
 
+    public Role() {
+
+    }
 }

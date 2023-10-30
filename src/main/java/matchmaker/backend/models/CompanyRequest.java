@@ -1,6 +1,7 @@
 package matchmaker.backend.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -12,6 +13,7 @@ import java.util.Date;
 @Getter
 @Setter
 @EnableAutoConfiguration
+@AllArgsConstructor
 public class CompanyRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,11 +22,15 @@ public class CompanyRequest {
     public String name;
 
     @OneToOne
-    public Branch branchId;
+    public Branch branch;
 
     public String tags;
     public Date requestedAt;
 
     @OneToOne
-    public User ownerId;
+    public User owner;
+
+    public CompanyRequest() {
+
+    }
 }

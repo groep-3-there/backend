@@ -1,17 +1,17 @@
 package matchmaker.backend.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-
-import java.lang.reflect.Type;
 import java.util.Date;
 
 @Entity
 @Setter
 @Getter
 @EnableAutoConfiguration
+@AllArgsConstructor
 @Table(name = "challengeinputs")
 public class ChallengeInput {
 
@@ -32,4 +32,8 @@ public class ChallengeInput {
     public boolean isChosenAnswer;
 
     public Date createdAt;
+
+    public ChallengeInput() {
+
+    }
 }

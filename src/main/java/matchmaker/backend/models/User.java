@@ -1,6 +1,7 @@
 package matchmaker.backend.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.UuidGenerator;
@@ -14,6 +15,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @EnableAutoConfiguration
+@AllArgsConstructor
 public class User {
 
     @Id
@@ -34,6 +36,7 @@ public class User {
     public Role role;
     @OneToOne
     public Department department;
+    //
 
     @OneToOne
     Company company;

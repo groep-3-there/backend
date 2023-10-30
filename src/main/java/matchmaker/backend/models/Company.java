@@ -1,6 +1,7 @@
 package matchmaker.backend.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -12,17 +13,10 @@ import java.util.UUID;
 @Entity
 @Table(name = "companies")
 @EnableAutoConfiguration
+@AllArgsConstructor
 @Getter
 @Setter
 public class Company {
-
-    public Company(){
-
-    }
-    public Company(String name, User owner){
-        this.owner = owner;
-        this.name = name;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -38,4 +32,12 @@ public class Company {
 
     @OneToOne
     public User owner;
+
+    public Company() {
+
+    }
+    public Company(String name, User owner){
+        this.name = name;
+        this.owner = owner;
+    }
 }

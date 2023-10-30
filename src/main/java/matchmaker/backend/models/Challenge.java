@@ -1,22 +1,24 @@
 package matchmaker.backend.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
 import java.util.Date;
-import java.util.UUID;
 
 @Entity
 @Table(name = "challenges")
 @EnableAutoConfiguration
+@AllArgsConstructor
 @Getter
 @Setter
 public class Challenge {
     public Challenge(){
 
     }
+
     public Challenge(String title, User author){
         this.author = author;
         this.title = title;
@@ -34,11 +36,12 @@ public class Challenge {
 
     @OneToOne
     public Company company;
-
+    public String contactInformation;
     public String title;
     public String description;
     public String banner;
     public String concludingRemarks;
+    public String summary;
     public Enum status;
     public Date createdAt;
     public Date endDate;
