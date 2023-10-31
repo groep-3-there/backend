@@ -20,25 +20,21 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @Nullable
     public Challenge challenge;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @Nullable
     public ChallengeInput challengeInput;
 
     @Nullable
     public String data;
 
-    @Lob
-    public String photo;
-
     public Image() {
 
     }
     public Image(String photoData, String data){
-        this.photo = photoData;
         this.data = data;
     }
 }

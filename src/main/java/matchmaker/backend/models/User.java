@@ -36,10 +36,9 @@ public class User {
     public Role role;
     @OneToOne
     public Department department;
-    //
 
     @OneToOne
-    Company company;
+    public Company company;
 
     public User(String name) {
         this.name = name;

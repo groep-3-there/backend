@@ -30,7 +30,7 @@ public class Company {
     public String branch;
     public Date createdAt;
 
-    @OneToOne
+    @OneToOne(fetch=FetchType.EAGER)
     public User owner;
 
     public Company() {
