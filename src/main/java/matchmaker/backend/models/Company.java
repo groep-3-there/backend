@@ -36,6 +36,9 @@ public class Company {
     public Company() {
 
     }
+    public Company(String name){
+        this.name = name;
+    }
     public Company(String name, User owner){
         this.name = name;
         this.owner = owner;

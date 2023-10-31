@@ -28,14 +28,15 @@ public class Challenge {
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long id;
 
-    @OneToOne
+    @ManyToOne
     public User author;
 
-    @OneToOne
+    @ManyToOne
     public Department department;
 
-    @OneToOne
+    @ManyToOne
     public Company company;
+
     public String contactInformation;
     public String title;
     public String description;

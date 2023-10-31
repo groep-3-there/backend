@@ -21,7 +21,7 @@ public class CompanyRequest {
 
     public String name;
 
-    @OneToOne
+    @ManyToOne
     public Branch branch;
 
     public String tags;

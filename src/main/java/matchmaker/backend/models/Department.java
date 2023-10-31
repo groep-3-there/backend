@@ -19,11 +19,16 @@ public class Department {
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long id;
     public String name;
-    @OneToOne
+
+    @ManyToOne
     public Company parentCompany;
     public Date createdAt;
 
     public Department() {
 
+    }
+    public Department(String name, Company parentCompany){
+        this.name = name;
+        this.parentCompany = parentCompany;
     }
 }

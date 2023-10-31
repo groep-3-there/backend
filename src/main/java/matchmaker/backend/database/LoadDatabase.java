@@ -1,13 +1,7 @@
 package matchmaker.backend.database;
 
-import matchmaker.backend.models.Challenge;
-import matchmaker.backend.models.Company;
-import matchmaker.backend.models.Image;
-import matchmaker.backend.models.User;
-import matchmaker.backend.repositories.ChallengeRepository;
-import matchmaker.backend.repositories.CompanyRepository;
-import matchmaker.backend.repositories.ImageRepository;
-import matchmaker.backend.repositories.UserRepository;
+import matchmaker.backend.models.*;
+import matchmaker.backend.repositories.*;
 import org.aspectj.apache.bcel.util.ClassPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,24 +24,54 @@ public class LoadDatabase implements ApplicationRunner {
     private ChallengeRepository challenges;
     private CompanyRepository companies;
     private ImageRepository images;
+    private RoleRepository roles;
+    private PermissionRepository permissions;
+    private DepartmentRepository departments;
+
+    public Company chippie = new Company("Chippie");
+    public Department chippieIct = new Department("Chip Ict", chippie);
+    public Role ChipMedewerker = new Role("Medewerker", chippie, chippieIct);
+    public Role ChipBeheerder = new Role("Afdeling Beheerder", chippie, chippieIct);
+
+    public Permission readChallenge = new Permission("READ_CHALLENGE", "Het bekijken van een challenge", "Challenge bekijken");
+
 
     public User Florijn = new User("Florijn");
+
     public User Luke = new User("Luke");
 
     public LoadDatabase() throws IOException {
     }
 
     @Autowired
-    public void DataLoader(UserRepository userRepository, ChallengeRepository challengeRepository, CompanyRepository companyRepository, ImageRepository imageRepository){
+    public void DataLoader(UserRepository userRepository, ChallengeRepository challengeRepository, CompanyRepository companyRepository, ImageRepository imageRepository, RoleRepository roleRepository, PermissionRepository permissionRepository, DepartmentRepository departmentRepository){
         this.users = userRepository;
         this.challenges = challengeRepository;
         this.companies = companyRepository;
         this.images = imageRepository;
+        this.roles = roleRepository;
+        this.permissions = permissionRepository;
+        this.departments = departmentRepository;
     }
-
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+
+        if(users.findAll().iterator().hasNext()){
+            return;
+        }
+
+        companies.save(chippie);
+        departments.save(chippieIct);
+        permissions.save(readChallenge);
+        roles.save(ChipMedewerker);
+        ChipMedewerker.permissions.add(readChallenge);
+        ChipBeheerder.permissions.add(readChallenge);
+        roles.save(ChipMedewerker);
+
+        roles.save(ChipBeheerder);
+        Florijn.setRole(ChipMedewerker);
+        Luke.setRole(ChipBeheerder);
         log.info("Preloading " + users.save(Florijn));
         log.info("Preloading " + users.save(Luke));
         log.info("Preloading " + challenges.save(new Challenge("Challenge 1", Florijn)));
@@ -55,4 +79,8 @@ public class LoadDatabase implements ApplicationRunner {
         log.info("Preloading " + companies.save(new Company("There", Florijn)));
         log.info("Preloading " + companies.save( new Company("MatchMaker", Luke)));
     }
+
+
+
+
 }

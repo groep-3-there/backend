@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class UserController {
@@ -16,8 +16,10 @@ public class UserController {
     private UserRepository userRepository;
 
 
-    @GetMapping("/users/{userid}")
-    public User getRandomUser(@PathVariable("userid") Long userid) {
-        return userRepository.findById(userid).get();
+
+    @GetMapping("/user/{id}")
+    public Optional<User> getUserById(@PathVariable("id") Long id){
+        return Optional.of(userRepository.findById(id).get());
     }
+
 }

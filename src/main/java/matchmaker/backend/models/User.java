@@ -6,12 +6,13 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.UuidGenerator;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-
+import matchmaker.backend.constants.Perm;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "users")
+@Table(name = "user_accounts")
 @Getter
 @Setter
 @EnableAutoConfiguration
@@ -19,7 +20,7 @@ import java.util.UUID;
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public Long id;
 
     public String name;
@@ -27,22 +28,45 @@ public class User {
     public String tags;
     public Date createdAt;
     public Date lastSeen;
+
     @OneToOne
     public Image avatarImage;
     public boolean isEmailPublic;
     public boolean isPhoneNumberPublic;
     public Date acceptedTosDate;
-    @OneToOne
+
+    @ManyToOne
     public Role role;
-    @OneToOne
+
+    @ManyToOne
     public Department department;
 
-    @OneToOne
+    @ManyToOne
     public Company company;
+
+
+    @ManyToMany
+    public List<Challenge> favorites = new java.util.ArrayList<>();
 
     public User(String name) {
         this.name = name;
     }
+
+    public boolean hasPermissionAtCompany(Long companyId, String m){
+        if(!role.getCompany().id.equals(companyId)){
+            //User is not part of the company, so he dos not have the permission
+            return false;
+        }
+
+        for(Permission p : role.getPermissions()){
+            if (p.codeName.equals(m)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 
     public User() {
 

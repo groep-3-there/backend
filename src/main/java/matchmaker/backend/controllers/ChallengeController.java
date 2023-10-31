@@ -26,13 +26,13 @@ public class ChallengeController {
     @Autowired
     private ImageRepository imageRepository;
 
-    @GetMapping("/challenges")
+    @GetMapping("/challenge")
     public Iterable<Challenge> getChallenges() {
         return repository.findAll();
     }
 
-    @GetMapping("/challenges/{userid}")
-    public Iterable<Challenge> getChallengesByUUID(@PathVariable("userid") Long userid) {
-        return repository.findByAuthorId(userid);
-    }
+
+
+
+
 }

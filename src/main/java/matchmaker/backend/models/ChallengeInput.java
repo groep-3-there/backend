@@ -19,10 +19,10 @@ public class ChallengeInput {
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long id;
 
-    @OneToOne
+    @ManyToOne
     public User author;
 
-    @OneToOne
+    @ManyToOne
     public Challenge challenge;
 
     public Enum type;
