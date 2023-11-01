@@ -14,7 +14,7 @@
 	<name>backend</name>
 	<description>API back-end for the MatchMaker project</description>
 	<properties>
-		<java.version>19</java.version>
+		<java.version>21</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
