@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import matchmaker.backend.constants.ChallengeStatus;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
 import java.util.Date;
@@ -43,11 +44,14 @@ public class Challenge {
     public String banner;
     public String concludingRemarks;
     public String summary;
-    public Enum status;
+
+    @Enumerated(EnumType.ORDINAL)
+    public ChallengeStatus status;
     public Date createdAt;
     public Date endDate;
     public String tags;
-    public Enum branch;
+    @ManyToOne
+    public Branch branch;
     public boolean canReact;
     public boolean isPublicVisible;
     public boolean isPublicReactable;
