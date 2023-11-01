@@ -67,7 +67,7 @@ public class ChallengeController {
         return Optional.of(savedChallenge);
     }
 
-    @GetMapping("/search")
+    @GetMapping("/challenge/search")
     public Iterable<Challenge> search(
             @RequestParam(value = "query", required = false) String query,
             @RequestParam(value = "company", required = false) List<String> company,
