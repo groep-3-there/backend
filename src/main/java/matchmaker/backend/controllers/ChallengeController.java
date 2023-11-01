@@ -7,6 +7,7 @@ import matchmaker.backend.repositories.ChallengeRepository;
 import matchmaker.backend.repositories.ImageRepository;
 import matchmaker.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -28,6 +29,17 @@ public class ChallengeController {
     @GetMapping("/challenge/{id}")
     public Optional<Challenge> getChallengeById(@PathVariable("id")Long id) {
      return repository.findById(id);
+    }
+
+    //Discuss, {id} or update?
+    @PutMapping("/challenge/update")
+    public HttpStatus updateChallenge(@RequestBody Challenge challengeToUpdate){
+        Optional<Challenge> challenge = repository.findById(challengeToUpdate.id);
+        if (challenge.isEmpty()){
+            return HttpStatus.EXPECTATION_FAILED;
+        }
+        repository.save(challengeToUpdate);
+        return HttpStatus.OK;
     }
 
     @PostMapping(path = "/challenge")
