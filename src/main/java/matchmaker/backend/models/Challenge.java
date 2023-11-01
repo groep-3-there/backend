@@ -50,6 +50,8 @@ public class Challenge {
     public Date createdAt;
     public Date endDate;
     public String tags;
+
+    @ManyToOne
     public Branch branch;
     public boolean canReact;
     public boolean isPublicVisible;
