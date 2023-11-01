@@ -1,0 +1,106 @@
+insert into companies (id, banner_image, branch, created_at, info, name, profile_image, tags, owner_id)
+values (1, null, null, '2020-01-01', 'Medische Software', 'ChipSoft', null, 'tag1', null),
+       (2, null, null, '2020-01-02', 'Some Info 2', 'Company 2', null, 'tag2', null),
+       (3, null, null, '2020-01-03', 'Some Info 3', 'Company 3', null, 'tag3', null),
+       (4, null, null, '2020-01-04', 'Some Info 4', 'Company 4', null, 'tag4', null),
+       (5, null, null, '2020-01-05', 'Some Info 5', 'Company 5', null, 'tag5', null),
+       (6, null, null, '2020-01-06', 'Some Info 6', 'Company 6', null, 'tag6', null),
+       (7, null, null, '2020-01-07', 'Some Info 7', 'Company 7', null, 'tag7', null),
+       (8, null, null, '2020-01-08', 'Some Info 8', 'Company 8', null, 'tag8', null),
+       (9, null, null, '2020-01-09', 'Some Info 9', 'Company 9', null, 'tag9', null),
+       (10, null, null, '2020-01-10', 'Some Info 10', 'Company 10', null, 'tag10', null),
+       (11, null, null, '2020-01-11', 'Some Info 11', 'Company 11', null, 'tag11', null);
+
+--Insert test data for departments
+insert into departments (id, created_at, name, parent_company_id)
+values (1, '2021-02-01', 'ICT', 1),
+       (2, '2022-02-11', 'Bakkers', 1),
+       (3, '2023-02-21', 'HR', 1),
+       (4, '2024-02-01', 'Management', 1),
+       (5, '2025-02-02', 'Sales', 1),
+       (6, '2026-02-03', 'Development', 1),
+       (7, '2027-02-04', 'Finance', 1),
+       (8, '2028-02-05', 'Marketing', 1),
+       (9, '2029-02-06', 'Legal', 1),
+       (10, '2030-02-07', 'Research', 1),
+       (11, '2011-01-02', 'Testing', 2),
+       (12, '2012-01-03', 'Design', 2),
+       (13, '2013-01-04', 'Sales', 2),
+       (14, '2014-01-05', 'Marketing', 2),
+       (15, '2015-01-06', 'Finance', 2),
+       (16, '2016-01-07', 'Management', 2),
+       (17, '2017-01-08', 'Development', 2),
+       (18, '2018-01-09', 'HR', 2),
+       (19, '2019-01-10', 'Legal', 2),
+       (20, '2020-01-11', 'Research', 2),
+       (21, '2021-01-12', 'ICT', 3),
+       (22, '2022-01-13', 'Bakkers', 5),
+       (23, '2023-01-14', 'HR', 3),
+       (24, '2024-01-15', 'Management', 4),
+       (25, '2025-01-16', 'Sales', 3),
+       (26, '2026-01-17', 'Development', 2),
+       (27, '2027-01-18', 'Finance', 3),
+       (28, '2028-01-19', 'Marketing', 3),
+       (29, '2029-01-20', 'Legal', 6),
+       (30, '2030-01-21', 'Research', 3),
+       (31, '2011-01-22', 'Testing', 4),
+       (32, '2012-01-23', 'Design', 7),
+       (33, '2013-01-24', 'Sales', 8),
+       (34, '2014-01-25', 'Marketing', 9),
+       (35, '2015-01-26', 'Finance', 10),
+       (36, '2016-01-27', 'Management', 4),
+       (37, '2017-01-28', 'Development', 4),
+       (38, '2018-01-29', 'HR', 4);
+
+insert into roles (id, created_at, is_matchmaker, name, company_id, department_id)
+values (1, '2020-01-01', true, 'Beheerder', 1, 1),
+       (2, '2020-01-02', false, 'Gebruiker', 2, 2),
+       (3, '2020-01-03', false, 'Gebruiker', 3, 3),
+       (4, '2020-01-04', false, 'Gebruiker', 4, 4),
+       (5, '2020-01-05', false, 'Gebruiker', 5, 5),
+       (6, '2020-01-06', false, 'Gebruiker', 6, 6),
+       (7, '2020-01-07', false, 'Gebruiker', 7, 7),
+       (8, '2020-01-08', false, 'Gebruiker', 8, 8),
+       (9, '2020-01-09', false, 'Gebruiker', 9, 9),
+       (10, '2020-01-10', false, 'Gebruiker', 10, 10),
+       (11, '2020-01-11', false, 'Gebruiker', 1, 11),
+       (12, '2020-01-12', false, 'Gebruiker', 2, 12),
+       (13, '2020-01-13', false, 'Gebruiker', 3, 13),
+       (14, '2020-01-14', false, 'Gebruiker', 4, 14),
+       (15, '2020-01-15', false, 'Gebruiker', 5, 15),
+       (16, '2020-01-16', false, 'Gebruiker', 6, 16),
+       (17, '2020-01-17', false, 'Gebruiker', 7, 17),
+       (18, '2020-01-18', false, 'Gebruiker', 8, 18),
+       (19, '2020-01-19', false, 'Gebruiker', 9, 19),
+       (20, '2020-01-20', false, 'Gebruiker', 1, 20),
+       (21, '2020-01-21', false, 'Gebruiker', 4, 21);
+
+insert into permissions (id, code_name, description, fancy_name)
+values (1, 'READ_CHALLENGE', 'Het bekijken van een challenge', 'Challenge bekijken');
+
+insert into roles_permissions (role_id, permissions_id)
+values (1, 1),
+       (2, 1),
+       (3, 1),
+       (4, 1),
+       (5, 1),
+       (6, 1),
+       (7, 1),
+       (8, 1),
+       (9, 1),
+       (10, 1);
+
+-- Insert test data for the User table
+INSERT INTO users (id, name, info, tags, created_at, last_seen, avatar_image_id, is_email_public,
+                   is_phone_number_public, accepted_tos_date, role_id, department_id, company_id)
+VALUES (1, 'User1', 'Info1', 'tag1,tag2', '2023-01-01', '2023-01-01', NULL, true, true, '2023-01-01', 1, 1, 1),
+       (2, 'User2', 'Info2', 'tag3,tag4', '2023-01-02', '2023-01-02', NULL, false, false, '2023-01-02', 2, 2, 2),
+       (3, 'User3', 'Info3', 'tag5,tag6', '2023-01-03', '2023-01-03', NULL, true, false, '2023-01-03', 3, 3, 3),
+       (4, 'User4', 'Info4', 'tag7,tag8', '2023-01-04', '2023-01-04', NULL, false, true, '2023-01-04', 4, 4, 4),
+       (5, 'User5', 'Info5', 'tag9,tag10', '2023-01-05', '2023-01-05', NULL, true, false, '2023-01-05', 5, 5, 5),
+       (6, 'User6', 'Info6', 'tag11,tag12', '2023-01-06', '2023-01-06', NULL, true, true, '2023-01-06', 6, 6, 6),
+       (7, 'User7', 'Info7', 'tag13,tag14', '2023-01-07', '2023-01-07', NULL, false, false, '2023-01-07', 7, 7, 7),
+       (8, 'User8', 'Info8', 'tag15,tag16', '2023-01-08', '2023-01-08', NULL, true, true, '2023-01-08', 8, 8, 8),
+       (9, 'User9', 'Info9', 'tag17,tag18', '2023-01-09', '2023-01-09', NULL, false, true, '2023-01-09', 9, 9, 9),
+       (10, 'User10', 'Info10', 'tag19,tag20', '2023-01-10', '2023-01-10', NULL, true, false, '2023-01-10', 10, 10, 10);
+
