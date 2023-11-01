@@ -12,10 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 public class ChallengeController {
@@ -31,8 +28,10 @@ public class ChallengeController {
         return repository.findAll();
     }
 
-
-
+    @GetMapping("/challenge/{id}")
+    public Optional<Challenge> getChallengeById(@PathVariable("id")Long id) {
+     return repository.findById(id);
+    }
 
 
 }

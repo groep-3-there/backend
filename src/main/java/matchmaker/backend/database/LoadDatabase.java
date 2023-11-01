@@ -1,5 +1,6 @@
 package matchmaker.backend.database;
 
+import matchmaker.backend.constants.ChallengeStatus;
 import matchmaker.backend.models.*;
 import matchmaker.backend.repositories.*;
 import org.aspectj.apache.bcel.util.ClassPath;
@@ -74,7 +75,11 @@ public class LoadDatabase implements ApplicationRunner {
         Luke.setRole(ChipBeheerder);
         log.info("Preloading " + users.save(Florijn));
         log.info("Preloading " + users.save(Luke));
-        log.info("Preloading " + challenges.save(new Challenge("Challenge 1", Florijn)));
+
+        Challenge a = new Challenge("Challenge 1", Florijn);
+        a.status = ChallengeStatus.IN_UITVOERING;
+        log.info("Preloading " + challenges.save(a));
+
         log.info("Preloading " + challenges.save(new Challenge("Challenge 2", Luke)));
         log.info("Preloading " + companies.save(new Company("There", Florijn)));
         log.info("Preloading " + companies.save( new Company("MatchMaker", Luke)));
