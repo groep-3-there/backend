@@ -2,7 +2,6 @@ package matchmaker.backend.database;
 
 import matchmaker.backend.models.*;
 import matchmaker.backend.repositories.*;
-import org.aspectj.apache.bcel.util.ClassPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 
 import java.io.IOException;
-import java.util.Base64;
 
 @Component
 public class LoadDatabase implements ApplicationRunner {
@@ -57,13 +55,15 @@ public class LoadDatabase implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        if(users.findAll().iterator().hasNext()){
-            return;
-        }
 
+        Image profileImage = new Image();
+        profileImage.photoData = StreamUtils.copyToByteArray(new ClassPathResource("image.jpg").getInputStream());
         companies.save(chippie);
         departments.save(chippieIct);
         permissions.save(readChallenge);
+        images.save(profileImage);
+        Florijn.setAvatarImageId(profileImage.getId());
+        Luke.setAvatarImageId(profileImage.getId());
         roles.save(ChipMedewerker);
         ChipMedewerker.permissions.add(readChallenge);
         ChipBeheerder.permissions.add(readChallenge);
