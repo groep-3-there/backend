@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "user_accounts")
+@Table(name = "users")
 @Getter
 @Setter
 @EnableAutoConfiguration
