@@ -1,4 +1,4 @@
-insert into companies (id, banner_image, branch, created_at, info, name, profile_image, tags, owner_id)
+insert into companies (id, banner_image_id, branch, created_at, info, name, profile_image_id, tags, owner_id)
 values (1, null, null, '2020-01-01', 'Medische Software', 'ChipSoft', null, 'tag1', null),
        (2, null, null, '2020-01-02', 'Fintech', 'PayPal', null, 'tag2', null),
        (3, null, null, '2020-01-03', 'Educatie', 'NHL Stenden', null, 'tag3', null),

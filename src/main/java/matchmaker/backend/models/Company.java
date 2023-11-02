@@ -23,7 +23,7 @@ public class Company {
     public String name;
     public String info;
     public Long profileImageId;
-    public Long bannerImagId;
+    public Long bannerImageId;
     public String tags;
     public String branch;
     public Date createdAt;
