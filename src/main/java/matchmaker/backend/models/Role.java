@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.FetchMode;
+import org.hibernate.annotations.Fetch;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
 import java.util.Date;
@@ -30,7 +32,7 @@ public class Role {
     public Date createdAt;
     public boolean isMatchmaker;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     public List<Permission> permissions = new java.util.ArrayList<>();
 
     public Role(String name, Company company, Department department) {
