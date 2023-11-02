@@ -35,6 +35,9 @@ public class User {
     public boolean isPhoneNumberPublic;
     public Date acceptedTosDate;
 
+    public String email;
+    public String phoneNumber;
+
     @ManyToOne
     public Role role;
 

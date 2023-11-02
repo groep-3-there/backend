@@ -96,15 +96,15 @@ values (1,1),
 
 -- Insert test data for the User table
 INSERT INTO users (id, name, info, tags, created_at, last_seen, avatar_image_id, is_email_public,
-                   is_phone_number_public, accepted_tos_date, role_id, department_id, company_id)
-VALUES (1, 'Jan Bakker', 'Info1', 'tag1,tag2', '2023-01-01', '2023-01-01', NULL, true, true, '2023-01-01', 1, 1, 1),
-       (2, 'Johan de Vries', 'Info2', 'tag3,tag4', '2023-01-02', '2023-01-02', NULL, false, false, '2023-01-02', 2, 2, 2),
-       (3, 'Florijn Munster', 'Info3', 'tag5,tag6', '2023-01-03', '2023-01-03', NULL, true, false, '2023-01-03', 3, 3, 3),
-       (4, 'Rik Wildschut', 'Info4', 'tag7,tag8', '2023-01-04', '2023-01-04', NULL, false, true, '2023-01-04', 4, 4, 4),
-       (5, 'Luke van de Pol', 'Info5', 'tag9,tag10', '2023-01-05', '2023-01-05', NULL, true, false, '2023-01-05', 5, 5, 5),
-       (6, 'Eelco Jansma', 'Info6', 'tag11,tag12', '2023-01-06', '2023-01-06', NULL, true, true, '2023-01-06', 1, 6, 6),
-       (7, 'Jelle Blaeser', 'Info7', 'tag13,tag14', '2023-01-07', '2023-01-07', NULL, false, false, '2023-01-07', 2, 7, 7),
-       (8, 'Tjerk Venema', 'Info8', 'tag15,tag16', '2023-01-08', '2023-01-08', NULL, true, true, '2023-01-08', 3, 8, 8),
-       (9, 'Anniek de Boer', 'Info9', 'tag17,tag18', '2023-01-09', '2023-01-09', NULL, false, true, '2023-01-09', 4, 9, 9),
-       (10, 'Piet de Wit', 'Info10', 'tag19,tag20', '2023-01-10', '2023-01-10', NULL, true, false, '2023-01-10', 5, 10, 10);
+                   is_phone_number_public, accepted_tos_date, role_id, department_id, company_id, email, phone_number)
+VALUES (1, 'Jan Bakker', 'Info1', 'tag1,tag2', '2023-01-01', '2023-01-01', NULL, true, true, '2023-01-01', 1, 1, 1, 'jan.bakker@email.com', '0612345678'),
+       (2, 'Johan de Vries', 'Info2', 'tag3,tag4', '2023-01-02', '2023-01-02', NULL, false, false, '2023-01-02', 2, 2, 2, 'johan.de.vries@email.com', '0612345678'),
+       (3, 'Florijn Munster', 'Info3', 'tag5,tag6', '2023-01-03', '2023-01-03', NULL, true, false, '2023-01-03', 3, 3, 3, 'florijn.munster@email.com', '0612345678'),
+       (4, 'Rik Wildschut', 'Info4', 'tag7,tag8', '2023-01-04', '2023-01-04', NULL, false, true, '2023-01-04', 4, 4, 4, 'rik.wildschut@email.com','0612345678'),
+       (5, 'Luke van de Pol', 'Info5', 'tag9,tag10', '2023-01-05', '2023-01-05', NULL, true, false, '2023-01-05', 5, 5, 5, 'luke.van.de.pol@email.com', '0612345678'),
+       (6, 'Eelco Jansma', 'Info6', 'tag11,tag12', '2023-01-06', '2023-01-06', NULL, true, true, '2023-01-06', 1, 6, 6, 'eelco.jansma@email.com','0612345678'),
+       (7, 'Jelle Blaeser', 'Info7', 'tag13,tag14', '2023-01-07', '2023-01-07', NULL, false, false, '2023-01-07', 2, 7, 7, 'jelle.blaeser@email.com', '0612345678'),
+       (8, 'Tjerk Venema', 'Info8', 'tag15,tag16', '2023-01-08', '2023-01-08', NULL, true, true, '2023-01-08', 3, 8, 8, 'tjerk.venema@email.com','0612345678'),
+       (9, 'Anniek de Boer', 'Info9', 'tag17,tag18', '2023-01-09', '2023-01-09', NULL, false, true, '2023-01-09', 4, 9, 9,'anniek.de.boer@email.com','0612345678'),
+       (10, 'Piet de Wit', 'Info10', 'tag19,tag20', '2023-01-10', '2023-01-10', NULL, true, false, '2023-01-10', 5, 10, 10, 'piet.de.wit@email.com','0612345678');
 

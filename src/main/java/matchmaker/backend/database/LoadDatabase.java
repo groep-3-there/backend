@@ -42,7 +42,7 @@ public class LoadDatabase implements CommandLineRunner {
     }
 
     private boolean testDataExists() {
-        String query = "SELECT COUNT(*) FROM users WHERE name = 'User1'";
+        String query = "SELECT COUNT(*) FROM users WHERE name = 'Jan Bakker'";
         Integer count = jdbcTemplate.queryForObject(query, Integer.class);
         return count != null && count > 0;
     }
