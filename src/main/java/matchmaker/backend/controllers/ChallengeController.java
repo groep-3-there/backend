@@ -53,7 +53,7 @@ public class ChallengeController {
         checkedChallenge.contactInformation = newChallenge.contactInformation;
         checkedChallenge.title = newChallenge.title;
         checkedChallenge.description = newChallenge.description;
-        checkedChallenge.banner = newChallenge.banner;
+        checkedChallenge.bannerImageId = newChallenge.bannerImageId;
         checkedChallenge.concludingRemarks = newChallenge.concludingRemarks;
         checkedChallenge.summary = newChallenge.summary;
         checkedChallenge.status = newChallenge.status;
