@@ -41,7 +41,7 @@ public class Challenge {
     public String contactInformation;
     public String title;
     public String description;
-    public String banner;
+    public Long bannerImageId;
     public String concludingRemarks;
     public String summary;
 
