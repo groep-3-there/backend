@@ -31,6 +31,4 @@ build/
 
 ### VS Code ###
 .vscode/
-
-### ENVIRONMENT PASSWORDS ###
-./src/main/resources/env.properties
+src/main/resources/env.properties
