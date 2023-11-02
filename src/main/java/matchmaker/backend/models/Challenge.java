@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import matchmaker.backend.constants.ChallengeStatus;
+import matchmaker.backend.constants.ChallengeVisibility;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
 import java.util.Date;
@@ -54,6 +55,7 @@ public class Challenge {
     @ManyToOne
     public Branch branch;
     public boolean canReact;
-    public boolean isPublicVisible;
-    public boolean isPublicReactable;
+
+    @Enumerated(EnumType.ORDINAL)
+    public ChallengeVisibility visibility;
 }
