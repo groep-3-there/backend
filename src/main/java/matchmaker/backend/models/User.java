@@ -4,12 +4,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.UuidGenerator;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import matchmaker.backend.constants.Perm;
+
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name = "users")
@@ -28,9 +26,7 @@ public class User {
     public String tags;
     public Date createdAt;
     public Date lastSeen;
-
-    @OneToOne
-    public Image avatarImage;
+    public Long avatarImageId;
     public boolean isEmailPublic;
     public boolean isPhoneNumberPublic;
     public Date acceptedTosDate;

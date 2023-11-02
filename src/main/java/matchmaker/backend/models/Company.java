@@ -7,8 +7,6 @@ import lombok.Setter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
 import java.util.Date;
-import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name = "companies")
@@ -24,13 +22,13 @@ public class Company {
 
     public String name;
     public String info;
-    public String profileImage;
-    public String bannerImage;
+    public Long profileImageId;
+    public Long bannerImagId;
     public String tags;
     public String branch;
     public Date createdAt;
 
-    @OneToOne(fetch=FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     public User owner;
 
     public Company() {
