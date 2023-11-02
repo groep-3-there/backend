@@ -60,8 +60,7 @@ public class ChallengeController {
         checkedChallenge.endDate = newChallenge.endDate;
         checkedChallenge.tags = newChallenge.tags;
         checkedChallenge.branch = newChallenge.branch;
-        checkedChallenge.isPublicVisible = newChallenge.isPublicReactable;
-        checkedChallenge.isPublicReactable = newChallenge.isPublicReactable;
+        checkedChallenge.visibility = newChallenge.visibility;
 
         Challenge savedChallenge = repository.save(checkedChallenge);
         return Optional.of(savedChallenge);

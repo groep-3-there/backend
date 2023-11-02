@@ -108,3 +108,10 @@ VALUES (1, 'Jan Bakker', 'Info1', 'tag1,tag2', '2023-01-01', '2023-01-01', NULL,
        (9, 'Anniek de Boer', 'Info9', 'tag17,tag18', '2023-01-09', '2023-01-09', NULL, false, true, '2023-01-09', 4, 9, 9,'anniek.de.boer@email.com','0612345678'),
        (10, 'Piet de Wit', 'Info10', 'tag19,tag20', '2023-01-10', '2023-01-10', NULL, true, false, '2023-01-10', 5, 10, 10, 'piet.de.wit@email.com','0612345678');
 
+insert into challenges (id, banner_image_id, can_react, concluding_remarks, contact_information, created_at,
+                        description, end_date, status, summary, tags, title, visibility, author_id, branch_id,
+                        company_id, department_id)
+values (1, null, true, 'Dit zijn de mooie concluding remarks', 'Contact informatie', '2023-01-01', 'Dit is de challenge description',
+        '2023-09-11', 1, 'Summary', 'prototype,website', 'Innovatie kapperszaak', 2, 1, null, 1, 1);
+
+
