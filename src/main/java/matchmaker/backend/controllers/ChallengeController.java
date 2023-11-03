@@ -3,14 +3,17 @@ package matchmaker.backend.controllers;
 import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
+import matchmaker.backend.constants.Perm;
 import matchmaker.backend.models.*;
 import matchmaker.backend.repositories.ChallengeRepository;
 import matchmaker.backend.repositories.ImageRepository;
 import matchmaker.backend.repositories.UserRepository;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -21,22 +24,24 @@ public class ChallengeController {
     @Autowired
     private ChallengeRepository repository;
 
-    @Autowired
-    private ImageRepository imageRepository;
-
     @GetMapping("/challenge")
     public Iterable<Challenge> getChallenges() {
         return repository.findAll();
     }
 
     @GetMapping("/challenge/{id}")
-    public Optional<Challenge> getChallengeById(@PathVariable("id")Long id) {
-     return repository.findById(id);
+    public ResponseEntity<Optional<Challenge>> getChallengeById(@PathVariable("id")Long id, @RequestAttribute("loggedInUser") User currentUser) {
+        if(!currentUser.hasPermissionAtCompany(currentUser.company.getId(), Perm.CHALLENGE_READ)){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Optional.empty());
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(repository.findById(id));
     }
 
-    //Discuss, {id} or update?
     @PutMapping("/challenge/update")
-    public HttpStatus updateChallenge(@RequestBody Challenge challengeToUpdate){
+    public HttpStatus updateChallenge(@RequestBody Challenge challengeToUpdate, @RequestAttribute("loggedInUser") User currentUser){
+        if(!currentUser.hasPermissionAtCompany(currentUser.company.getId(), Perm.CHALLENGE_MANAGE)){
+            return HttpStatus.FORBIDDEN;
+        }
         Optional<Challenge> challenge = repository.findById(challengeToUpdate.id);
         if (challenge.isEmpty()){
             return HttpStatus.EXPECTATION_FAILED;
@@ -46,24 +51,28 @@ public class ChallengeController {
     }
 
     @PostMapping(path = "/challenge")
-    public Optional<Challenge> createChallenge(@RequestBody Challenge newChallenge) {
+    public ResponseEntity<Optional<Challenge>> createChallenge(@RequestBody Challenge newChallenge, @RequestAttribute("loggedInUser") User currentUser) {
         Challenge checkedChallenge = new Challenge();
+        if(currentUser.hasPermissionAtCompany(currentUser.company.getId(), Perm.CHALLENGE_MANAGE)) {
 
-        //Only copy values we trust from the enduser. If user passes id, it is ignored.
-        checkedChallenge.contactInformation = newChallenge.contactInformation;
-        checkedChallenge.title = newChallenge.title;
-        checkedChallenge.description = newChallenge.description;
-        checkedChallenge.bannerImageId = newChallenge.bannerImageId;
-        checkedChallenge.concludingRemarks = newChallenge.concludingRemarks;
-        checkedChallenge.summary = newChallenge.summary;
-        checkedChallenge.status = newChallenge.status;
-        checkedChallenge.endDate = newChallenge.endDate;
-        checkedChallenge.tags = newChallenge.tags;
-        checkedChallenge.branch = newChallenge.branch;
-        checkedChallenge.visibility = newChallenge.visibility;
+            checkedChallenge.contactInformation = newChallenge.contactInformation;
+            checkedChallenge.title = newChallenge.title;
+            checkedChallenge.description = newChallenge.description;
+            checkedChallenge.bannerImageId = newChallenge.bannerImageId;
+            checkedChallenge.concludingRemarks = newChallenge.concludingRemarks;
+            checkedChallenge.summary = newChallenge.summary;
+            checkedChallenge.status = newChallenge.status;
+            checkedChallenge.endDate = newChallenge.endDate;
+            checkedChallenge.tags = newChallenge.tags;
+            checkedChallenge.branch = newChallenge.branch;
+            checkedChallenge.visibility = newChallenge.visibility;
 
-        Challenge savedChallenge = repository.save(checkedChallenge);
-        return Optional.of(savedChallenge);
+            Challenge savedChallenge = repository.save(checkedChallenge);
+            return ResponseEntity.status(HttpStatus.CREATED).body(Optional.of(savedChallenge));
+        }
+        else{
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Optional.empty());
+        }
     }
 
     @GetMapping("/challenge/search")
