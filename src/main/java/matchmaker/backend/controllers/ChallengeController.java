@@ -4,11 +4,11 @@ import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import matchmaker.backend.constants.Perm;
-import matchmaker.backend.models.*;
+import matchmaker.backend.models.Branch;
+import matchmaker.backend.models.Challenge;
+import matchmaker.backend.models.Company;
+import matchmaker.backend.models.User;
 import matchmaker.backend.repositories.ChallengeRepository;
-import matchmaker.backend.repositories.ImageRepository;
-import matchmaker.backend.repositories.UserRepository;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -16,7 +16,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class ChallengeController {
@@ -25,25 +27,29 @@ public class ChallengeController {
     private ChallengeRepository repository;
 
     @GetMapping("/challenge")
-    public Iterable<Challenge> getChallenges() {
-        return repository.findAll();
+    public ResponseEntity<Iterable<Challenge>> getChallenges(@RequestAttribute("loggedInUser") User currentUser) {
+        if (!currentUser.hasPermissionAtCompany(currentUser.company.getId(), Perm.CHALLENGE_READ)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body(repository.findAll());
+        }
     }
 
     @GetMapping("/challenge/{id}")
-    public ResponseEntity<Optional<Challenge>> getChallengeById(@PathVariable("id")Long id, @RequestAttribute("loggedInUser") User currentUser) {
-        if(!currentUser.hasPermissionAtCompany(currentUser.company.getId(), Perm.CHALLENGE_READ)){
+    public ResponseEntity<Optional<Challenge>> getChallengeById(@PathVariable("id") Long id, @RequestAttribute("loggedInUser") User currentUser) {
+        if (!currentUser.hasPermissionAtCompany(currentUser.company.getId(), Perm.CHALLENGE_READ)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Optional.empty());
         }
         return ResponseEntity.status(HttpStatus.OK).body(repository.findById(id));
     }
 
     @PutMapping("/challenge/update")
-    public HttpStatus updateChallenge(@RequestBody Challenge challengeToUpdate, @RequestAttribute("loggedInUser") User currentUser){
-        if(!currentUser.hasPermissionAtCompany(currentUser.company.getId(), Perm.CHALLENGE_MANAGE)){
+    public HttpStatus updateChallenge(@RequestBody Challenge challengeToUpdate, @RequestAttribute("loggedInUser") User currentUser) {
+        if (!currentUser.hasPermissionAtCompany(currentUser.company.getId(), Perm.CHALLENGE_MANAGE)) {
             return HttpStatus.FORBIDDEN;
         }
         Optional<Challenge> challenge = repository.findById(challengeToUpdate.id);
-        if (challenge.isEmpty()){
+        if (challenge.isEmpty()) {
             return HttpStatus.EXPECTATION_FAILED;
         }
         repository.save(challengeToUpdate);
@@ -53,26 +59,23 @@ public class ChallengeController {
     @PostMapping(path = "/challenge")
     public ResponseEntity<Optional<Challenge>> createChallenge(@RequestBody Challenge newChallenge, @RequestAttribute("loggedInUser") User currentUser) {
         Challenge checkedChallenge = new Challenge();
-        if(currentUser.hasPermissionAtCompany(currentUser.company.getId(), Perm.CHALLENGE_MANAGE)) {
-
-            checkedChallenge.contactInformation = newChallenge.contactInformation;
-            checkedChallenge.title = newChallenge.title;
-            checkedChallenge.description = newChallenge.description;
-            checkedChallenge.bannerImageId = newChallenge.bannerImageId;
-            checkedChallenge.concludingRemarks = newChallenge.concludingRemarks;
-            checkedChallenge.summary = newChallenge.summary;
-            checkedChallenge.status = newChallenge.status;
-            checkedChallenge.endDate = newChallenge.endDate;
-            checkedChallenge.tags = newChallenge.tags;
-            checkedChallenge.branch = newChallenge.branch;
-            checkedChallenge.visibility = newChallenge.visibility;
-
-            Challenge savedChallenge = repository.save(checkedChallenge);
-            return ResponseEntity.status(HttpStatus.CREATED).body(Optional.of(savedChallenge));
-        }
-        else{
+        if (!currentUser.hasPermissionAtCompany(currentUser.company.getId(), Perm.CHALLENGE_MANAGE)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Optional.empty());
         }
+        checkedChallenge.contactInformation = newChallenge.contactInformation;
+        checkedChallenge.title = newChallenge.title;
+        checkedChallenge.description = newChallenge.description;
+        checkedChallenge.bannerImageId = newChallenge.bannerImageId;
+        checkedChallenge.concludingRemarks = newChallenge.concludingRemarks;
+        checkedChallenge.summary = newChallenge.summary;
+        checkedChallenge.status = newChallenge.status;
+        checkedChallenge.endDate = newChallenge.endDate;
+        checkedChallenge.tags = newChallenge.tags;
+        checkedChallenge.branch = newChallenge.branch;
+        checkedChallenge.visibility = newChallenge.visibility;
+
+        Challenge savedChallenge = repository.save(checkedChallenge);
+        return ResponseEntity.status(HttpStatus.CREATED).body(Optional.of(savedChallenge));
     }
 
     @GetMapping("/challenge/search")
@@ -86,7 +89,7 @@ public class ChallengeController {
             List<Predicate> predicates = new ArrayList<>();
 
             //find on the query, this includes: title, tags, description and summary
-            if (query != null && !query.isEmpty()){
+            if (query != null && !query.isEmpty()) {
                 Predicate titlePredicate = builder.like(root.get("title"), "%" + query + "%");
                 Predicate tagsPredicate = builder.like(root.get("tags"), "%" + query + "%");
                 Predicate descriptionPredicate = builder.like(root.get("description"), "%" + query + "%");
@@ -116,8 +119,7 @@ public class ChallengeController {
 
         if ("Newest_first".equalsIgnoreCase(sort)) {
             sortOrder = Sort.by(Sort.Direction.DESC, "createdAt");
-        }
-        else if ("deadline_closest_first".equalsIgnoreCase(sort)) {
+        } else if ("deadline_closest_first".equalsIgnoreCase(sort)) {
             sortOrder = Sort.by(Sort.Direction.ASC, "endDate");
         }
 
