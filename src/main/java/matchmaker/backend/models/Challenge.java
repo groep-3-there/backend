@@ -56,6 +56,8 @@ public class Challenge {
     public Branch branch;
     public boolean canReact;
 
+    public Long[] imageAttachmentsIds;
+
     @Enumerated(EnumType.ORDINAL)
     public ChallengeVisibility visibility;
 }

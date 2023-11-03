@@ -6,7 +6,6 @@ import jakarta.persistence.criteria.Predicate;
 import matchmaker.backend.models.*;
 import matchmaker.backend.repositories.ChallengeRepository;
 import matchmaker.backend.repositories.ImageRepository;
-import matchmaker.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -59,8 +58,15 @@ public class ChallengeController {
         checkedChallenge.status = newChallenge.status;
         checkedChallenge.endDate = newChallenge.endDate;
         checkedChallenge.tags = newChallenge.tags;
+        //Remove the last comma, if there is one
+        if(checkedChallenge.tags.endsWith(",")){
+            String tags = checkedChallenge.tags;
+            checkedChallenge.tags = tags.substring(0,tags.length()-1);
+        }
         checkedChallenge.branch = newChallenge.branch;
         checkedChallenge.visibility = newChallenge.visibility;
+        checkedChallenge.imageAttachmentsIds = newChallenge.imageAttachmentsIds;
+        checkedChallenge.createdAt = new Date();
 
         Challenge savedChallenge = repository.save(checkedChallenge);
         return Optional.of(savedChallenge);

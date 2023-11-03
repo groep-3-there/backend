@@ -8,12 +8,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -26,35 +31,34 @@ public class ImageController {
     @Autowired
     private ChallengeRepository challengeRepository;
 
-    public Image upload(MultipartFile file, User author){
-        Image img = null;
-        try {
-            img = new Image(file.getBytes());
-            return imageRepository.save(img);
-        } catch (IOException e) {
-            log.warn("Image upload failed");
-        }
-        return null;
-    }
+
 
     @PostMapping(value = "/image/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Image uploadImage(@RequestParam("image") MultipartFile multipartFile, @RequestAttribute("loggedInUser") User currentUser) {
-        return upload(multipartFile, currentUser);
+    public Image uploadImage(@RequestParam("image") MultipartFile multipartFile, @RequestAttribute("loggedInUser") User currentUser, @RequestParam(name = "imgData", required = false, defaultValue = "0") Boolean withImageData) {
+        Image img = null;
+        try {
+            img = new Image(multipartFile.getBytes());
+            img.author = currentUser;
+        } catch (IOException e) {
+            log.warn("Uploading image failed"  +e.toString());
+            return null;
+        }
+        Image m = imageRepository.save(img);
+        if(withImageData){
+            return m;
+        }
+        return m.withoutData();
     }
 
-    @PostMapping(value = "/image/upload/challenge/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Image uploadImageForChallenge(@RequestParam("image") MultipartFile multipartFile, @RequestAttribute("loggedInUser") User currentUser, @PathVariable("id")Long id) {
-        Image savedImage =  upload(multipartFile, currentUser);
-        savedImage.attachmentForChallenge = challengeRepository.findById(id).get();
-        imageRepository.save(savedImage);
-        return savedImage;
-    }
+
     @GetMapping(value="/image/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
     @CrossOrigin(origins = "*")
     public ResponseEntity<byte[]> getImage(@PathVariable Long id) {
         Image img = imageRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Image not found"));
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(img.photoData);
     }
+
+
 
 
 
