@@ -17,23 +17,19 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    public Challenge challenge;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    public ChallengeInput challengeInput;
-
-    public String data;
-
     @Lob
     public byte[] photoData;
+
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    public User author;
 
     public Image() {
 
     }
 
-    public Image(String photoData, String data) {
-        this.data = data;
+    public Image(byte[] photoData) {
+        this.photoData = photoData;
     }
 }
 
