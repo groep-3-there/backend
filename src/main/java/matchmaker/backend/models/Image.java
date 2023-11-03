@@ -1,5 +1,6 @@
 package matchmaker.backend.models;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,6 +24,10 @@ public class Image {
     @ManyToOne
     @JoinColumn(name = "author_id")
     public User author;
+
+    @ManyToOne
+    @Nullable
+    public Challenge attachmentForChallenge;
 
     public Image() {
 

@@ -2,8 +2,8 @@ package matchmaker.backend.controllers;
 
 import matchmaker.backend.models.Image;
 import matchmaker.backend.models.User;
+import matchmaker.backend.repositories.ChallengeRepository;
 import matchmaker.backend.repositories.ImageRepository;
-import matchmaker.backend.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,25 +23,8 @@ public class ImageController {
     private static final Logger log = LoggerFactory.getLogger(ImageController.class);
     @Autowired
     private ImageRepository imageRepository;
-
     @Autowired
-    private UserRepository userRepository;
-
-    @GetMapping("/image/user/{id}")
-    public String getBase64ImageByUserId(@PathVariable("id") Long userId) {
-        Optional<User> user = userRepository.findById(userId);
-        if (!user.isPresent()) {
-            return null;
-        }
-
-        Optional<Image> profilePicture = imageRepository.findById(user.get().getAvatarImageId());
-        if (!profilePicture.isPresent()) {
-            return null;
-        }
-
-        byte[] byteaImage = profilePicture.get().photoData;
-        return java.util.Base64.getEncoder().encodeToString(byteaImage);
-    }
+    private ChallengeRepository challengeRepository;
 
     public Image upload(MultipartFile file, User author){
         Image img = null;
@@ -59,12 +42,21 @@ public class ImageController {
         return upload(multipartFile, currentUser);
     }
 
+    @PostMapping(value = "/image/upload/challenge/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Image uploadImageForChallenge(@RequestParam("image") MultipartFile multipartFile, @RequestAttribute("loggedInUser") User currentUser, @PathVariable("id")Long id) {
+        Image savedImage =  upload(multipartFile, currentUser);
+        savedImage.attachmentForChallenge = challengeRepository.findById(id).get();
+        imageRepository.save(savedImage);
+        return savedImage;
+    }
     @GetMapping(value="/image/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
     @CrossOrigin(origins = "*")
     public ResponseEntity<byte[]> getImage(@PathVariable Long id) {
         Image img = imageRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Image not found"));
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(img.photoData);
     }
+
+
 
 
 
