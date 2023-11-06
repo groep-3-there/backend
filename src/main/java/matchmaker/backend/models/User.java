@@ -46,6 +46,7 @@ public class User {
     }
 
     public boolean hasPermissionAtCompany(String m, Long companyId){
+        if(this.role.isMatchmaker) { return true; }
         if(!role.getCompany().id.equals(companyId)){
             //User is not part of the company, so he dos not have the permission
             return false;
