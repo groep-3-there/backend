@@ -45,7 +45,7 @@ public class ChallengeController {
     }
 
     @PostMapping(path = "/challenge")
-    public Optional<Challenge> createChallenge(@RequestBody Challenge newChallenge) {
+    public Optional<Challenge> createChallenge(@RequestBody Challenge newChallenge, @RequestAttribute("loggedInUser") User currentUser) {
         Challenge checkedChallenge = new Challenge();
 
         //Only copy values we trust from the enduser. If user passes id, it is ignored.
@@ -66,6 +66,12 @@ public class ChallengeController {
         checkedChallenge.branch = newChallenge.branch;
         checkedChallenge.visibility = newChallenge.visibility;
         checkedChallenge.imageAttachmentsIds = newChallenge.imageAttachmentsIds;
+        checkedChallenge.createdAt = new Date();
+
+        //Set this based on the session, so no bad input can set the author, company & department
+        checkedChallenge.author = currentUser;
+        checkedChallenge.company = currentUser.company;
+        checkedChallenge.department = currentUser.department;
         checkedChallenge.createdAt = new Date();
 
         Challenge savedChallenge = repository.save(checkedChallenge);
