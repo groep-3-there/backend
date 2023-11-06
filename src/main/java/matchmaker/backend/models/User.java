@@ -37,12 +37,6 @@ public class User {
     @ManyToOne
     public Role role;
 
-    @ManyToOne
-    public Department department;
-
-    @ManyToOne
-    public Company company;
-
 
     @ManyToMany
     public List<Challenge> favorites = new java.util.ArrayList<>();
@@ -51,7 +45,7 @@ public class User {
         this.name = name;
     }
 
-    public boolean hasPermissionAtCompany(Long companyId, String m){
+    public boolean hasPermissionAtCompany(String m, Long companyId){
         if(!role.getCompany().id.equals(companyId)){
             //User is not part of the company, so he dos not have the permission
             return false;
@@ -64,7 +58,9 @@ public class User {
         }
         return false;
     }
-
+    public boolean isInCompany(){
+        return this.role != null;
+    }
 
 
     public User() {
