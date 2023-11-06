@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
 @Entity
@@ -35,6 +36,12 @@ public class Image {
 
     public Image(byte[] photoData) {
         this.photoData = photoData;
+    }
+    public Image withoutData(){
+        Image m = new Image();
+        m.id = this.id;
+        m.author = this.author;
+        return m;
     }
 }
 
