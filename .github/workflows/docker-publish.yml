@@ -70,11 +70,11 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
         # Build the JAR file
-      - name: Build with Maven
       - uses: actions/setup-java@v3
         with:
           java-version: '21'
           distribution: 'adopt'
+      - name: Build with Maven
         run: mvn -B package --file pom.xml
 
       # Build and push Docker image with Buildx (don't push on PR)
