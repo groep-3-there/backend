@@ -44,7 +44,7 @@ public class ChallengeInputController {
     public ResponseEntity createReactionOnChallenge(@RequestBody ChallengeInput reaction,
                                                     @RequestAttribute("loggedInUser") User currentUser,
                                                     @PathVariable("id") Long challengeId){
-        //Check if the user is logged inrea
+        //Check if the user is logged in
         if(currentUser == null){ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); }
 
         //Check if the challenge exists
