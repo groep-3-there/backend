@@ -29,6 +29,10 @@ public class ChallengeController {
     @Autowired
     private ImageRepository imageRepository;
 
+    public ChallengeController(ChallengeRepository challengeRepository) {
+        this.repository = challengeRepository;
+    }
+
     @GetMapping("/challenge")
     public Iterable<Challenge> getChallenges() {
         return repository.findAll();
