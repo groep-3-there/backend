@@ -1,4 +1,4 @@
-name: Docker
+name: Docker image creation
 
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
@@ -9,11 +9,11 @@ on:
   schedule:
     - cron: '26 23 * * *'
   push:
-    branches: [ "CICD" ]
+    branches: [ "master" ]
     # Publish semver tags as releases.
     tags: [ 'v*.*.*' ]
   pull_request:
-    branches: [ "CICD" ]
+    branches: [ "master" ]
 
 env:
   # Use docker.io for Docker Hub if empty

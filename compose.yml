@@ -8,19 +8,30 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
   backend:
-    image: c0b0078b4b36baaa5bb550f7fc650121aee421880fd8621fb2a031ba4a60c887
+    image: ghcr.io/groep-3-there/backend:master
     ports:
-      - "8080:8080"
+      - '8080:8080'
     depends_on:
       - postgres
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
+  frontend:
+    image: ghcr.io/groep-3-there/frontend:master
+    ports:
+      - '3000:80'
+    depends_on:
+      - backend
 volumes:
   postgres-data:
+
+#RUN USING:
+#docker-compose down
+#docker-compose pull
+#docker-compose up --build
