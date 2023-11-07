@@ -3,6 +3,8 @@ package matchmaker.backend.controllers;
 import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
+import matchmaker.backend.constants.ChallengeStatus;
+import matchmaker.backend.constants.Perm;
 import matchmaker.backend.models.*;
 import matchmaker.backend.repositories.ChallengeRepository;
 import matchmaker.backend.repositories.ImageRepository;
@@ -13,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -32,25 +35,45 @@ public class ChallengeController {
     }
 
     @GetMapping("/challenge/{id}")
-    public Optional<Challenge> getChallengeById(@PathVariable("id") Long id) {
-        return repository.findById(id);
+    public ResponseEntity<Challenge> getChallengeById(@PathVariable("id")Long id, @RequestAttribute("loggedInUser") User currentUser) {
+        Optional<Challenge> target = repository.findById(id);
+        if(target.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        Challenge challenge = target.get();
+        if(!challenge.canBeSeenBy(currentUser)){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(challenge);
     }
 
     //Discuss, {id} or update?
     @PutMapping("/challenge/update")
-    public HttpStatus updateChallenge(@RequestBody Challenge challengeToUpdate) {
-        Optional<Challenge> challenge = repository.findById(challengeToUpdate.id);
-        if (challenge.isEmpty()) {
+    public HttpStatus updateChallenge(@RequestBody Challenge challengeToUpdate, @RequestAttribute("loggedInUser") User currentUser){
+        Optional<Challenge> target = repository.findById(challengeToUpdate.id);
+        if (target.isEmpty()){
+
             return HttpStatus.EXPECTATION_FAILED;
         }
+
+        //Grab the same challenge from the database to be sure we have valid data.
+        Challenge challengeInDatabase = target.get();
+        if(!challengeInDatabase.canBeEditedBy(currentUser)){
+            return HttpStatus.UNAUTHORIZED;
+        }
+
         repository.save(challengeToUpdate);
         return HttpStatus.OK;
     }
 
     @PostMapping(path = "/challenge")
-    public Optional<Challenge> createChallenge(
-            @RequestBody Challenge newChallenge,
-            @RequestAttribute("loggedInUser") User currentUser) {
+    public ResponseEntity<Challenge> createChallenge(@RequestBody Challenge newChallenge, @RequestAttribute("loggedInUser") User currentUser) {
+        if(!currentUser.isInCompany()){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        if(!currentUser.hasPermissionAtCompany(Perm.CHALLENGE_MANAGE, currentUser.role.company.id)){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
         Challenge checkedChallenge = new Challenge();
 
         //Only copy values we trust from the enduser. If user passes id, it is ignored.
@@ -60,7 +83,13 @@ public class ChallengeController {
         checkedChallenge.bannerImageId = newChallenge.bannerImageId;
         checkedChallenge.concludingRemarks = newChallenge.concludingRemarks;
         checkedChallenge.summary = newChallenge.summary;
-        checkedChallenge.status = newChallenge.status;
+        if(newChallenge.status == null){
+            newChallenge.status = ChallengeStatus.OPEN_VOOR_IDEEEN;
+        }
+        else{
+            checkedChallenge.status = newChallenge.status;
+
+        }
         checkedChallenge.endDate = newChallenge.endDate;
         checkedChallenge.tags = newChallenge.tags;
         //Remove the last comma, if there is one
@@ -68,19 +97,19 @@ public class ChallengeController {
             String tags = checkedChallenge.tags;
             checkedChallenge.tags = tags.substring(0, tags.length() - 1);
         }
-        checkedChallenge.branch = newChallenge.branch;
+
         checkedChallenge.visibility = newChallenge.visibility;
         checkedChallenge.imageAttachmentsIds = newChallenge.imageAttachmentsIds;
         checkedChallenge.createdAt = new Date();
 
         //Set this based on the session, so no bad input can set the author, company & department
         checkedChallenge.author = currentUser;
-        checkedChallenge.company = currentUser.company;
-        checkedChallenge.department = currentUser.department;
+        checkedChallenge.company = currentUser.role.company;
+        checkedChallenge.department = currentUser.role.department;
         checkedChallenge.createdAt = new Date();
 
         Challenge savedChallenge = repository.save(checkedChallenge);
-        return Optional.of(savedChallenge);
+        return ResponseEntity.status(HttpStatus.OK).body(savedChallenge);
     }
 
     /**

@@ -60,10 +60,10 @@ values (1, '2020-01-01', true, 'Medewerker', 1, 1),
        (5, '2020-01-05', false, 'MatchMaker', 5, 5);
 
 insert into permissions (id, code_name, description, fancy_name)
-values (1, 'CHALLENGE_READ', 'Het bekijken van een challenge', 'Challenge bekijken'),
-       (2, 'CHALLENGE_REACT', 'Het reageren op een challenge', 'Reageren op Challenge'),
-       (3, 'CHALLENGE_MANAGE', 'Het beheren van een challenge', 'Beheer challenge'),
-       (4, 'CHALLENGE_MARK_REACTION', 'Het markeren van een reactie', 'Markeer reactie'),
+values (1, 'CHALLENGE_READ', 'Het bekijken van een challenge en reacties achterlaten', 'Challenge bekijken'),
+--        (2, 'CHALLENGE_REACT', 'Het reageren op een challenge', 'Reageren op Challenge'),
+       (3, 'CHALLENGE_MANAGE', 'Het beheren van een challenge & kiezen van reacties', 'Beheer challenge'),
+--        (4, 'CHALLENGE_MARK_REACTION', 'Het markeren van een reactie', 'Markeer reactie'),
        (5, 'DEPARTMENT_CREATE', 'Het creeeren van een department', 'Creeer department'),
        (6, 'COMPANY_EDIT', 'Het bewerken van een bedrijf', 'Bewerk bedrijf'),
        (7, 'COMPANY_GRADE', 'Het goedkeuren van een bedrijfsaanvraag', 'Goedkeuren bedrijfsaanvraag');
@@ -71,47 +71,65 @@ values (1, 'CHALLENGE_READ', 'Het bekijken van een challenge', 'Challenge bekijk
 
 insert into roles_permissions (role_id, permissions_id)
 values (1,1),
-       (1,2),
+--        (1,2),
        (2,1),
-       (2,2),
+--        (2,2),
        (2,3),
-       (2,4),
+--        (2,4),
        (3,1),
-       (3,2),
+--        (3,2),
        (3,3),
-       (3,4),
+--        (3,4),
        (4,1),
-       (4,2),
+--        (4,2),
        (4,3),
-       (4,4),
+--        (4,4),
        (4,5),
        (4,6),
        (5,1),
-       (5,2),
+--        (5,2),
        (5,3),
-       (5,4),
+--        (5,4),
        (5,5),
        (5,6),
        (5,7);
 
 -- Insert test data for the User table
 INSERT INTO users (id, name, info, tags, created_at, last_seen, avatar_image_id, is_email_public,
-                   is_phone_number_public, accepted_tos_date, role_id, department_id, company_id, email, phone_number)
-VALUES (1, 'Jan Bakker', 'Info1', 'tag1,tag2', '2023-01-01', '2023-01-01', NULL, true, true, '2023-01-01', 1, 1, 1, 'jan.bakker@email.com', '0612345678'),
-       (2, 'Johan de Vries', 'Info2', 'tag3,tag4', '2023-01-02', '2023-01-02', NULL, false, false, '2023-01-02', 2, 2, 2, 'johan.de.vries@email.com', '0612345678'),
-       (3, 'Florijn Munster', 'Info3', 'tag5,tag6', '2023-01-03', '2023-01-03', NULL, true, false, '2023-01-03', 3, 3, 3, 'florijn.munster@email.com', '0612345678'),
-       (4, 'Rik Wildschut', 'Info4', 'tag7,tag8', '2023-01-04', '2023-01-04', NULL, false, true, '2023-01-04', 4, 4, 4, 'rik.wildschut@email.com','0612345678'),
-       (5, 'Luke van de Pol', 'Info5', 'tag9,tag10', '2023-01-05', '2023-01-05', NULL, true, false, '2023-01-05', 5, 5, 5, 'luke.van.de.pol@email.com', '0612345678'),
-       (6, 'Eelco Jansma', 'Info6', 'tag11,tag12', '2023-01-06', '2023-01-06', NULL, true, true, '2023-01-06', 1, 6, 6, 'eelco.jansma@email.com','0612345678'),
-       (7, 'Jelle Blaeser', 'Info7', 'tag13,tag14', '2023-01-07', '2023-01-07', NULL, false, false, '2023-01-07', 2, 7, 7, 'jelle.blaeser@email.com', '0612345678'),
-       (8, 'Tjerk Venema', 'Info8', 'tag15,tag16', '2023-01-08', '2023-01-08', NULL, true, true, '2023-01-08', 3, 8, 8, 'tjerk.venema@email.com','0612345678'),
-       (9, 'Anniek de Boer', 'Info9', 'tag17,tag18', '2023-01-09', '2023-01-09', NULL, false, true, '2023-01-09', 4, 9, 9,'anniek.de.boer@email.com','0612345678'),
-       (10, 'Piet de Wit', 'Info10', 'tag19,tag20', '2023-01-10', '2023-01-10', NULL, true, false, '2023-01-10', 5, 10, 10, 'piet.de.wit@email.com','0612345678');
+                   is_phone_number_public, accepted_tos_date, role_id, email, phone_number)
+VALUES (1, 'Jan Bakker', 'Info1', 'tag1,tag2', '2023-01-01', '2023-01-01', NULL, true, true, '2023-01-01', 1,  'jan.bakker@email.com', '0612345678'),
+       (2, 'Johan de Vries', 'Info2', 'tag3,tag4', '2023-01-02', '2023-01-02', NULL, false, false, '2023-01-02', 2, 'johan.de.vries@email.com', '0612345678'),
+       (3, 'Florijn Munster', 'Info3', 'tag5,tag6', '2023-01-03', '2023-01-03', NULL, true, false, '2023-01-03', 3, 'florijn.munster@email.com', '0612345678'),
+       (4, 'Rik Wildschut', 'Info4', 'tag7,tag8', '2023-01-04', '2023-01-04', NULL, false, true, '2023-01-04', 4, 'rik.wildschut@email.com','0612345678'),
+       (5, 'Luke van de Pol', 'Info5', 'tag9,tag10', '2023-01-05', '2023-01-05', NULL, true, false, '2023-01-05', 5, 'luke.van.de.pol@email.com', '0612345678'),
+       (6, 'Eelco Jansma', 'Info6', 'tag11,tag12', '2023-01-06', '2023-01-06', NULL, true, true, '2023-01-06', 1, 'eelco.jansma@email.com','0612345678'),
+       (7, 'Jelle Blaeser', 'Info7', 'tag13,tag14', '2023-01-07', '2023-01-07', NULL, false, false, '2023-01-07', 2, 'jelle.blaeser@email.com', '0612345678'),
+       (8, 'Tjerk Venema', 'Info8', 'tag15,tag16', '2023-01-08', '2023-01-08', NULL, true, true, '2023-01-08', 3, 'tjerk.venema@email.com','0612345678'),
+       (9, 'Anniek de Boer', 'Info9', 'tag17,tag18', '2023-01-09', '2023-01-09', NULL, false, true, '2023-01-09', 4, 'anniek.de.boer@email.com','0612345678'),
+       (10, 'Piet de Wit', 'Info10', 'tag19,tag20', '2023-01-10', '2023-01-10', NULL, true, false, '2023-01-10', 5, 'piet.de.wit@email.com','0612345678');
 
-insert into challenges (id, banner_image_id, can_react, concluding_remarks, contact_information, created_at,
-                        description, end_date, status, summary, tags, title, visibility, author_id, branch_id,
+insert into challenges (id, banner_image_id, concluding_remarks, contact_information, created_at,
+                        description, end_date, status, summary, tags, title, visibility, author_id,
                         company_id, department_id)
-values (1, null, true, 'Dit zijn de mooie concluding remarks', 'Contact informatie', '2023-01-01', 'Dit is de challenge description',
-        '2023-09-11', 1, 'Summary', 'prototype,website', 'Innovatie kapperszaak', 2, 1, null, 1, 1);
+values (1, null, 'Dit zijn de mooie concluding remarks', 'Contact informatie', '2023-01-01', 'Dit is de challenge description',
+        '2023-09-11', 1, 'Summary', 'prototype,website', 'Innovatie kapperszaak', 2, 1, null, 1);
 
+insert into branches(id, name)
+values(1,'Advies en consultancy'),
+      (2,'Agrosector'),
+      (3,'Bouw, installatie en infrastructuur'),
+      (4,'Cultuur en sport'),
+      (5,'Delfstoffen'),
+      (6,'Financiële dienstverlening'),
+      (7,'Gezondheidszorg en maatschappelijke dienstverlening'),
+      (8, 'Autohandel, groothandel en detailhandel'),
+       (9, 'Horeca'),
+       (10,'ICT, media en communicatie'),
+       (11,'Industrie'),
+       (12, 'Onderwijs en training'),
+       (13, 'Onroerend goed'),
+       (14, 'Persoonlijke dienstverleningen en not-for-profit'),
+       (15, 'Vervoer, post en opslag'),
+       (16, 'Water en afval'),
+       (17, 'Zakelijke dienstverlening')
 
