@@ -21,14 +21,8 @@ public class ChallengeInputController {
 
     @GetMapping("/reaction/challenge/{id}")
     public ResponseEntity<Iterable<ChallengeInput>> getChallengeReactions(@PathVariable("id") Long id) {
-        Iterable<ChallengeInput> reactions = repository.findAll();
-        List<ChallengeInput> reactionsForChallenge = new ArrayList<>();
-        for (ChallengeInput reaction : reactions) {
-            if (reaction.challenge.id.equals(id)) {
-                reactionsForChallenge.add(reaction);
-            }
-        }
-        return new ResponseEntity<>(reactionsForChallenge, HttpStatus.OK);
+        List<ChallengeInput> reactions = repository.findByChallengeId(id);
+        return new ResponseEntity<>(reactions, HttpStatus.OK);
     }
 
     @GetMapping("/reaction/{id}")
@@ -44,14 +38,14 @@ public class ChallengeInputController {
     public ResponseEntity createReactionOnChallenge(@RequestBody ChallengeInput reaction,
                                                     @RequestAttribute("loggedInUser") User currentUser,
                                                     @PathVariable("id") Long challengeId){
+        //Check if the user is logged in
+        if(currentUser == null){ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); }
+
         //Check if the challenge exists
         if(reaction.challenge == null){ return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null); }
 
         //Check if the challenge is open for ideas
         if(reaction.challenge.status != ChallengeStatus.OPEN_VOOR_IDEEEN){ return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null); }
-
-        //Check if the user is logged in
-        if(currentUser == null){ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); }
 
         //If the user cant see the challenge, it should not be able to react to it.
         if(!reaction.challenge.canBeSeenBy(currentUser)){return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);}
