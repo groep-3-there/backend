@@ -131,5 +131,10 @@ values(1,'Advies en consultancy'),
        (14, 'Persoonlijke dienstverleningen en not-for-profit'),
        (15, 'Vervoer, post en opslag'),
        (16, 'Water en afval'),
-       (17, 'Zakelijke dienstverlening')
+       (17, 'Zakelijke dienstverlening');
+
+
+insert into challengeinputs (id, created_at, is_chosen_answer, text, type, author_id, challenge_id)
+values (1, null, false, 'Wow, wat een mooie challenge heb jij daar!', null, 1, 1),
+       (2, null, false, 'Dit vind ik een erg rare challenge.', null, 2, 1);
 
