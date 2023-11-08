@@ -26,12 +26,12 @@ public class ChallengeControllerUnitTest {
     private ImageRepository imageRepository;
     private final User user = new User("test");
 
-/*    @Test
+    @Test
     public void testChallengesTableNotEmpty() throws Exception {
         ChallengeController challengeController = new ChallengeController(challengeRepository);
         Iterable<Challenge> challenges = challengeController.getChallenges();
         Assertions.assertThat(challenges).isNotEmpty();
-    }*/
+    }
     @Test
     public void testGetChallengeById() throws Exception {
         ChallengeController challengeController = new ChallengeController(challengeRepository);
@@ -67,21 +67,13 @@ public class ChallengeControllerUnitTest {
         ChallengeController challengeController = new ChallengeController(challengeRepository);
         Iterable<Challenge> challenges = challengeController.search("Summary", null, null, null, 0);
         Assertions.assertThat(challenges).anyMatch(challenge -> challenge.id.equals(1L));
-    }/*
-    @Test
-    public void testSearchByCompany() throws Exception {
-        ChallengeController challengeController = new ChallengeController(challengeRepository);
-        ArrayList<String> companyList = new ArrayList<String>();
-        companyList.add("ChipSoft");
-        Iterable<Challenge> challenges = challengeController.search(null, companyList , null, null, 0);
-        Assertions.assertThat(challenges).anyMatch(challenge -> challenge.id.equals(1L));
-    }*/
+    }
     @Test
     public void faultyTest() throws Exception {
         ChallengeController challengeController = new ChallengeController(challengeRepository);
         ArrayList<String> companyList = new ArrayList<String>();
         companyList.add("testcompany");
         Iterable<Challenge> challenges = challengeController.search(null, companyList , null, null, 0);
-        Assertions.assertThat(challenges).anyMatch(challenge -> challenge.id.equals(1L));
+        Assertions.assertThat(challenges).noneMatch(challenge -> challenge.id.equals(1L));
     }
 }
