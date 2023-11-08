@@ -53,11 +53,11 @@ values (1, '2021-02-01', 'ICT', 1),
        (38, '2018-01-29', 'HR', 4);
 
 insert into roles (id, created_at, is_matchmaker, name, company_id, department_id)
-values (1, '2020-01-01', true, 'Medewerker', 1, 1),
+values (1, '2020-01-01', false, 'Medewerker', 1, 1),
        (2, '2020-01-02', false, 'Challenger', 2, 2),
        (3, '2020-01-03', false, 'Department beheerder', 3, 3),
        (4, '2020-01-04', false, 'Company beheerder', 4, 4),
-       (5, '2020-01-05', false, 'MatchMaker', 5, 5);
+       (5, '2020-01-05', true, 'MatchMaker', 5, 5);
 
 insert into permissions (id, code_name, description, fancy_name)
 values (1, 'CHALLENGE_READ', 'Het bekijken van een challenge en reacties achterlaten', 'Challenge bekijken'),
@@ -112,7 +112,7 @@ insert into challenges (id, banner_image_id, concluding_remarks, contact_informa
                         description, end_date, status, summary, tags, title, visibility, author_id,
                         company_id, department_id)
 values (1, null, 'Dit zijn de mooie concluding remarks', 'Contact informatie', '2023-01-01', 'Dit is de challenge description',
-        '2023-09-11', 1, 'Summary', 'prototype,website', 'Innovatie kapperszaak', 2, 1, null, 1);
+        '2023-09-11', 0, 'Summary', 'prototype,website', 'Innovatie kapperszaak', 2, 1, 1, 1);
 
 insert into branches(id, name)
 values(1,'Advies en consultancy'),
