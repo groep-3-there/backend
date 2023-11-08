@@ -1,6 +1,6 @@
 package matchmaker.backend.repositories;
 
-import matchmaker.backend.models.Branch;
+import matchmaker.backend.UnitTests.Branch;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;

@@ -1,6 +1,6 @@
 package matchmaker.backend.repositories;
 
-import matchmaker.backend.models.ChallengeInput;
+import matchmaker.backend.UnitTests.ChallengeInput;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

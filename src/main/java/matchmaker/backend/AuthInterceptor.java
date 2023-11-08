@@ -2,15 +2,11 @@ package matchmaker.backend;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import matchmaker.backend.database.LoadDatabase;
-import matchmaker.backend.models.User;
-import matchmaker.backend.repositories.ChallengeRepository;
+import matchmaker.backend.UnitTests.User;
 import matchmaker.backend.repositories.UserRepository;
-import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.HandlerInterceptor;
