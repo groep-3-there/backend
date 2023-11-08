@@ -20,9 +20,9 @@ import java.util.ArrayList;
 @MockBean(ChallengeRepository.class)
 public class ChallengeControllerUnitTest {
 
-    @Mock
+    @MockBean
     private ChallengeRepository challengeRepository;
-    @Mock
+    @MockBean
     private ImageRepository imageRepository;
     private final User user = new User("test");
 
