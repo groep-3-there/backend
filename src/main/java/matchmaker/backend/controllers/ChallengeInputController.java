@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-public class ChallengeInputController {
+public class  ChallengeInputController {
 
     @Autowired
     private ChallengeInputRepository repository;

@@ -35,44 +35,44 @@ public class ChallengeControllerUnitTest {
         Challenge challenge = challengeController.getChallengeById(99999L, user).getBody();
         Assertions.assertThat(challenge).isNull();
     }
-//    @Test
-//    public void testSearchByQuery() throws Exception {
-//        ChallengeController challengeController = new ChallengeController(challengeRepository);
-//        Iterable<Challenge> challenges = challengeController.search("Innovatie", null, null, null);
-//        Assertions.assertThat(challenges).anyMatch(challenge -> challenge.id.equals(1L));
-//    }
-//    @Test
-//    public void testSearchByTags() throws Exception {
-//        ChallengeController challengeController = new ChallengeController(challengeRepository);
-//        Iterable<Challenge> challenges = challengeController.search("prototype", null, null, null);
-//        Assertions.assertThat(challenges).anyMatch(challenge -> challenge.id.equals(1L));
-//    }
-//    @Test
-//    public void testSearchByDescription() throws Exception {
-//        ChallengeController challengeController = new ChallengeController(challengeRepository);
-//        Iterable<Challenge> challenges = challengeController.search("challenge description", null, null, null);
-//        Assertions.assertThat(challenges).anyMatch(challenge -> challenge.id.equals(1L));
-//    }
-//    @Test
-//    public void testSearchBySummary() throws Exception {
-//        ChallengeController challengeController = new ChallengeController(challengeRepository);
-//        Iterable<Challenge> challenges = challengeController.search("Summary", null, null, null);
-//        Assertions.assertThat(challenges).anyMatch(challenge -> challenge.id.equals(1L));
-//    }
-//    @Test
-//    public void testSearchByCompany() throws Exception {
-//        ChallengeController challengeController = new ChallengeController(challengeRepository);
-//        ArrayList<String> companyList = new ArrayList<String>();
-//        companyList.add("ChipSoft");
-//        Iterable<Challenge> challenges = challengeController.search(null, companyList , null, null);
-//        Assertions.assertThat(challenges).anyMatch(challenge -> challenge.id.equals(1L));
-//    }
-//    @Test
-//    public void faultyTest() throws Exception {
-//        ChallengeController challengeController = new ChallengeController(challengeRepository);
-//        ArrayList<String> companyList = new ArrayList<String>();
-//        companyList.add("testcompany");
-//        Iterable<Challenge> challenges = challengeController.search(null, companyList , null, null);
-//        Assertions.assertThat(challenges).anyMatch(challenge -> challenge.id.equals(1L));
-//    }
+    @Test
+    public void testSearchByQuery() throws Exception {
+        ChallengeController challengeController = new ChallengeController(challengeRepository);
+        Iterable<Challenge> challenges = challengeController.search("Innovatie", null, null, null,0);
+        Assertions.assertThat(challenges).anyMatch(challenge -> challenge.id.equals(1L));
+    }
+    @Test
+    public void testSearchByTags() throws Exception {
+        ChallengeController challengeController = new ChallengeController(challengeRepository);
+        Iterable<Challenge> challenges = challengeController.search("prototype", null, null, null, 0);
+        Assertions.assertThat(challenges).anyMatch(challenge -> challenge.id.equals(1L));
+    }
+    @Test
+    public void testSearchByDescription() throws Exception {
+        ChallengeController challengeController = new ChallengeController(challengeRepository);
+        Iterable<Challenge> challenges = challengeController.search("challenge description", null, null, null, 0);
+        Assertions.assertThat(challenges).anyMatch(challenge -> challenge.id.equals(1L));
+    }
+    @Test
+    public void testSearchBySummary() throws Exception {
+        ChallengeController challengeController = new ChallengeController(challengeRepository);
+        Iterable<Challenge> challenges = challengeController.search("Summary", null, null, null, 0);
+        Assertions.assertThat(challenges).anyMatch(challenge -> challenge.id.equals(1L));
+    }
+    @Test
+    public void testSearchByCompany() throws Exception {
+        ChallengeController challengeController = new ChallengeController(challengeRepository);
+        ArrayList<String> companyList = new ArrayList<String>();
+        companyList.add("ChipSoft");
+        Iterable<Challenge> challenges = challengeController.search(null, companyList , null, null, 0);
+        Assertions.assertThat(challenges).anyMatch(challenge -> challenge.id.equals(1L));
+    }
+    @Test
+    public void faultyTest() throws Exception {
+        ChallengeController challengeController = new ChallengeController(challengeRepository);
+        ArrayList<String> companyList = new ArrayList<String>();
+        companyList.add("testcompany");
+        Iterable<Challenge> challenges = challengeController.search(null, companyList , null, null, 0);
+        Assertions.assertThat(challenges).anyMatch(challenge -> challenge.id.equals(1L));
+    }
 }
