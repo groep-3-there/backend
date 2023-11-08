@@ -18,7 +18,6 @@ import java.util.ArrayList;
 
 @SpringBootTest
 @MockBean(ChallengeRepository.class)
-@WebMvcTest(ChallengeController.class)
 public class ChallengeControllerUnitTest {
 
     @MockBean
