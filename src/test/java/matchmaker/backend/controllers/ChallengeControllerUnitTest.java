@@ -17,12 +17,12 @@ import org.springframework.test.context.ContextConfiguration;
 import java.util.ArrayList;
 
 @SpringBootTest
-@MockBean(ChallengeRepository.class)
+//@MockBean(ChallengeRepository.class)
 public class ChallengeControllerUnitTest {
 
-    @MockBean
+    @Autowired
     private ChallengeRepository challengeRepository;
-    @MockBean
+    @Autowired
     private ImageRepository imageRepository;
     private final User user = new User("test");
 
@@ -31,20 +31,20 @@ public class ChallengeControllerUnitTest {
         ChallengeController challengeController = new ChallengeController(challengeRepository);
         Iterable<Challenge> challenges = challengeController.getChallenges();
         Assertions.assertThat(challenges).isNotEmpty();
-    }
+    }*/
     @Test
     public void testGetChallengeById() throws Exception {
         ChallengeController challengeController = new ChallengeController(challengeRepository);
         Challenge challenge = challengeController.getChallengeById(1L, user).getBody();
         Assertions.assertThat(challenge).isNotNull();
-    }*/
+    }
     @Test
     public void testGetChallengeByIdThatDoesntExist() throws Exception {
         ChallengeController challengeController = new ChallengeController(challengeRepository);
         Challenge challenge = challengeController.getChallengeById(99999L, user).getBody();
         Assertions.assertThat(challenge).isNull();
     }
-    /*@Test
+    @Test
     public void testSearchByQuery() throws Exception {
         ChallengeController challengeController = new ChallengeController(challengeRepository);
         Iterable<Challenge> challenges = challengeController.search("Innovatie", null, null, null,0);
@@ -67,7 +67,7 @@ public class ChallengeControllerUnitTest {
         ChallengeController challengeController = new ChallengeController(challengeRepository);
         Iterable<Challenge> challenges = challengeController.search("Summary", null, null, null, 0);
         Assertions.assertThat(challenges).anyMatch(challenge -> challenge.id.equals(1L));
-    }
+    }/*
     @Test
     public void testSearchByCompany() throws Exception {
         ChallengeController challengeController = new ChallengeController(challengeRepository);
