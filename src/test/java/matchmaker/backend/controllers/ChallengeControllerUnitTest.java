@@ -5,14 +5,17 @@ import matchmaker.backend.models.User;
 import matchmaker.backend.repositories.ChallengeRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.ArrayList;
 
 @SpringBootTest
 @ContextConfiguration(classes = {ChallengeController.class, ChallengeRepository.class})
+@MockBean(ChallengeRepository.class)
 public class ChallengeControllerUnitTest {
 
     @Autowired
