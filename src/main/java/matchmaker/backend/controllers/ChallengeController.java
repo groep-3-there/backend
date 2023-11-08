@@ -202,4 +202,8 @@ public class ChallengeController {
             return builder.and(predicates.toArray(new Predicate[0]));
         };
     }
+
+    public Iterable<Challenge> GetChallengesByDepartmentId(Long departmentId){
+        return repository.findAllByDepartmentId(departmentId);
+    }
 }

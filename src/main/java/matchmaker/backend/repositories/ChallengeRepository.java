@@ -6,4 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface ChallengeRepository extends CrudRepository<Challenge, Long>, JpaSpecificationExecutor<Challenge> {
     Iterable<Challenge> findByAuthorId(Long authorId);
+
+    Iterable<Challenge> findAllByDepartmentId(Long departmentId);
 }
