@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import matchmaker.backend.constants.ChallengeReactionType;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import java.util.Date;
 
@@ -25,7 +26,8 @@ public class ChallengeInput {
     @ManyToOne
     public Challenge challenge;
 
-    public Enum type;
+    @Enumerated(EnumType.ORDINAL)
+    public ChallengeReactionType type;
 
     public String text;
 
