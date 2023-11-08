@@ -5,7 +5,6 @@ import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import matchmaker.backend.constants.ChallengeStatus;
 import matchmaker.backend.constants.Perm;
-import matchmaker.backend.UnitTests.*;
 import matchmaker.backend.models.Branch;
 import matchmaker.backend.models.Challenge;
 import matchmaker.backend.models.Company;
@@ -22,7 +21,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class ChallengeController {
