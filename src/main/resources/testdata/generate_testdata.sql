@@ -150,8 +150,8 @@ values (1, 'Advies en consultancy'),
 
 
 insert into challengeinputs (id, created_at, is_chosen_answer, text, type, author_id, challenge_id)
-values (1, null, false, 'Wow, wat een mooie challenge heb jij daar!', null, 1, 1),
-       (2, null, false, 'Dit vind ik een erg rare challenge.', null, 2, 1);
+values (1, '2023-01-01', false, 'Wow, wat een mooie challenge heb jij daar!', 1, 1, 1),
+       (2, '2023-01-01', false, 'Dit vind ik een erg rare challenge.', 2, 2, 1);
 
 
 insert into tags(id, name)
