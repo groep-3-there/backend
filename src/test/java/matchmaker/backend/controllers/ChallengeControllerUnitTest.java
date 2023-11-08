@@ -1,8 +1,10 @@
 package matchmaker.backend.controllers;
 
 import matchmaker.backend.models.Challenge;
+import matchmaker.backend.models.Image;
 import matchmaker.backend.models.User;
 import matchmaker.backend.repositories.ChallengeRepository;
+import matchmaker.backend.repositories.ImageRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -20,6 +22,8 @@ public class ChallengeControllerUnitTest {
 
     @Mock
     private ChallengeRepository challengeRepository;
+    @Mock
+    private ImageRepository imageRepository;
     private final User user = new User("test");
 
     @Test
