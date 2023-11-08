@@ -199,6 +199,8 @@ public class ChallengeController {
                 predicates.add(brancheNameExpression.in(branche));
             }
 
+            predicates.add(builder.notEqual(root.get("status"), ChallengeStatus.GEARCHIVEERD));
+
             return builder.and(predicates.toArray(new Predicate[0]));
         };
     }
