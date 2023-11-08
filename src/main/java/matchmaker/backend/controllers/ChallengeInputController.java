@@ -65,4 +65,22 @@ public class ChallengeInputController {
         repository.save(reaction);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
+
+    @PutMapping("/reaction/{id}/markreaction")
+    public ResponseEntity markReactionAsChosen(@PathVariable("id")Long reactionId,
+                                               @RequestAttribute("loggedInUser") User currentUser){
+        Optional<ChallengeInput> reaction = repository.findById(reactionId);
+        if(reaction.isEmpty()){ return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); }
+        Challenge challenge = reaction.get().challenge;
+
+        if(challenge.status != ChallengeStatus.OPEN_VOOR_IDEEEN){ return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Challenge is niet open voor ideeen."); }
+        if(!challenge.canBeEditedBy(currentUser)){ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); }
+
+        reaction.get().isChosenAnswer = true;
+        repository.save(reaction.get());
+        challenge.status = ChallengeStatus.IN_UITVOERING;
+        challengeRepository.save(challenge);
+
+        return ResponseEntity.status(HttpStatus.OK).body(reaction.get());
+    }
 }
