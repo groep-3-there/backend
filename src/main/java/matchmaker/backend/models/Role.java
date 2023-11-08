@@ -4,13 +4,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.FetchMode;
-import org.hibernate.annotations.Fetch;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "roles")
@@ -40,6 +37,7 @@ public class Role {
         this.company = company;
         this.department = department;
     }
+
     public Role(){
 
     }

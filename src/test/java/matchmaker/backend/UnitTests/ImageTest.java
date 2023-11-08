@@ -1,4 +1,4 @@
-package matchmaker.backend.models;
+package matchmaker.backend.UnitTests;
 
 import org.junit.jupiter.api.Test;
 

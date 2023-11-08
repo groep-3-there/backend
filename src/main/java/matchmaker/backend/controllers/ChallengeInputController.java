@@ -5,19 +5,17 @@ import matchmaker.backend.models.Challenge;
 import matchmaker.backend.models.ChallengeInput;
 import matchmaker.backend.models.User;
 import matchmaker.backend.repositories.ChallengeRepository;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import matchmaker.backend.repositories.ChallengeInputRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-public class ChallengeInputController {
+public class  ChallengeInputController {
 
     @Autowired
     private ChallengeInputRepository repository;

@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import matchmaker.backend.AuthInterceptor;
 import matchmaker.backend.constants.ChallengeStatus;
 import matchmaker.backend.constants.ChallengeVisibility;
 import matchmaker.backend.constants.Perm;
@@ -91,7 +90,7 @@ public class Challenge {
         if(!user.isInCompany()){ return false; } // If user is not in a company, abort
         Long companyId = user.role.company.id;
 
-        if(this.company.id.equals(companyId)){ return false; } // if user is not in the same company as the challenge, abort
+        if(!this.company.id.equals(companyId)){ return false; } // if user is not in the same company as the challenge, abort
         //User is part of same company as the challenge
 
         //If archived, only managers can view the challenge
