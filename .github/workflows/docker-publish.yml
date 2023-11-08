@@ -6,10 +6,8 @@ name: Docker image creation
 # documentation.
 
 on:
-  schedule:
-    - cron: '26 23 * * *'
   push:
-    branches: [ "master" ]
+    branches: [ "*" ]
     # Publish semver tags as releases.
     tags: [ 'v*.*.*' ]
   pull_request:
