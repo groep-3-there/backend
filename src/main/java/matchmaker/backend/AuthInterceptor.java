@@ -2,7 +2,7 @@ package matchmaker.backend;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import matchmaker.backend.UnitTests.User;
+import matchmaker.backend.models.User;
 import matchmaker.backend.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

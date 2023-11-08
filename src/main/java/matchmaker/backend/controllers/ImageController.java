@@ -1,7 +1,7 @@
-package matchmaker.backend.IntegrationTests;
+package matchmaker.backend.controllers;
 
-import matchmaker.backend.UnitTests.Image;
-import matchmaker.backend.UnitTests.User;
+import matchmaker.backend.models.Image;
+import matchmaker.backend.models.User;
 import matchmaker.backend.repositories.ChallengeRepository;
 import matchmaker.backend.repositories.ImageRepository;
 import org.slf4j.Logger;

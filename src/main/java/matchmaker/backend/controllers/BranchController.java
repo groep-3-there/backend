@@ -1,6 +1,6 @@
-package matchmaker.backend.IntegrationTests;
+package matchmaker.backend.controllers;
 
-import matchmaker.backend.UnitTests.Branch;
+import matchmaker.backend.models.Branch;
 import matchmaker.backend.repositories.BranchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

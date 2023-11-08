@@ -1,6 +1,6 @@
 package matchmaker.backend.repositories;
 
-import matchmaker.backend.UnitTests.Permission;
+import matchmaker.backend.models.Permission;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;

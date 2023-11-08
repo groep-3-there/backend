@@ -1,9 +1,9 @@
-package matchmaker.backend.IntegrationTests;
+package matchmaker.backend.controllers;
 
 import matchmaker.backend.constants.ChallengeStatus;
-import matchmaker.backend.UnitTests.Challenge;
-import matchmaker.backend.UnitTests.ChallengeInput;
-import matchmaker.backend.UnitTests.User;
+import matchmaker.backend.models.Challenge;
+import matchmaker.backend.models.ChallengeInput;
+import matchmaker.backend.models.User;
 import matchmaker.backend.repositories.ChallengeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -2,6 +2,7 @@ package matchmaker.backend.UnitTests;
 
 import matchmaker.backend.constants.ChallengeStatus;
 import matchmaker.backend.constants.ChallengeVisibility;
+import matchmaker.backend.models.*;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Date;

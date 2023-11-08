@@ -1,4 +1,4 @@
-package matchmaker.backend.UnitTests;
+package matchmaker.backend.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,26 +9,28 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import java.util.Date;
 
 @Entity
-@Table(name = "departments")
+@Table(name = "companyrequests")
 @Getter
 @Setter
 @EnableAutoConfiguration
 @AllArgsConstructor
-public class Department {
+public class CompanyRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long id;
+
     public String name;
 
     @ManyToOne
-    public Company parentCompany;
-    public Date createdAt;
+    public Branch branch;
 
-    public Department() {
+    public String tags;
+    public Date requestedAt;
 
-    }
-    public Department(String name, Company parentCompany){
-        this.name = name;
-        this.parentCompany = parentCompany;
+    @OneToOne
+    public User owner;
+
+    public CompanyRequest() {
+
     }
 }

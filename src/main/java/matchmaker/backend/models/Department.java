@@ -1,39 +1,34 @@
-package matchmaker.backend.UnitTests;
+package matchmaker.backend.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+
 import java.util.Date;
 
 @Entity
-@Setter
+@Table(name = "departments")
 @Getter
+@Setter
 @EnableAutoConfiguration
 @AllArgsConstructor
-@Table(name = "challengeinputs")
-public class ChallengeInput {
-
+public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long id;
+    public String name;
 
     @ManyToOne
-    public User author;
-
-    @ManyToOne
-    public Challenge challenge;
-
-    public Enum type;
-
-    public String text;
-
-    public boolean isChosenAnswer;
-
+    public Company parentCompany;
     public Date createdAt;
 
-    public ChallengeInput() {
+    public Department() {
 
+    }
+    public Department(String name, Company parentCompany){
+        this.name = name;
+        this.parentCompany = parentCompany;
     }
 }

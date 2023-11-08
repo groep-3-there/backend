@@ -1,4 +1,4 @@
-package matchmaker.backend.IntegrationTests;
+package matchmaker.backend.controllers;
 
 import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Join;
@@ -6,6 +6,10 @@ import jakarta.persistence.criteria.Predicate;
 import matchmaker.backend.constants.ChallengeStatus;
 import matchmaker.backend.constants.Perm;
 import matchmaker.backend.UnitTests.*;
+import matchmaker.backend.models.Branch;
+import matchmaker.backend.models.Challenge;
+import matchmaker.backend.models.Company;
+import matchmaker.backend.models.User;
 import matchmaker.backend.repositories.ChallengeRepository;
 import matchmaker.backend.repositories.ImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package matchmaker.backend.UnitTests;
+package matchmaker.backend.models;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
