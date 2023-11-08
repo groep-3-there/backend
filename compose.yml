@@ -13,7 +13,7 @@ services:
       - postgres-data:/var/lib/postgresql/data
 
   backend:
-    image: ghcr.io/groep-3-there/backend:feature-DS39-environments
+    image: ghcr.io/groep-3-there/backend:master
     ports:
       - '8080:8080'
     depends_on:
@@ -23,7 +23,7 @@ services:
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
   frontend:
-    image: ghcr.io/groep-3-there/frontend:develop
+    image: ghcr.io/groep-3-there/frontend:master
     ports:
       - '3000:80'
     depends_on:
