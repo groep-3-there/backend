@@ -14,4 +14,4 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build and test
-      run: mvn clean install
+      run: mvn clean install -DPOSTGRES_USER=${{ secrets.POSTGRES_USER }} -DPOSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} -DDB_URL=${{ secrets.DB_URL }}
