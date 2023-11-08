@@ -18,7 +18,7 @@ import java.util.ArrayList;
 @MockBean(ChallengeRepository.class)
 public class ChallengeControllerUnitTest {
 
-    @Autowired
+    @Mock
     private ChallengeRepository challengeRepository;
     private final User user = new User("test");
 
