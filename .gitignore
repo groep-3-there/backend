@@ -33,4 +33,4 @@ build/
 .vscode/
 
 ### Env ###
-#src/main/resources/env.properties
+#src/main/resources/encrypted.properties
