@@ -75,7 +75,7 @@ public class ChallengeControllerUnitTest {
         companyList.add("ChipSoft");
         Iterable<Challenge> challenges = challengeController.search(null, companyList , null, null, 0);
         Assertions.assertThat(challenges).anyMatch(challenge -> challenge.id.equals(1L));
-    }
+    }*/
     @Test
     public void faultyTest() throws Exception {
         ChallengeController challengeController = new ChallengeController(challengeRepository);
@@ -83,5 +83,5 @@ public class ChallengeControllerUnitTest {
         companyList.add("testcompany");
         Iterable<Challenge> challenges = challengeController.search(null, companyList , null, null, 0);
         Assertions.assertThat(challenges).anyMatch(challenge -> challenge.id.equals(1L));
-    }*/
+    }
 }
