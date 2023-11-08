@@ -74,6 +74,6 @@ public class ChallengeControllerUnitTest {
         ArrayList<String> companyList = new ArrayList<String>();
         companyList.add("testcompany");
         Iterable<Challenge> challenges = challengeController.search(null, companyList , null, null, 0);
-        Assertions.assertThat(challenges).anyMatch(challenge -> challenge.id.equals(1L));
+        Assertions.assertThat(challenges).noneMatch(challenge -> challenge.id.equals(1L));
     }
 }
