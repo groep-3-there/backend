@@ -29,6 +29,7 @@ public class ChallengeInput {
     @Enumerated(EnumType.ORDINAL)
     public ChallengeReactionType type;
 
+    @Column(length = 65535,columnDefinition="Text")
     public String text;
 
     public boolean isChosenAnswer;
