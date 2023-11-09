@@ -7,7 +7,6 @@ import matchmaker.backend.constants.ChallengeStatus;
 import matchmaker.backend.constants.Perm;
 import matchmaker.backend.models.*;
 import matchmaker.backend.repositories.ChallengeRepository;
-import matchmaker.backend.repositories.ImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
