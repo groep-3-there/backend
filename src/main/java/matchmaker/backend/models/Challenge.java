@@ -63,13 +63,15 @@ public class Challenge {
     @ElementCollection
     public List<Long> imageAttachmentsIds;
 
+    public String ttt;
+
     @Enumerated(EnumType.ORDINAL)
     public ChallengeVisibility visibility;
 
 
     public boolean canBeSeenBy(User user){
         //Opties zonder account
-        if(user.equals(null)){
+        if(user == null){
             if(this.visibility == ChallengeVisibility.PUBLIC && this.status != ChallengeStatus.GEARCHIVEERD){
                 return true;
             }

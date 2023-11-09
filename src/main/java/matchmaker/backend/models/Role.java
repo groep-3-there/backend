@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import matchmaker.backend.constants.Perm;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
 import java.util.Date;
@@ -37,6 +38,11 @@ public class Role {
         this.company = company;
         this.department = department;
     }
+
+    public void addPermission(Permission p){
+        this.permissions.add(p);
+    }
+
 
     public Role(){
 
