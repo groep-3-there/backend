@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 class UserTest {
 
     @Test
-    void hasPermissionAtCompany() {
+    void hasPermissionAtDepartment() {
     }
 
     @Test

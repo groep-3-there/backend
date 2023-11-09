@@ -77,7 +77,7 @@ public class ChallengeController {
         if(!currentUser.isInCompany()){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
-        if(!currentUser.hasPermissionAtCompany(Perm.CHALLENGE_MANAGE, currentUser.role.company.id)){
+        if(!currentUser.hasPermissionAtDepartment(Perm.CHALLENGE_MANAGE, currentUser.department.id)){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
         Challenge checkedChallenge = new Challenge();
@@ -110,8 +110,8 @@ public class ChallengeController {
 
         //Set this based on the session, so no bad input can set the author, company & department
         checkedChallenge.author = currentUser;
-        checkedChallenge.company = currentUser.role.company;
-        checkedChallenge.department = currentUser.role.department;
+        checkedChallenge.company = currentUser.department.parentCompany;
+        checkedChallenge.department = currentUser.department;
         checkedChallenge.createdAt = new Date();
 
         Challenge savedChallenge = repository.save(checkedChallenge);
