@@ -66,6 +66,14 @@ public class ChallengeController {
         return HttpStatus.OK;
     }
 
+    /**
+     * Create a new challenge
+     * @param newChallenge - Challenge object with the data to create
+     * @param currentUser - the user that is logged in
+     * @return the created challenge so the user can be redirected its id
+     * or UNAUTHORIZED if the user is not authorized
+     * or BAD_REQUEST if the input is invalid
+     */
     @PostMapping(path = "/challenge")
     public ResponseEntity<Challenge> createChallenge(
             @RequestBody Challenge newChallenge,
