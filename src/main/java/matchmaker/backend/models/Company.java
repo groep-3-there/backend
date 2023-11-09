@@ -28,8 +28,7 @@ public class Company {
     public String branch;
     public Date createdAt;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    public User owner;
+    public Long ownerId;
 
     public Company() {
 
@@ -37,8 +36,5 @@ public class Company {
     public Company(String name){
         this.name = name;
     }
-    public Company(String name, User owner){
-        this.name = name;
-        this.owner = owner;
-    }
+
 }
