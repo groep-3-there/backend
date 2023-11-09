@@ -76,11 +76,14 @@ public class ChallengeController {
         }
         Challenge checkedChallenge = new Challenge();
 
+        String space = " ";
+        String nothing = "";
+
         //Only copy values we trust from the end user. If user passes id, it is ignored.
         if (newChallenge.id != null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 
-        if (newChallenge.title == null || newChallenge.title.isEmpty())
+        if (newChallenge.title == null || newChallenge.title.replace(space, nothing).isEmpty())
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         checkedChallenge.title = newChallenge.title;
 
