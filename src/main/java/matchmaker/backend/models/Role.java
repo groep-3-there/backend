@@ -8,6 +8,7 @@ import matchmaker.backend.constants.Perm;
 import matchmaker.backend.controllers.ImageController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
 import java.util.Date;
@@ -45,6 +46,7 @@ public class Role {
             log.warn("!!!!! Permission must be fetched from database, skipping !!!!!");
             return;
         }
+
         this.permissions.add(p);
     }
 

@@ -57,6 +57,7 @@ values (1, '2020-01-01', false, 'Medewerker'),
        (4, '2020-01-04', false, 'Company beheerder'),
        (5, '2020-01-05', true, 'MatchMaker');
 
+
 insert into permissions (id, code_name, description, fancy_name)
 values (1, 'CHALLENGE_READ', 'Het bekijken van een challenge en reacties achterlaten', 'Challenge bekijken'),
 --        (2, 'CHALLENGE_REACT', 'Het reageren op een challenge', 'Reageren op Challenge'),
@@ -117,6 +118,7 @@ VALUES (1, 'Jan Bakker', 'Info1', 'tag1,tag2', '2023-01-01', '2023-01-01', NULL,
         'anniek.de.boer@email.com', '0612345678',1),
        (10, 'Piet de Wit', 'Info10', 'tag19,tag20', '2023-01-10', '2023-01-10', NULL, true, false, '2023-01-10', 5,
         'piet.de.wit@email.com', '0612345678',1);
+
 
 
 insert into branches(id, name)
