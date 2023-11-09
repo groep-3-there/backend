@@ -55,21 +55,21 @@ public class ChallengeController {
 
     //Discuss, {id} or update?
     @PutMapping("/challenge/update")
-    public HttpStatus updateChallenge(@RequestBody Challenge challengeToUpdate, @RequestAttribute("loggedInUser") User currentUser){
+    public ResponseEntity<Challenge> updateChallenge(@RequestBody Challenge challengeToUpdate, @RequestAttribute("loggedInUser") User currentUser){
         Optional<Challenge> target = repository.findById(challengeToUpdate.id);
         if (target.isEmpty()){
 
-            return HttpStatus.EXPECTATION_FAILED;
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null);
         }
 
         //Grab the same challenge from the database to be sure we have valid data.
         Challenge challengeInDatabase = target.get();
         if(!challengeInDatabase.canBeEditedBy(currentUser)){
-            return HttpStatus.UNAUTHORIZED;
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
 
-        repository.save(challengeToUpdate);
-        return HttpStatus.OK;
+        Challenge saved = repository.save(challengeToUpdate);
+        return ResponseEntity.status(HttpStatus.OK).body(saved);
     }
 
     @PostMapping(path = "/challenge")

@@ -1,5 +1,6 @@
 package matchmaker.backend.controllers;
 
+import matchmaker.backend.constants.ChallengeReactionType;
 import matchmaker.backend.constants.ChallengeStatus;
 import matchmaker.backend.models.Challenge;
 import matchmaker.backend.models.ChallengeInput;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import matchmaker.backend.repositories.ChallengeInputRepository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,7 +41,7 @@ public class  ChallengeInputController {
     }
 
     @PostMapping("/reaction/create/{id}")
-    public ResponseEntity createReactionOnChallenge(@RequestBody ChallengeInput reaction,
+    public ResponseEntity createReactionOnChallenge(@RequestBody ChallengeInput inputReaction,
                                                     @RequestAttribute("loggedInUser") User currentUser,
                                                     @PathVariable("id") Long challengeId){
         //Check if the user is logged in
@@ -57,11 +59,23 @@ public class  ChallengeInputController {
         //If the user cant see the challenge, it should not be able to react to it.
         if(!filledChallenge.canBeSeenBy(currentUser)){return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);}
 
+        if(inputReaction.text == null || inputReaction.text.isBlank()){ return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); }
+
         //The user can see the challenge, and the challenge is open for ideas, so we can save the reaction.
-        reaction.author = currentUser;
-        reaction.challenge = filledChallenge;
-        repository.save(reaction);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        ChallengeInput checked = new ChallengeInput();
+        checked.createdAt = new Date();
+        checked.isChosenAnswer = false;
+        if(inputReaction.type != null){
+            checked.type = inputReaction.type;
+        }
+        else{
+            inputReaction.type = ChallengeReactionType.FEEDBACK;
+        }
+        checked.author = currentUser;
+        checked.challenge = filledChallenge;
+        checked.text = inputReaction.text;
+        ChallengeInput created = repository.save(checked);
+        return ResponseEntity.status(HttpStatus.OK).body(created);
     }
 
     @PutMapping("/reaction/{id}/markreaction")
