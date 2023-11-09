@@ -185,4 +185,4 @@ values (1, 'Website'),
 --ALTER table permissions ENABLE TRIGGER ALL;
 --ALTER table roles_permissions ENABLE TRIGGER ALL;
 --ALTER table departments ENABLE TRIGGER ALL;
---ALTER table roles ENABLE TRIGGER ALL; 
+--ALTER table roles ENABLE TRIGGER ALL;
