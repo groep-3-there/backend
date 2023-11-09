@@ -109,10 +109,6 @@ public class ChallengeController {
             checkedChallenge.status = newChallenge.status;
         }
 
-        if (newChallenge.endDate == null || newChallenge.endDate.before(new Date()))
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        checkedChallenge.endDate = newChallenge.endDate;
-
         if (newChallenge.visibility == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         checkedChallenge.visibility = newChallenge.visibility;
@@ -120,6 +116,7 @@ public class ChallengeController {
         //optional fields that can be null
         checkedChallenge.bannerImageId = newChallenge.bannerImageId;
         checkedChallenge.imageAttachmentsIds = newChallenge.imageAttachmentsIds;
+        checkedChallenge.endDate = newChallenge.endDate;
 
         checkedChallenge.tags = newChallenge.tags;
         //Remove the last comma, if there is one
