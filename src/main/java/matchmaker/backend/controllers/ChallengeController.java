@@ -113,12 +113,6 @@ public class ChallengeController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         checkedChallenge.endDate = newChallenge.endDate;
 
-        //Remove the last comma, if there is one
-        if (checkedChallenge.tags.endsWith(",")) {
-            String tags = checkedChallenge.tags;
-            checkedChallenge.tags = tags.substring(0, tags.length() - 1);
-        }
-
         if (newChallenge.visibility == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         checkedChallenge.visibility = newChallenge.visibility;
