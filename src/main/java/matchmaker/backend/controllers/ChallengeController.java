@@ -55,21 +55,21 @@ public class ChallengeController {
 
     //Discuss, {id} or update?
     @PutMapping("/challenge/update")
-    public HttpStatus updateChallenge(@RequestBody Challenge challengeToUpdate, @RequestAttribute("loggedInUser") User currentUser){
+    public ResponseEntity<Challenge> updateChallenge(@RequestBody Challenge challengeToUpdate, @RequestAttribute("loggedInUser") User currentUser){
         Optional<Challenge> target = repository.findById(challengeToUpdate.id);
         if (target.isEmpty()){
 
-            return HttpStatus.EXPECTATION_FAILED;
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null);
         }
 
         //Grab the same challenge from the database to be sure we have valid data.
         Challenge challengeInDatabase = target.get();
         if(!challengeInDatabase.canBeEditedBy(currentUser)){
-            return HttpStatus.UNAUTHORIZED;
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
 
-        repository.save(challengeToUpdate);
-        return HttpStatus.OK;
+        Challenge saved = repository.save(challengeToUpdate);
+        return ResponseEntity.status(HttpStatus.OK).body(saved);
     }
 
     @PostMapping(path = "/challenge")
@@ -77,7 +77,7 @@ public class ChallengeController {
         if(!currentUser.isInCompany()){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
-        if(!currentUser.hasPermissionAtCompany(Perm.CHALLENGE_MANAGE, currentUser.role.company.id)){
+        if(!currentUser.hasPermissionAtDepartment(Perm.CHALLENGE_MANAGE, currentUser.department.id)){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
         Challenge checkedChallenge = new Challenge();
@@ -110,8 +110,8 @@ public class ChallengeController {
 
         //Set this based on the session, so no bad input can set the author, company & department
         checkedChallenge.author = currentUser;
-        checkedChallenge.company = currentUser.role.company;
-        checkedChallenge.department = currentUser.role.department;
+        checkedChallenge.company = currentUser.department.parentCompany;
+        checkedChallenge.department = currentUser.department;
         checkedChallenge.createdAt = new Date();
 
         Challenge savedChallenge = repository.save(checkedChallenge);

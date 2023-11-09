@@ -63,13 +63,15 @@ public class Challenge {
     @ElementCollection
     public List<Long> imageAttachmentsIds;
 
+    public String ttt;
+
     @Enumerated(EnumType.ORDINAL)
     public ChallengeVisibility visibility;
 
 
     public boolean canBeSeenBy(User user){
         //Opties zonder account
-        if(user.equals(null)){
+        if(user == null){
             if(this.visibility == ChallengeVisibility.PUBLIC && this.status != ChallengeStatus.GEARCHIVEERD){
                 return true;
             }
@@ -88,14 +90,14 @@ public class Challenge {
 
 
         if(!user.isInCompany()){ return false; } // If user is not in a company, abort
-        Long companyId = user.role.company.id;
-
-        if(!this.company.id.equals(companyId)){ return false; } // if user is not in the same company as the challenge, abort
+        Long userCompanyId = user.department.parentCompany.id;
+        Long userDepartmentId = user.department.id;
+        if(!this.company.id.equals(userCompanyId)){ return false; } // if user is not in the same company as the challenge, abort
         //User is part of same company as the challenge
 
         //If archived, only managers can view the challenge
         if(status == ChallengeStatus.GEARCHIVEERD){
-            return user.hasPermissionAtCompany(Perm.CHALLENGE_MANAGE, companyId);
+            return user.hasPermissionAtDepartment(Perm.CHALLENGE_MANAGE, userDepartmentId);
         }
 
         if(this.visibility == ChallengeVisibility.INTERNAL){
@@ -104,7 +106,7 @@ public class Challenge {
 
         if(this.visibility == ChallengeVisibility.DEPARTMENT){
             //If the user is in the same department
-            return user.role.department.id.equals(this.department.id);
+            return userDepartmentId.equals(this.department.id);
         }
 
         log.warn("Challenge and/or user did not fit any permission conditions, some checks are missing!");
@@ -114,8 +116,8 @@ public class Challenge {
 
     public boolean canBeEditedBy(User user){
         if(!user.isInCompany()) { return false; }
-        boolean userPartOfCompanyChallenge = this.company.id.equals(user.role.company.id); // is user in the same company as the challenge
-        return userPartOfCompanyChallenge && user.hasPermissionAtCompany(Perm.CHALLENGE_MANAGE, user.role.company.id);
+        boolean userPartOfDepartmentChallenge = this.department.id.equals(user.department.id); // is user in the same department as the challenge
+        return userPartOfDepartmentChallenge && user.hasPermissionAtDepartment(Perm.CHALLENGE_MANAGE, user.department.id);
     }
 
 
