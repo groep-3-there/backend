@@ -50,12 +50,12 @@ values (1, '2021-02-01', 'ICT', 1),
        (38, '2018-01-29', 'HR', 4);
 
 
-insert into roles (id, created_at, is_matchmaker, name, company_id, department_id)
-values (1, '2020-01-01', false, 'Medewerker', 1, 1),
-       (2, '2020-01-02', false, 'Challenger', 2, 2),
-       (3, '2020-01-03', false, 'Department beheerder', 3, 3),
-       (4, '2020-01-04', false, 'Company beheerder', 4, 4),
-       (5, '2020-01-05', true, 'MatchMaker', 4, 1);
+insert into roles (id, created_at, is_matchmaker, name)
+values (1, '2020-01-01', false, 'Medewerker'),
+       (2, '2020-01-02', false, 'Challenger'),
+       (3, '2020-01-03', false, 'Department beheerder'),
+       (4, '2020-01-04', false, 'Company beheerder'),
+       (5, '2020-01-05', true, 'MatchMaker');
 
 insert into permissions (id, code_name, description, fancy_name)
 values (1, 'CHALLENGE_READ', 'Het bekijken van een challenge en reacties achterlaten', 'Challenge bekijken'),
@@ -96,27 +96,27 @@ values (1, 1),
 
 -- Insert test data for the User table
 INSERT INTO users (id, name, info, tags, created_at, last_seen, avatar_image_id, is_email_public,
-                   is_phone_number_public, accepted_tos_date, role_id, email, phone_number)
+                   is_phone_number_public, accepted_tos_date, role_id, email, phone_number, department_id)
 VALUES (1, 'Jan Bakker', 'Info1', 'tag1,tag2', '2023-01-01', '2023-01-01', NULL, true, true, '2023-01-01', 1,
-        'jan.bakker@email.com', '0612345678'),
+        'jan.bakker@email.com', '0612345678',1),
        (2, 'Johan de Vries', 'Info2', 'tag3,tag4', '2023-01-02', '2023-01-02', NULL, false, false, '2023-01-02', 2,
-        'johan.de.vries@email.com', '0612345678'),
+        'johan.de.vries@email.com', '0612345678',1),
        (3, 'Florijn Munster', 'Info3', 'tag5,tag6', '2023-01-03', '2023-01-03', NULL, true, false, '2023-01-03', 3,
-        'florijn.munster@email.com', '0612345678'),
+        'florijn.munster@email.com', '0612345678',1),
        (4, 'Rik Wildschut', 'Info4', 'tag7,tag8', '2023-01-04', '2023-01-04', NULL, false, true, '2023-01-04', 4,
-        'rik.wildschut@email.com', '0612345678'),
+        'rik.wildschut@email.com', '0612345678',1),
        (5, 'Luke van de Pol', 'Info5', 'tag9,tag10', '2023-01-05', '2023-01-05', NULL, true, false, '2023-01-05', 5,
-        'luke.van.de.pol@email.com', '0612345678'),
+        'luke.van.de.pol@email.com', '0612345678',1),
        (6, 'Eelco Jansma', 'Info6', 'tag11,tag12', '2023-01-06', '2023-01-06', NULL, true, true, '2023-01-06', 1,
-        'eelco.jansma@email.com', '0612345678'),
+        'eelco.jansma@email.com', '0612345678',1),
        (7, 'Jelle Blaeser', 'Info7', 'tag13,tag14', '2023-01-07', '2023-01-07', NULL, false, false, '2023-01-07', 2,
-        'jelle.blaeser@email.com', '0612345678'),
+        'jelle.blaeser@email.com', '0612345678',1),
        (8, 'Tjerk Venema', 'Info8', 'tag15,tag16', '2023-01-08', '2023-01-08', NULL, true, true, '2023-01-08', 3,
-        'tjerk.venema@email.com', '0612345678'),
+        'tjerk.venema@email.com', '0612345678',1),
        (9, 'Anniek de Boer', 'Info9', 'tag17,tag18', '2023-01-09', '2023-01-09', NULL, false, true, '2023-01-09', 4,
-        'anniek.de.boer@email.com', '0612345678'),
+        'anniek.de.boer@email.com', '0612345678',1),
        (10, 'Piet de Wit', 'Info10', 'tag19,tag20', '2023-01-10', '2023-01-10', NULL, true, false, '2023-01-10', 5,
-        'piet.de.wit@email.com', '0612345678');
+        'piet.de.wit@email.com', '0612345678',1);
 
 
 insert into branches(id, name)
@@ -178,7 +178,6 @@ values (1, 'Website'),
        (16, 'Prototype');
 
 
---
 --ALTER table users ENABLE TRIGGER ALL;
 --ALTER table companies ENABLE TRIGGER ALL;
 --ALTER table challenges ENABLE TRIGGER ALL;
