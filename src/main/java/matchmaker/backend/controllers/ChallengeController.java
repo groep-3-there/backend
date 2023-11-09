@@ -35,7 +35,9 @@ public class ChallengeController {
     }
 
     @GetMapping("/challenge/{id}")
-    public ResponseEntity<Challenge> getChallengeById(@PathVariable("id") Long id, @RequestAttribute("loggedInUser") User currentUser) {
+    public ResponseEntity<Challenge> getChallengeById(
+            @PathVariable("id") Long id,
+            @RequestAttribute("loggedInUser") User currentUser) {
         Optional<Challenge> target = repository.findById(id);
         if (target.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -49,7 +51,9 @@ public class ChallengeController {
 
     //Discuss, {id} or update?
     @PutMapping("/challenge/update")
-    public HttpStatus updateChallenge(@RequestBody Challenge challengeToUpdate, @RequestAttribute("loggedInUser") User currentUser) {
+    public HttpStatus updateChallenge(
+            @RequestBody Challenge challengeToUpdate,
+            @RequestAttribute("loggedInUser") User currentUser) {
         Optional<Challenge> target = repository.findById(challengeToUpdate.id);
         if (target.isEmpty()) {
 
@@ -67,7 +71,9 @@ public class ChallengeController {
     }
 
     @PostMapping(path = "/challenge")
-    public ResponseEntity<Challenge> createChallenge(@RequestBody Challenge newChallenge, @RequestAttribute("loggedInUser") User currentUser) {
+    public ResponseEntity<Challenge> createChallenge(
+            @RequestBody Challenge newChallenge,
+            @RequestAttribute("loggedInUser") User currentUser) {
         if (!currentUser.isInCompany()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
@@ -76,26 +82,23 @@ public class ChallengeController {
         }
         Challenge checkedChallenge = new Challenge();
 
-        String space = " ";
-        String nothing = "";
-
         //Only copy values we trust from the end user. If user passes id, it is ignored.
         if (newChallenge.id != null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 
-        if (newChallenge.title == null || newChallenge.title.replace(space, nothing).isEmpty())
+        if (newChallenge.title == null || newChallenge.title.isBlank())
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         checkedChallenge.title = newChallenge.title;
 
-        if (newChallenge.summary == null || newChallenge.summary.isEmpty())
+        if (newChallenge.summary == null || newChallenge.summary.isBlank())
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         checkedChallenge.summary = newChallenge.summary;
 
-        if (newChallenge.description == null || newChallenge.description.isEmpty())
+        if (newChallenge.description == null || newChallenge.description.isBlank())
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         checkedChallenge.description = newChallenge.description;
 
-        if (newChallenge.contactInformation == null || newChallenge.contactInformation.isEmpty())
+        if (newChallenge.contactInformation == null || newChallenge.contactInformation.isBlank())
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         checkedChallenge.contactInformation = newChallenge.contactInformation;
 
@@ -114,7 +117,6 @@ public class ChallengeController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         checkedChallenge.endDate = newChallenge.endDate;
 
-
         //Remove the last comma, if there is one
         if (checkedChallenge.tags.endsWith(",")) {
             String tags = checkedChallenge.tags;
@@ -128,7 +130,13 @@ public class ChallengeController {
         //optional fields that can be null
         checkedChallenge.bannerImageId = newChallenge.bannerImageId;
         checkedChallenge.imageAttachmentsIds = newChallenge.imageAttachmentsIds;
+
         checkedChallenge.tags = newChallenge.tags;
+        //Remove the last comma, if there is one
+        if (checkedChallenge.tags.endsWith(",")) {
+            String tags = checkedChallenge.tags;
+            checkedChallenge.tags = tags.substring(0, tags.length() - 1);
+        }
 
         //set the date to now
         checkedChallenge.createdAt = new Date();
