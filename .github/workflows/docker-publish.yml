@@ -73,7 +73,7 @@ jobs:
           java-version: '21'
           distribution: 'adopt'
       - name: Build with Maven
-        run: mvn -Dspring.profiles.active=prod -B package --file pom.xml
+        run: mvn -B package --file pom.xml
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
