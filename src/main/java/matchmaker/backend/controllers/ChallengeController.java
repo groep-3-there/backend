@@ -10,7 +10,6 @@ import matchmaker.backend.models.Challenge;
 import matchmaker.backend.models.Company;
 import matchmaker.backend.models.User;
 import matchmaker.backend.repositories.ChallengeRepository;
-import matchmaker.backend.repositories.ImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,22 +31,21 @@ public class ChallengeController {
     @Autowired
     private ChallengeRepository repository;
 
-    @Autowired
-    private ImageRepository imageRepository;
-
     @GetMapping("/challenge")
     public Iterable<Challenge> getChallenges() {
         return repository.findAll();
     }
 
     @GetMapping("/challenge/{id}")
-    public ResponseEntity<Challenge> getChallengeById(@PathVariable("id")Long id, @RequestAttribute("loggedInUser") User currentUser) {
+    public ResponseEntity<Challenge> getChallengeById(
+            @PathVariable("id") Long id,
+            @RequestAttribute("loggedInUser") User currentUser) {
         Optional<Challenge> target = repository.findById(id);
-        if(target.isEmpty()){
+        if (target.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         Challenge challenge = target.get();
-        if(!challenge.canBeSeenBy(currentUser)){
+        if (!challenge.canBeSeenBy(currentUser)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
         return ResponseEntity.status(HttpStatus.OK).body(challenge);
@@ -55,9 +53,11 @@ public class ChallengeController {
 
     //Discuss, {id} or update?
     @PutMapping("/challenge/update")
-    public ResponseEntity<Challenge> updateChallenge(@RequestBody Challenge challengeToUpdate, @RequestAttribute("loggedInUser") User currentUser){
+    public ResponseEntity<Challenge> updateChallenge(
+            @RequestBody Challenge challengeToUpdate, 
+            @RequestAttribute("loggedInUser") User currentUser){
         Optional<Challenge> target = repository.findById(challengeToUpdate.id);
-        if (target.isEmpty()){
+        if (target.isEmpty()) {
 
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null);
         }
@@ -67,36 +67,90 @@ public class ChallengeController {
         if(!challengeInDatabase.canBeEditedBy(currentUser)){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
+        //Only copy values we trust from the enduser. If user passes id, it is ignored.
+        challengeInDatabase.contactInformation = challengeToUpdate.contactInformation;
+        challengeInDatabase.title = challengeToUpdate.title;
+        challengeInDatabase.description = challengeToUpdate.description;
+        challengeInDatabase.bannerImageId = challengeToUpdate.bannerImageId;
+        challengeInDatabase.concludingRemarks = challengeToUpdate.concludingRemarks;
+        challengeInDatabase.summary = challengeToUpdate.summary;
+        challengeInDatabase.status = challengeToUpdate.status;
+        challengeInDatabase.endDate = challengeToUpdate.endDate;
+        challengeInDatabase.tags = challengeToUpdate.tags;
+        //Remove the last comma, if there is one
+        if (challengeToUpdate.tags.endsWith(",")) {
+            String tags = challengeToUpdate.tags;
+            challengeInDatabase.tags = tags.substring(0, tags.length() - 1);
+        }
 
-        Challenge saved = repository.save(challengeToUpdate);
+        challengeInDatabase.visibility = challengeToUpdate.visibility;
+        challengeInDatabase.imageAttachmentsIds = challengeToUpdate.imageAttachmentsIds;
+
+        Challenge saved = repository.save(challengeInDatabase);
         return ResponseEntity.status(HttpStatus.OK).body(saved);
     }
 
+    /**
+     * Create a new challenge
+     * @param newChallenge - Challenge object with the data to create
+     * @param currentUser - the user that is logged in
+     * @return the created challenge so the user can be redirected its id
+     * or UNAUTHORIZED if the user is not authorized
+     * or BAD_REQUEST if the input is invalid
+     */
     @PostMapping(path = "/challenge")
-    public ResponseEntity<Challenge> createChallenge(@RequestBody Challenge newChallenge, @RequestAttribute("loggedInUser") User currentUser) {
-        if(!currentUser.isInCompany()){
+    public ResponseEntity<Challenge> createChallenge(
+            @RequestBody Challenge newChallenge,
+            @RequestAttribute("loggedInUser") User currentUser) {
+        if (!currentUser.isInCompany()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
+
         if(!currentUser.hasPermissionAtDepartment(Perm.CHALLENGE_MANAGE, currentUser.department.id)){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
         Challenge checkedChallenge = new Challenge();
 
-        //Only copy values we trust from the enduser. If user passes id, it is ignored.
-        checkedChallenge.contactInformation = newChallenge.contactInformation;
-        checkedChallenge.title = newChallenge.title;
-        checkedChallenge.description = newChallenge.description;
-        checkedChallenge.bannerImageId = newChallenge.bannerImageId;
-        checkedChallenge.concludingRemarks = newChallenge.concludingRemarks;
-        checkedChallenge.summary = newChallenge.summary;
-        if(newChallenge.status == null){
-            newChallenge.status = ChallengeStatus.OPEN_VOOR_IDEEEN;
-        }
-        else{
-            checkedChallenge.status = newChallenge.status;
+        //Only copy values we trust from the end user. If user passes id, it is ignored.
+        if (newChallenge.id != null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 
+        if (newChallenge.title == null || newChallenge.title.isBlank())
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        checkedChallenge.title = newChallenge.title;
+
+        if (newChallenge.summary == null || newChallenge.summary.isBlank())
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        checkedChallenge.summary = newChallenge.summary;
+
+        if (newChallenge.description == null || newChallenge.description.isBlank())
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        checkedChallenge.description = newChallenge.description;
+
+        if (newChallenge.contactInformation == null || newChallenge.contactInformation.isBlank())
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        checkedChallenge.contactInformation = newChallenge.contactInformation;
+
+        //if user passed a concluding remark, it is not sent from the Vue GUI.
+        if (newChallenge.concludingRemarks != null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+//        checkedChallenge.concludingRemarks = newChallenge.concludingRemarks;
+
+        if (newChallenge.status == null) {
+            newChallenge.status = ChallengeStatus.OPEN_VOOR_IDEEEN;
+        } else {
+            checkedChallenge.status = newChallenge.status;
         }
+
+        if (newChallenge.visibility == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        checkedChallenge.visibility = newChallenge.visibility;
+
+        //optional fields that can be null
+        checkedChallenge.bannerImageId = newChallenge.bannerImageId;
+        checkedChallenge.imageAttachmentsIds = newChallenge.imageAttachmentsIds;
         checkedChallenge.endDate = newChallenge.endDate;
+
         checkedChallenge.tags = newChallenge.tags;
         //Remove the last comma, if there is one
         if (checkedChallenge.tags.endsWith(",")) {
@@ -104,8 +158,7 @@ public class ChallengeController {
             checkedChallenge.tags = tags.substring(0, tags.length() - 1);
         }
 
-        checkedChallenge.visibility = newChallenge.visibility;
-        checkedChallenge.imageAttachmentsIds = newChallenge.imageAttachmentsIds;
+        //set the date to now
         checkedChallenge.createdAt = new Date();
 
         //Set this based on the session, so no bad input can set the author, company & department
@@ -114,8 +167,12 @@ public class ChallengeController {
         checkedChallenge.department = currentUser.department;
         checkedChallenge.createdAt = new Date();
 
-        Challenge savedChallenge = repository.save(checkedChallenge);
-        return ResponseEntity.status(HttpStatus.OK).body(savedChallenge);
+        try {
+            Challenge savedChallenge = repository.save(checkedChallenge);
+            return ResponseEntity.status(HttpStatus.OK).body(savedChallenge);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
     }
 
     /**
