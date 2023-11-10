@@ -24,7 +24,15 @@ jobs:
         java-version: 21
         distribution: 'temurin'
         cache: maven
-    - name: Run and Stop Spring Boot
-      run: mvn spring-boot:test-run -Dspring-boot.run.jvmArguments="-Djasypt.encryptor.password=${{ secrets.SECRET_KEY }} -Dspring.profiles.active=dev";
+    #Run Spring Boot and then cancel it
+    - name: Run Spring Boot
+      run: mvn spring-boot:run &
+      shell: bash
+    - name: Wait for Spring Boot to start
+      run: sleep 30
+      shell: bash
+    - name: Cancel Spring Boot
+      run: kill $(jobs -p)
+      shell: bash
     - name: build and test
       run: mvn clean install -Djasypt.encryptor.password=${{ secrets.SECRET_KEY }}
