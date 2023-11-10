@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import java.util.Optional;
+
 /**
  * Adds the current logged in user to every request
  */
@@ -26,11 +28,18 @@ public class AuthInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         //TODO make this depend on the current session.
-        User loggedInUser = userRepository.findById(1L).get();
-        loggedInUser.getFavorites().stream().count(); // This triggers hiberate to load the (eager) favorite field
-        request.setAttribute("loggedInUser", loggedInUser);
+        Optional<User> loggedInUser = userRepository.findById(1L);
+        User testUser;
+        if(loggedInUser.isEmpty()){
+            testUser = new User("testUser");
+        }
+        else {
+            testUser = loggedInUser.get();
+        }
+        testUser.getFavorites().stream().count(); // This triggers hiberate to load the (eager) favorite field
+        request.setAttribute("loggedInUser", testUser);
 
-        log.info("[Auth Interceptor] Request performed by " + loggedInUser.name);
+        log.info("[Auth Interceptor] Request performed by " + testUser.name);
         return true; // Continue processing the request
     }
 }
