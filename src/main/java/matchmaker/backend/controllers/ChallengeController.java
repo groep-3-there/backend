@@ -67,8 +67,26 @@ public class ChallengeController {
         if(!challengeInDatabase.canBeEditedBy(currentUser)){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
+        //Only copy values we trust from the enduser. If user passes id, it is ignored.
+        challengeInDatabase.contactInformation = challengeToUpdate.contactInformation;
+        challengeInDatabase.title = challengeToUpdate.title;
+        challengeInDatabase.description = challengeToUpdate.description;
+        challengeInDatabase.bannerImageId = challengeToUpdate.bannerImageId;
+        challengeInDatabase.concludingRemarks = challengeToUpdate.concludingRemarks;
+        challengeInDatabase.summary = challengeToUpdate.summary;
+        challengeInDatabase.status = challengeToUpdate.status;
+        challengeInDatabase.endDate = challengeToUpdate.endDate;
+        challengeInDatabase.tags = challengeToUpdate.tags;
+        //Remove the last comma, if there is one
+        if (challengeToUpdate.tags.endsWith(",")) {
+            String tags = challengeToUpdate.tags;
+            challengeInDatabase.tags = tags.substring(0, tags.length() - 1);
+        }
 
-        Challenge saved = repository.save(challengeToUpdate);
+        challengeInDatabase.visibility = challengeToUpdate.visibility;
+        challengeInDatabase.imageAttachmentsIds = challengeToUpdate.imageAttachmentsIds;
+
+        Challenge saved = repository.save(challengeInDatabase);
         return ResponseEntity.status(HttpStatus.OK).body(saved);
     }
 
