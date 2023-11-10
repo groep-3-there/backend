@@ -56,7 +56,7 @@ public class UserIntegrationTest {
         testUser.email = "jan.bakker@mail.com";
         testUser.acceptedTosDate = new Date();
         testUser.avatarImageId = 1L;
-        testUser.createdAt = new Date();
+        testUser.createdAt = new Date();   
         testUser.favorites = null;
         testUser.department = null;
         testUser.info = "Jan Bakker bakt graag bij bakker bart.";
