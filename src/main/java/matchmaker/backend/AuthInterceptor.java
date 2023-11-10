@@ -28,7 +28,7 @@ public class AuthInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         //TODO make this depend on the current session.
-        Optional<User> loggedInUser = userRepository.findById(1L);
+        Optional<User> loggedInUser = userRepository.findFirstByOrderByIdAsc();
         User testUser;
         if(loggedInUser.isEmpty()){
             testUser = new User("testUser");
