@@ -33,7 +33,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         if(loggedInUser.isEmpty()){
             testUser = new User("testUser");
         }
-        else {
+        else { 
             testUser = loggedInUser.get();
         }
         testUser.getFavorites().stream().count(); // This triggers hiberate to load the (eager) favorite field
