@@ -30,12 +30,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         //TODO make this depend on the current session.
         Optional<User> loggedInUser = userRepository.findFirstByOrderByIdAsc();
         User testUser;
-        if(loggedInUser.isEmpty()){
-            testUser = new User("testUser");
-        }
-        else { 
-            testUser = loggedInUser.get();
-        }
+        testUser = loggedInUser.orElseGet(() -> new User("testUser"));
         testUser.getFavorites().stream().count(); // This triggers hiberate to load the (eager) favorite field
         request.setAttribute("loggedInUser", testUser);
 
