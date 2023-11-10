@@ -4,13 +4,15 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.FetchMode;
-import org.hibernate.annotations.Fetch;
+import matchmaker.backend.constants.Perm;
+import matchmaker.backend.controllers.ImageController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "roles")
@@ -19,15 +21,15 @@ import java.util.Set;
 @Getter
 @Setter
 public class Role {
+
+    private static final Logger log = LoggerFactory.getLogger(Role.class);
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long id;
 
-    @ManyToOne
-    public Company company;
 
-    @ManyToOne
-    public Department department;
     public String name;
     public Date createdAt;
     public boolean isMatchmaker;
@@ -37,9 +39,18 @@ public class Role {
 
     public Role(String name, Company company, Department department) {
         this.name = name;
-        this.company = company;
-        this.department = department;
     }
+
+    public void addPermission(Permission p){
+        if(p.id == null){
+            log.warn("!!!!! Permission must be fetched from database, skipping !!!!!");
+            return;
+        }
+
+        this.permissions.add(p);
+    }
+
+
     public Role(){
 
     }

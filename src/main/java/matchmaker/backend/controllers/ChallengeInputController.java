@@ -1,23 +1,23 @@
 package matchmaker.backend.controllers;
 
+import matchmaker.backend.constants.ChallengeReactionType;
 import matchmaker.backend.constants.ChallengeStatus;
 import matchmaker.backend.models.Challenge;
 import matchmaker.backend.models.ChallengeInput;
 import matchmaker.backend.models.User;
 import matchmaker.backend.repositories.ChallengeRepository;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import matchmaker.backend.repositories.ChallengeInputRepository;
 
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-public class ChallengeInputController {
+public class  ChallengeInputController {
 
     @Autowired
     private ChallengeInputRepository repository;
@@ -41,7 +41,7 @@ public class ChallengeInputController {
     }
 
     @PostMapping("/reaction/create/{id}")
-    public ResponseEntity createReactionOnChallenge(@RequestBody ChallengeInput reaction,
+    public ResponseEntity createReactionOnChallenge(@RequestBody ChallengeInput inputReaction,
                                                     @RequestAttribute("loggedInUser") User currentUser,
                                                     @PathVariable("id") Long challengeId){
         //Check if the user is logged in
@@ -59,10 +59,40 @@ public class ChallengeInputController {
         //If the user cant see the challenge, it should not be able to react to it.
         if(!filledChallenge.canBeSeenBy(currentUser)){return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);}
 
+        if(inputReaction.text == null || inputReaction.text.isBlank()){ return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); }
+
         //The user can see the challenge, and the challenge is open for ideas, so we can save the reaction.
-        reaction.author = currentUser;
-        reaction.challenge = filledChallenge;
-        repository.save(reaction);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        ChallengeInput checked = new ChallengeInput();
+        checked.createdAt = new Date();
+        checked.isChosenAnswer = false;
+        if(inputReaction.type != null){
+            checked.type = inputReaction.type;
+        }
+        else{
+            inputReaction.type = ChallengeReactionType.FEEDBACK;
+        }
+        checked.author = currentUser;
+        checked.challenge = filledChallenge;
+        checked.text = inputReaction.text;
+        ChallengeInput created = repository.save(checked);
+        return ResponseEntity.status(HttpStatus.OK).body(created);
+    }
+
+    @PutMapping("/reaction/{id}/markreaction")
+    public ResponseEntity markReactionAsChosen(@PathVariable("id")Long reactionId,
+                                               @RequestAttribute("loggedInUser") User currentUser){
+        Optional<ChallengeInput> reaction = repository.findById(reactionId);
+        if(reaction.isEmpty()){ return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); }
+        Challenge challenge = reaction.get().challenge;
+
+        if(challenge.status != ChallengeStatus.OPEN_VOOR_IDEEEN){ return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Challenge is niet open voor ideeen."); }
+        if(!challenge.canBeEditedBy(currentUser)){ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); }
+
+        reaction.get().isChosenAnswer = true;
+        repository.save(reaction.get());
+        challenge.status = ChallengeStatus.IN_UITVOERING;
+        challengeRepository.save(challenge);
+
+        return ResponseEntity.status(HttpStatus.OK).body(reaction.get());
     }
 }

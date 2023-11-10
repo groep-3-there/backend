@@ -5,7 +5,10 @@ import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import matchmaker.backend.constants.ChallengeStatus;
 import matchmaker.backend.constants.Perm;
-import matchmaker.backend.models.*;
+import matchmaker.backend.models.Branch;
+import matchmaker.backend.models.Challenge;
+import matchmaker.backend.models.Company;
+import matchmaker.backend.models.User;
 import matchmaker.backend.repositories.ChallengeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,7 +20,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class ChallengeController {
@@ -47,23 +53,23 @@ public class ChallengeController {
 
     //Discuss, {id} or update?
     @PutMapping("/challenge/update")
-    public HttpStatus updateChallenge(
-            @RequestBody Challenge challengeToUpdate,
-            @RequestAttribute("loggedInUser") User currentUser) {
+    public ResponseEntity<Challenge> updateChallenge(
+            @RequestBody Challenge challengeToUpdate, 
+            @RequestAttribute("loggedInUser") User currentUser){
         Optional<Challenge> target = repository.findById(challengeToUpdate.id);
         if (target.isEmpty()) {
 
-            return HttpStatus.EXPECTATION_FAILED;
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null);
         }
 
         //Grab the same challenge from the database to be sure we have valid data.
         Challenge challengeInDatabase = target.get();
-        if (!challengeInDatabase.canBeEditedBy(currentUser)) {
-            return HttpStatus.UNAUTHORIZED;
+        if(!challengeInDatabase.canBeEditedBy(currentUser)){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
 
-        repository.save(challengeToUpdate);
-        return HttpStatus.OK;
+        Challenge saved = repository.save(challengeToUpdate);
+        return ResponseEntity.status(HttpStatus.OK).body(saved);
     }
 
     /**
@@ -81,7 +87,8 @@ public class ChallengeController {
         if (!currentUser.isInCompany()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
-        if (!currentUser.hasPermissionAtCompany(Perm.CHALLENGE_MANAGE, currentUser.role.company.id)) {
+
+        if(!currentUser.hasPermissionAtDepartment(Perm.CHALLENGE_MANAGE, currentUser.department.id)){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
         Challenge checkedChallenge = new Challenge();
@@ -138,8 +145,8 @@ public class ChallengeController {
 
         //Set this based on the session, so no bad input can set the author, company & department
         checkedChallenge.author = currentUser;
-        checkedChallenge.company = currentUser.role.company;
-        checkedChallenge.department = currentUser.role.department;
+        checkedChallenge.company = currentUser.department.parentCompany;
+        checkedChallenge.department = currentUser.department;
         checkedChallenge.createdAt = new Date();
 
         try {
@@ -237,7 +244,13 @@ public class ChallengeController {
                 predicates.add(brancheNameExpression.in(branche));
             }
 
+            predicates.add(builder.notEqual(root.get("status"), ChallengeStatus.GEARCHIVEERD));
+
             return builder.and(predicates.toArray(new Predicate[0]));
         };
+    }
+
+    public Iterable<Challenge> GetChallengesByDepartmentId(Long departmentId){
+        return repository.findAllByDepartmentId(departmentId);
     }
 }

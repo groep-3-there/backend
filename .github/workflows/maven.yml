@@ -5,6 +5,15 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 21
@@ -14,4 +23,4 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build and test
-      run: mvn clean install
+      run: mvn clean install -Djasypt.encryptor.password=${{ secrets.SECRET_KEY }}

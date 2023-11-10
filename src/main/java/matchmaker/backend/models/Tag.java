@@ -6,35 +6,21 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
-import java.util.Date;
-
 @Entity
-@Table(name = "companies")
+@Table(name = "tags")
 @EnableAutoConfiguration
 @AllArgsConstructor
 @Getter
 @Setter
-public class Company {
-
+public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long id;
-
     public String name;
-    public String info;
-    public Long profileImageId;
-    public Long bannerImageId;
-    public String tags;
-    public String branch;
-    public Date createdAt;
 
-    public Long ownerId;
-
-    public Company() {
-
-    }
-    public Company(String name){
+    public Tag(String name){
         this.name = name;
     }
 
+    public Tag(){}
 }
