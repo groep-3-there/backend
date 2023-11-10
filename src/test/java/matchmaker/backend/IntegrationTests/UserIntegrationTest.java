@@ -41,7 +41,7 @@ public class UserIntegrationTest {
 
     @Test
     public void getUserById() throws Exception {
-        Optional<Role> role = roleRepository.findById(1L);
+        Optional<Role> role = Optional.of(roleRepository.findById(1L).orElseGet(() -> new Role("testRole")));
         Department department = new Department();
         department.setName("Test department");
         Company company = new Company();
