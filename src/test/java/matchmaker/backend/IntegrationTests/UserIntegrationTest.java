@@ -41,9 +41,8 @@ public class UserIntegrationTest {
 
     @Test
     public void getUserById() throws Exception {
-        Role testRole = new Role("testRole");
-        testRole.setMatchmaker(true);
-        roleRepository.save(testRole);
+        //Get first role
+        Optional<Role> role = roleRepository.findById(1L);
         Department department = new Department();
         department.setName("Test department");
         Company company = new Company();
@@ -64,7 +63,7 @@ public class UserIntegrationTest {
         testUser.isEmailPublic = true;
         testUser.isPhoneNumberPublic = true;
         testUser.lastSeen = new Date();
-        testUser.role = testRole;
+        testUser.role = role.get();
         testUser.setDepartment(department);
         testUser.phoneNumber = "0612345678";
         testUser.tags = "tag1,tag2";
