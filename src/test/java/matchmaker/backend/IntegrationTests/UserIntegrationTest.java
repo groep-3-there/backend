@@ -64,7 +64,7 @@ public class UserIntegrationTest {
         testUser.isEmailPublic = true;
         testUser.isPhoneNumberPublic = true;
         testUser.lastSeen = new Date();
-        testUser.role = role.get();
+        testUser.role = testRole;
         testUser.setDepartment(department);
         testUser.phoneNumber = "0612345678";
         testUser.tags = "tag1,tag2";
