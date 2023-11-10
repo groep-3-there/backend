@@ -35,7 +35,7 @@ public class LoadDatabase implements CommandLineRunner {
         }
     }
     private boolean testDataExists() {
-        String query = "SELECT COUNT(*) FROM users WHERE name = 'Jan Bakker'";
+        String query = "SELECT COUNT(*) FROM permissions WHERE code_name = 'CHALLENGE_READ'";
         Integer count = jdbcTemplate.queryForObject(query, Integer.class);
         return count != null && count > 0;
     }
