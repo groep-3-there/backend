@@ -26,7 +26,7 @@ jobs:
         cache: maven
     #Run Spring Boot and then cancel it
     - name: Run Spring Boot
-      run: mvn spring-boot:run &
+      run: mvn spring-boot:test-run -Dspring-boot.run.jvmArguments="-Djasypt.encryptor.password=${{ secrets.SECRET_KEY }} -Dspring.profiles.active=dev";
       shell: bash
     - name: Wait for Spring Boot to start
       run: sleep 30
