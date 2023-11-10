@@ -25,6 +25,6 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Run and Stop Spring Boot
-    - run: mvn spring-boot:test-run -Dspring-boot.run.jvmArguments="-Djasypt.encryptor.password=${{ secrets.SECRET_KEY }} -Dspring.profiles.active=dev &
+      run: mvn spring-boot:test-run -Dspring-boot.run.jvmArguments="-Djasypt.encryptor.password=${{ secrets.SECRET_KEY }} -Dspring.profiles.active=dev &
     - name: build and test
       run: mvn clean install -Djasypt.encryptor.password=${{ secrets.SECRET_KEY }}
