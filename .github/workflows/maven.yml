@@ -28,4 +28,3 @@ jobs:
       run: mvn spring-boot:run -Dspring-boot.run.jvmArguments="-Djasypt.encryptor.password=${{ secrets.SECRET_KEY }} -Dspring.profiles.active=dev" & sleep 30 && mvn spring-boot:stop
     - name: build and test
       run: mvn clean install -Djasypt.encryptor.password=${{ secrets.SECRET_KEY }}  -Dspring.profiles.active=dev
- 
