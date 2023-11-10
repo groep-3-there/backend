@@ -24,9 +24,7 @@ jobs:
         java-version: 21
         distribution: 'temurin'
         cache: maven
-    - name: Run Spring Boot
-      run: mvn -Dspring-boot.run.jvmArguments="-Djasypt.encryptor.password=matchmaker" spring-boot:run
-    - name: Stop Spring Boot
-      run: mvn spring-boot:stop
+    - name: Run and Stop Spring Boot
+      run: mvn -Dspring-boot.run.jvmArguments="-Djasypt.encryptor.password=matchmaker" spring-boot:run; mvn spring-boot:stop
     - name: build and test
       run: mvn clean install -Djasypt.encryptor.password=${{ secrets.SECRET_KEY }}
