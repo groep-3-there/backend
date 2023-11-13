@@ -29,3 +29,4 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addMapping("/**").allowedOrigins("http://161.35.84.133").allowedMethods("*");
         registry.addMapping("/**").allowedOrigins("https://groep-3-there.github.io").allowedMethods("*");
     }
+}
