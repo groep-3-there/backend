@@ -40,10 +40,6 @@ public class User {
     @ManyToOne
     public Department department;
 
-    @ManyToOne
-    public Company company;
-
-
     @ManyToMany
     public List<Challenge> favorites = new java.util.ArrayList<>();
 
@@ -51,9 +47,10 @@ public class User {
         this.name = name;
     }
 
-    public boolean hasPermissionAtCompany(Long companyId, String m){
-        if(!role.getCompany().id.equals(companyId)){
-            //User is not part of the company, so he dos not have the permission
+    public boolean hasPermissionAtDepartment(String m, Long departmentId){
+        if(this.role.isMatchmaker) { return true; }
+        if(!department.id.equals(departmentId)){
+            //User is not part of the company, so he does not have the permission
             return false;
         }
 
@@ -64,7 +61,9 @@ public class User {
         }
         return false;
     }
-
+    public boolean isInCompany(){
+        return this.department != null;
+    }
 
 
     public User() {
