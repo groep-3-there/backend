@@ -81,4 +81,10 @@ public class CompanyIntegrationTest {
                 })
                 .andExpect(status().isOk());
     }
+
+    @Test
+    public void testGetNonExistentCompanyById() throws Exception{
+        mockMvc.perform(MockMvcRequestBuilders.get("/company/999912"))
+                .andExpect(status().isNotFound());
+    }
 }
