@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Principal;
 import java.util.HashMap;
 
 @RestController
@@ -29,6 +30,11 @@ public class RootController {
         HashMap<String, String> map = new HashMap<>();
         map.put("ping", "pong");
         return map;
+    }
+
+    @GetMapping(path = "/test")
+    public String test(Principal principal) {
+        return principal.getName();
     }
 
 
