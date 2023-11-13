@@ -4,6 +4,6 @@ public enum ChallengeStatus {
     OPEN_VOOR_IDEEEN,
     IN_UITVOERING,
     AFGEROND,
-    GEACHRIVEERD
+    GEARCHIVEERD
 }
 

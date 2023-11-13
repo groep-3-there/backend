@@ -2,18 +2,16 @@ package matchmaker.backend;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import matchmaker.backend.database.LoadDatabase;
 import matchmaker.backend.models.User;
-import matchmaker.backend.repositories.ChallengeRepository;
 import matchmaker.backend.repositories.UserRepository;
-import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.HandlerInterceptor;
+
+import java.util.Optional;
 
 /**
  * Adds the current logged in user to every request
@@ -30,11 +28,13 @@ public class AuthInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         //TODO make this depend on the current session.
-        User loggedInUser = userRepository.findById(1L).get();
-        loggedInUser.getFavorites().stream().count(); // This triggers hiberate to load the (eager) favorite field
-        request.setAttribute("loggedInUser", loggedInUser);
+        Optional<User> loggedInUser = userRepository.findFirstByOrderByIdAsc();
+        User testUser;
+        testUser = loggedInUser.orElseGet(() -> new User("testUser"));
+        testUser.getFavorites().stream().count(); // This triggers hiberate to load the (eager) favorite field
+        request.setAttribute("loggedInUser", testUser);
 
-        log.info("[Auth Interceptor] Request performed by " + loggedInUser.name);
+        log.info("[Auth Interceptor] Request performed by " + testUser.name);
         return true; // Continue processing the request
     }
 }

@@ -1,12 +1,13 @@
 package matchmaker.backend.repositories;
 
 import matchmaker.backend.models.Challenge;
-import matchmaker.backend.models.User;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.UUID;
-
+@Repository
 public interface ChallengeRepository extends CrudRepository<Challenge, Long>, JpaSpecificationExecutor<Challenge> {
     Iterable<Challenge> findByAuthorId(Long authorId);
+
+    Iterable<Challenge> findAllByDepartmentId(Long departmentId);
 }
