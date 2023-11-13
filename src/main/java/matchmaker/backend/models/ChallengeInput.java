@@ -39,4 +39,8 @@ public class ChallengeInput {
     public ChallengeInput() {
 
     }
+
+    public ChallengeInput(String name){
+        this.text = name;
+    }
 }

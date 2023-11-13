@@ -3,6 +3,8 @@ package matchmaker.backend.controllers;
 import matchmaker.backend.models.Company;
 import matchmaker.backend.repositories.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,8 +24,12 @@ public class CompanyController {
     }
 
     @GetMapping("/company/{id}")
-    public Optional<Company> getCompanyById(@PathVariable("id") Long id){
-        return repository.findById(id);
+    public ResponseEntity<Optional<Company>> getCompanyById(@PathVariable("id") Long id){
+        Optional<Company> company = repository.findById(id);
+        if(company.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(company);
     }
 
 
