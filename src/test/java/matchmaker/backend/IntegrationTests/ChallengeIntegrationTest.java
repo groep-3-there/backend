@@ -164,6 +164,11 @@ public class ChallengeIntegrationTest {
         user.setRole(role);
         userRepository.save(user);
 
+        //change the role of the first user, delete later when login is implemented
+        User firstuser = userRepository.findById(1L).get();
+        firstuser.setRole(role);
+        userRepository.save(firstuser);
+
         Challenge testChallenge = new Challenge();
         testChallenge.setTitle("Vergadering verbeteren");
         testChallenge.setDescription("Ik wil graag mijn vergadering verbeteren. Ik zoek een team van 3 personen die mij hierbij kunnen helpen.");
@@ -180,6 +185,11 @@ public class ChallengeIntegrationTest {
             .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(testChallenge)))
                 .andExpect(status().isOk());
+
+        //reset the change of the first user, delete later when login is implemented
+        Role roletemp = rolerepository.findById(1L).get();
+        firstuser.setRole(roletemp);
+        userRepository.save(firstuser);
     }
 
     @Test
@@ -237,15 +247,20 @@ public class ChallengeIntegrationTest {
         testChallenge.setSummary("platform verbeteren");
         testChallenge.setTags("App");
 
+        //change the role of the first user, delete later when login is implemented
         User firstUser = userRepository.findById(1L).get();
-        Role matchMaker = rolerepository.findById(1L).get();
-        firstUser.setRole(matchMaker);
+        firstUser.setRole(role);
         userRepository.save(firstUser);
 
         mockMvc.perform(put("/challenge/update")
             .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(testChallenge)))
                 .andExpect(status().isOk());
+
+        //reset the change of the first user, delete later when login is implemented
+        Role roletemp = rolerepository.findById(1L).get();
+        firstUser.setRole(roletemp);
+        userRepository.save(firstUser);
     }
 
     @Test
