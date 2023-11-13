@@ -29,8 +29,7 @@ public class Challenge {
     private static final Logger log = LoggerFactory.getLogger(Challenge.class);
 
 
-    public Challenge(String title, User author){
-        this.author = author;
+    public Challenge(String title){
         this.title = title;
     }
 
