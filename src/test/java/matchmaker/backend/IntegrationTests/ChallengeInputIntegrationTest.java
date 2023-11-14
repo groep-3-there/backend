@@ -8,6 +8,7 @@ import matchmaker.backend.constants.ChallengeReactionType;
 import matchmaker.backend.constants.ChallengeStatus;
 import matchmaker.backend.constants.ChallengeVisibility;
 import matchmaker.backend.controllers.ChallengeInputController;
+import matchmaker.backend.controllers.CompanyController;
 import matchmaker.backend.controllers.UserController;
 import matchmaker.backend.models.*;
 import matchmaker.backend.repositories.*;
@@ -60,12 +61,13 @@ public class ChallengeInputIntegrationTest {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private ChallengeInputController challengeInputController;
 
     private Logger log = LoggerFactory.getLogger(ChallengeInputIntegrationTest.class);
     @Autowired
     private UserController userController;
+
+    @Autowired
+    private ChallengeInputController challengeInputController;
 
     @SneakyThrows
     @BeforeEach
@@ -92,6 +94,7 @@ public class ChallengeInputIntegrationTest {
         });
 
     }
+
     @Test
     public void testGetAllReactionsForChallengeById() throws Exception{
         //Create a challenge

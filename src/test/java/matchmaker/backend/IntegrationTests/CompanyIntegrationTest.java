@@ -49,7 +49,7 @@ public class CompanyIntegrationTest{
     @Autowired
     private UserRepository userRepository;
 
-    private static final Logger log = LoggerFactory.getLogger(CompanyIntegrationTest.class);
+    private static final Logger log = LoggerFactory.getLogger(ChallengeInputIntegrationTest.class);
 
     @Autowired
     private UserController userController;
