@@ -163,7 +163,6 @@ public class ChallengeController {
 
         //Set this based on the session, so no bad input can set the author, company & department
         checkedChallenge.author = currentUser;
-        checkedChallenge.company = currentUser.department.parentCompany;
         checkedChallenge.department = currentUser.department;
         checkedChallenge.createdAt = new Date();
 
