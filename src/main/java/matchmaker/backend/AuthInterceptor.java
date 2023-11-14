@@ -1,5 +1,6 @@
 package matchmaker.backend;
 
+import com.google.firebase.auth.FirebaseAuth;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import matchmaker.backend.models.User;
@@ -23,18 +24,32 @@ public class AuthInterceptor implements HandlerInterceptor {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    private FirebaseAuth firebaseAuth;
+
     private static final Logger log = LoggerFactory.getLogger(AuthInterceptor.class);
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        //TODO make this depend on the current session.
-        Optional<User> loggedInUser = userRepository.findFirstByOrderByIdAsc();
-        User testUser;
-        testUser = loggedInUser.orElseGet(() -> new User("testUser"));
-        testUser.getFavorites().stream().count(); // This triggers hiberate to load the (eager) favorite field
-        request.setAttribute("loggedInUser", testUser);
+        if(request.getUserPrincipal() == null){
+            log.info("No user principal found");
+            request.setAttribute("loggedInUser", null);
+            return true;
+        }
+        String firebaseUID = firebaseAuth.getUser(request.getUserPrincipal().getName()).getUid();
+        Optional<User> loggedInUser = userRepository.findByFirebaseId(firebaseUID);
+        if(loggedInUser.isEmpty()){
+            log.info("No matching user found for firebase id " + firebaseUID);
+            request.setAttribute("loggedInUser", null);
+            return true;
+        }
 
-        log.info("[Auth Interceptor] Request performed by " + testUser.name);
+        User existingUser = loggedInUser.get();
+        existingUser.getFavorites().stream().count(); // This triggers hiberate to load the (eager) favorite field
+        log.info("[Auth Interceptor] Request performed by " + existingUser.name );
+        request.setAttribute("loggedInUser", existingUser);
+
+
         return true; // Continue processing the request
     }
 }

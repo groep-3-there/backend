@@ -20,7 +20,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long id;
-
+    public String firebaseId;
     public String name;
     public String info;
     public String tags;

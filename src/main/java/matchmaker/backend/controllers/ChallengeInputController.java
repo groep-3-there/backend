@@ -42,7 +42,7 @@ public class  ChallengeInputController {
 
     @PostMapping("/reaction/create/{id}")
     public ResponseEntity createReactionOnChallenge(@RequestBody ChallengeInput inputReaction,
-                                                    @RequestAttribute("loggedInUser") User currentUser,
+                                                    @RequestAttribute(name = "loggedInUser", required = false) User currentUser,
                                                     @PathVariable("id") Long challengeId){
         //Check if the user is logged in
         if(currentUser == null){ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); }
@@ -80,7 +80,7 @@ public class  ChallengeInputController {
 
     @PutMapping("/reaction/{id}/markreaction")
     public ResponseEntity markReactionAsChosen(@PathVariable("id")Long reactionId,
-                                               @RequestAttribute("loggedInUser") User currentUser){
+                                               @RequestAttribute(name = "loggedInUser", required = false) User currentUser){
         Optional<ChallengeInput> reaction = repository.findById(reactionId);
         if(reaction.isEmpty()){ return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); }
         Challenge challenge = reaction.get().challenge;

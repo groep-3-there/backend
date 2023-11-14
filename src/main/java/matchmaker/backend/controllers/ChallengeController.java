@@ -39,7 +39,7 @@ public class ChallengeController {
     @GetMapping("/challenge/{id}")
     public ResponseEntity<Challenge> getChallengeById(
             @PathVariable("id") Long id,
-            @RequestAttribute("loggedInUser") User currentUser) {
+            @RequestAttribute(name = "loggedInUser", required = false) User currentUser) {
         Optional<Challenge> target = repository.findById(id);
         if (target.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
