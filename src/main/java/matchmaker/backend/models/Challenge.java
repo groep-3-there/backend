@@ -36,7 +36,8 @@ public class Challenge {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "challenge_id")
+    @TableGenerator(name="challenge_id", initialValue = 1000)
     public Long id;
 
     @ManyToOne
