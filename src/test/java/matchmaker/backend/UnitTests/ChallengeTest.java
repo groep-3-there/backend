@@ -39,6 +39,7 @@ class ChallengeTest {
         testDepartment.setId(1L);
         testDepartment.setParentCompany(testCompany);
         testUser.department = testDepartment;
+        testChallenge.setDepartment(testDepartment);
         testChallenge.visibility = ChallengeVisibility.INTERNAL;
         assertEquals(testChallenge.canBeSeenBy(testUser), true);
     }
