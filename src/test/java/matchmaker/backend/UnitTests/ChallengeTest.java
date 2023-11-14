@@ -33,7 +33,13 @@ class ChallengeTest {
     void canBeSeenByInternalUser(){
         Challenge testChallenge = new Challenge();
         User testUser = new User("testUser");
-        testUser.department = new Department();
+        Company testCompany = new Company();
+        testCompany.setId(1L);
+        Department testDepartment = new Department();
+        testDepartment.setId(1L);
+        testDepartment.setParentCompany(testCompany);
+        testUser.department = testDepartment;
+        testChallenge.setDepartment(testDepartment);
         testChallenge.visibility = ChallengeVisibility.INTERNAL;
         assertEquals(testChallenge.canBeSeenBy(testUser), true);
     }
@@ -42,9 +48,11 @@ class ChallengeTest {
     void canBeSeenByDepartmentUser() {
         Challenge testChallenge = new Challenge();
         User testUser = new User("testUser");
+        Company testCompany = new Company();
+        testCompany.setId(1L);
         Department testDepartment = new Department();
         testDepartment.id = 1L;
-
+        testDepartment.parentCompany = testCompany;
         testUser.department = testDepartment;
         testChallenge.department = testDepartment;
         testChallenge.visibility = ChallengeVisibility.DEPARTMENT;
