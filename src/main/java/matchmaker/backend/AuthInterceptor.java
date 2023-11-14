@@ -1,5 +1,6 @@
 package matchmaker.backend;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,6 +30,9 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     @Autowired
     private FirebaseAuth firebaseAuth;
+
+    @Autowired
+    private FirebaseApp firebaseApp;
 
     @Autowired
     private Environment environment;
