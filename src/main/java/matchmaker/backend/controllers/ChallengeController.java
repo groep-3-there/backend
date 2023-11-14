@@ -267,4 +267,9 @@ public class ChallengeController {
     public Iterable<Challenge> GetChallengesByDepartmentId(Long departmentId){
         return repository.findAllByDepartmentId(departmentId);
     }
+
+    @GetMapping("/challenge/company/{id}")
+    public Iterable<Challenge> getChallengesByCompanyId(@PathVariable("id") Long companyId){
+        return repository.findChallengeByDepartment_ParentCompanyId(companyId);
+    }
 }
