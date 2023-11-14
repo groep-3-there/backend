@@ -5,8 +5,10 @@ import lombok.SneakyThrows;
 import matchmaker.backend.AuthInterceptor;
 import matchmaker.backend.controllers.CompanyController;
 import matchmaker.backend.controllers.UserController;
+import matchmaker.backend.models.Branch;
 import matchmaker.backend.models.Company;
 import matchmaker.backend.models.User;
+import matchmaker.backend.repositories.BranchRepository;
 import matchmaker.backend.repositories.CompanyRepository;
 import matchmaker.backend.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,6 +58,8 @@ public class CompanyIntegrationTest{
 
     @Autowired
     private CompanyController companyController;
+    @Autowired
+    private BranchRepository branchRepository;
 
     @SneakyThrows
     @BeforeEach

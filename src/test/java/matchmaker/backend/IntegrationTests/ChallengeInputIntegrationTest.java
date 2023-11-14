@@ -27,6 +27,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.Optional;
@@ -71,6 +72,8 @@ public class ChallengeInputIntegrationTest {
     @Autowired
     private RoleRepository roleRepository;
 
+
+    public Long userId = 1L;
     @SneakyThrows
     @BeforeEach
     public void before() {
@@ -101,6 +104,9 @@ public class ChallengeInputIntegrationTest {
             testUser.tags = "tag1,tag2";
 
             userRepository.save(testUser);
+            userId = testUser.id;
+            log.info("User saved to repository with id " + testUser.id.toString());
+            userRepository.findAll().forEach(user -> log.info("Database users: " + user.id.toString()));
 
         MockitoAnnotations.initMocks(this);
         mockMvc = MockMvcBuilders
@@ -110,7 +116,7 @@ public class ChallengeInputIntegrationTest {
         when(authInterceptor.preHandle(Mockito.any(), Mockito.any(), Mockito.any())).then(invocation -> {
 
             log.info("[Auth Interceptor] Test environment detected, returning user 1");
-            Optional<User> loggedInUser = userRepository.findById(1L);
+            Optional<User> loggedInUser = userRepository.findById(userId);
             if (loggedInUser.isEmpty()) {
                 log.info("[Auth Interceptor] No matching user found for id 1");
                 invocation.getArgument(0, jakarta.servlet.http.HttpServletRequest.class).setAttribute("loggedInUser", null);
