@@ -1,341 +1,314 @@
-//package matchmaker.backend.UnitTests;
-//
-//import matchmaker.backend.constants.ChallengeStatus;
-//import matchmaker.backend.constants.ChallengeVisibility;
-//import matchmaker.backend.models.*;
-//import org.junit.jupiter.api.Test;
-//import java.util.ArrayList;
-//import java.util.Date;
-//
-//class ChallengeTest {
-//
-//    public User testUser = new User(){
-//        {
-//            this.id = 1L;
-//            this.name = "Test User";
-//            this.info = "This is a test user.";
-//            this.tags = "Test, User, Test User";
-//            this.createdAt = new Date();
-//            this.lastSeen = new Date();
-//            this.avatarImageId = 1L;
-//            this.isEmailPublic = true;
-//            this.isPhoneNumberPublic = true;
-//            this.acceptedTosDate = new Date();
-//            this.email = "";
-//            this.role = testRole;
-//        }
-//    };
-//
-//    public Company testCompany = new Company(){
-//        {
-//            this.id = 1L;
-//            this.name = "Test Company";
-//            this.bannerImageId = 1L;
-//            this.tags = "Test, Company, Test Company";
-//            this.createdAt = new Date();
-//            this.branch = "Test Branch";
-//        }
-//    };
-//
-//    public Department testDepartment = new Department(){
-//        {
-//            this.id = 1L;
-//            this.name = "Test Department";
-//            this.createdAt = new Date();
-//            this.parentCompany = testCompany;
-//        }
-//    };
-//
-//    public Challenge testChallenge = new Challenge(){
-//        {
-//            this.id = 1L;
-//            this.author = testUser;
-//            this.department = testDepartment;
-//            this.company = testCompany;
-//            this.contactInformation = "Contact information for the test challenge.";
-//            this.title = "New test challenge";
-//            this.description = "New test description.";
-//            this.bannerImageId = 1L;
-//            this.concludingRemarks = "These are some concluding remarks for the test challenge.";
-//            this.summary = "This is a summary of the test challenge.";
-//            this.status = ChallengeStatus.OPEN_VOOR_IDEEEN;
-//            this.createdAt = new Date();
-//            this.endDate = new Date();
-//            this.tags = "AI, Machine Learning, Prototype, Test";
-//            this.imageAttachmentsIds = new ArrayList<>();
-//            this.visibility = ChallengeVisibility.PUBLIC;
-//        }
-//    };
-//
-//    public Role testRole = new Role(){
-//        {
-//            this.id = 1L;
-//            this.name = "Test Role";
-//            this.createdAt = new Date();
-//            this.isMatchmaker = true;
-////            this.company = testCompany;
-////            this.department = testDepartment;
-//        }
-//    };
-//
-//    @Test
-//    void getId() {
-//        Long id = testChallenge.getId();
-//        assert(id == 1L);
-//    }
-//
-//    @Test
-//    void getAuthor() {
-//        User author = testChallenge.getAuthor();
-//        assert(author == testUser);
-//    }
-//
-//    @Test
-//    void getDepartment() {
-//        Department department = testChallenge.getDepartment();
-//        assert(department == testDepartment);
-//    }
-//
-//    @Test
-//    void getCompany() {
-//        Company company = testChallenge.getCompany();
-//        assert(company == testCompany);
-//    }
-//
-//    @Test
-//    void getContactInformation() {
-//        String contactInformation = testChallenge.getContactInformation();
-//        assert(contactInformation.equals("Contact information for the test challenge."));
-//    }
-//
-//    @Test
-//    void getTitle() {
-//        String title = testChallenge.getTitle();
-//        assert(title.equals("New test challenge"));
-//    }
-//
-//    @Test
-//    void getDescription() {
-//        String description = testChallenge.getDescription();
-//        assert(description.equals("New test description."));
-//    }
-//
-//    @Test
-//    void getBannerImageId() {
-//        Long bannerImageId = testChallenge.getBannerImageId();
-//        assert(bannerImageId == 1L);
-//    }
-//
-//    @Test
-//    void getConcludingRemarks() {
-//        String concludingRemarks = testChallenge.getConcludingRemarks();
-//        assert(concludingRemarks.equals("These are some concluding remarks for the test challenge."));
-//    }
-//
-//    @Test
-//    void getSummary() {
-//        String summary = testChallenge.getSummary();
-//        assert(summary.equals("This is a summary of the test challenge."));
-//    }
-//
-//    @Test
-//    void getStatus() {
-//        ChallengeStatus status = testChallenge.getStatus();
-//        assert(status == ChallengeStatus.OPEN_VOOR_IDEEEN);
-//    }
-//
-//    @Test
-//    void getCreatedAt() {
-//        Date createdAt = testChallenge.getCreatedAt();
-//        assert(createdAt != null);
-//    }
-//
-//    @Test
-//    void getEndDate() {
-//        Date endDate = testChallenge.getEndDate();
-//        assert(endDate != null);
-//    }
-//
-//    @Test
-//    void getTags() {
-//        String tags = testChallenge.getTags();
-//        assert(tags.equals("AI, Machine Learning, Prototype, Test"));
-//    }
-//
-//    @Test
-//    void getBranch() {
-//        String branch = testChallenge.company.getBranch();
-//        assert(branch.equals("Test Branch"));
-//    }
-//
-//    @Test
-//    void isPublicVisible() {
-//        ChallengeVisibility visibility = testChallenge.getVisibility();
-//        assert(visibility == ChallengeVisibility.PUBLIC);
-//    }
-//
-//    @Test
-//    void setId() {
-//        testChallenge.setId(2L);
-//        Long id = testChallenge.getId();
-//        assert(id == 2L);
-//    }
-//
-//    @Test
-//    void setAuthor() {
-//        testChallenge.setAuthor(testUser);
-//        User author = testChallenge.getAuthor();
-//        assert(author == testUser);
-//    }
-//
-//    @Test
-//    void setDepartment() {
-//        testChallenge.setDepartment(testDepartment);
-//        Department department = testChallenge.getDepartment();
-//        assert(department == testDepartment);
-//    }
-//
-//    @Test
-//    void setCompany() {
-//        testChallenge.setCompany(testCompany);
-//        Company company = testChallenge.getCompany();
-//        assert(company == testCompany);
-//    }
-//
-//    @Test
-//    void setContactInformation() {
-//        testChallenge.setContactInformation("New contact information for the test challenge.");
-//        String contactInformation = testChallenge.getContactInformation();
-//        assert(contactInformation.equals("New contact information for the test challenge."));
-//    }
-//
-//    @Test
-//    void setTitle() {
-//        testChallenge.setTitle("New title for the test challenge.");
-//        String title = testChallenge.getTitle();
-//        assert(title.equals("New title for the test challenge."));
-//    }
-//
-//    @Test
-//    void setDescription() {
-//        testChallenge.setDescription("New description for the test challenge.");
-//        String description = testChallenge.getDescription();
-//        assert(description.equals("New description for the test challenge."));
-//    }
-//
-//    @Test
-//    void setBannerImageId() {
-//        testChallenge.setBannerImageId(2L);
-//        Long bannerImageId = testChallenge.getBannerImageId();
-//        assert(bannerImageId == 2L);
-//    }
-//
-//    @Test
-//    void setConcludingRemarks() {
-//        testChallenge.setConcludingRemarks("New concluding remarks for the test challenge.");
-//        String concludingRemarks = testChallenge.getConcludingRemarks();
-//        assert(concludingRemarks.equals("New concluding remarks for the test challenge."));
-//    }
-//
-//    @Test
-//    void setSummary() {
-//        testChallenge.setSummary("New summary for the test challenge.");
-//        String summary = testChallenge.getSummary();
-//        assert(summary.equals("New summary for the test challenge."));
-//    }
-//
-//    @Test
-//    void setStatus() {
-//        testChallenge.setStatus(ChallengeStatus.AFGEROND);
-//        ChallengeStatus status = testChallenge.getStatus();
-//        assert(status == ChallengeStatus.AFGEROND);
-//    }
-//
-//    @Test
-//    void setCreatedAt() {
-//        testChallenge.setCreatedAt(new Date());
-//        Date createdAt = testChallenge.getCreatedAt();
-//        assert(createdAt != null);
-//    }
-//
-//    @Test
-//    void setEndDate() {
-//        testChallenge.setEndDate(new Date());
-//        Date endDate = testChallenge.getEndDate();
-//        assert(endDate != null);
-//    }
-//
-//    @Test
-//    void setTags() {
-//        testChallenge.setTags("Bakker, Koffie, Thee, Brood");
-//        String tags = testChallenge.getTags();
-//        assert(tags.equals("Bakker, Koffie, Thee, Brood"));
-//    }
-//
-//    @Test
-//    void setBranch() {
-//        testChallenge.company.setBranch("New Test Branch");
-//        String branch = testChallenge.company.getBranch();
-//        assert(branch.equals("New Test Branch"));
-//    }
-//
-//    @Test
-//    void setPublicVisible() {
-//        testChallenge.setVisibility(ChallengeVisibility.INTERNAL);
-//        ChallengeVisibility visibility = testChallenge.getVisibility();
-//        assert(visibility == ChallengeVisibility.INTERNAL);
-//    }
-//
-//    @Test
-//    void canBeSeenByPublic() {
-//        boolean canBeSeenBy = testChallenge.canBeSeenBy(testUser);
-//        assert(canBeSeenBy);
-//    }
-//
-//    @Test
-//    void canNotBeSeenByInternal() {
-//        testChallenge.visibility = ChallengeVisibility.INTERNAL;
-//        boolean canBeSeenBy = testChallenge.canBeSeenBy(testUser);
-//        assert(!canBeSeenBy);
-//    }
-//
-//    @Test
-//    void canNotBeSeenByDepartment(){
-//        testChallenge.visibility = ChallengeVisibility.DEPARTMENT;
-//        boolean canBeSeenBy = testChallenge.canBeSeenBy(testUser);
-//        assert(!canBeSeenBy);
-//    }
-//
-//    @Test
-//    void canBeSeenByDepartment(){
-//        testChallenge.visibility = ChallengeVisibility.DEPARTMENT;
-//        testUser.role = testRole;
-//        boolean canBeSeenBy = testChallenge.canBeSeenBy(testUser);
-//        assert(canBeSeenBy);
-//    }
-//
-//    @Test
-//    void canBeSeenByInternal(){
-//        testChallenge.visibility = ChallengeVisibility.INTERNAL;
-//        testUser.role = testRole;
-//        boolean canBeSeenBy = testChallenge.canBeSeenBy(testUser);
-//        assert(canBeSeenBy);
-//    }
-//
-//    @Test
-//    void canBeSeenByGearchiveerdMatchMaker(){
-//        testChallenge.status = ChallengeStatus.GEARCHIVEERD;
-//        testUser.role = testRole;
-//        boolean canBeSeenBy = testChallenge.canBeSeenBy(testUser);
-//        assert(canBeSeenBy);
-//    }
-//
-//    @Test
-//    void canNotBeSeenByGearchiveerd(){
-//        testChallenge.status = ChallengeStatus.GEARCHIVEERD;
-//        testUser.role = testRole;
-//        testUser.role.isMatchmaker = false;
-//        boolean canBeSeenBy = testChallenge.canBeSeenBy(testUser);
-//        assert(!canBeSeenBy);
-//    }
-//}
+package matchmaker.backend.UnitTests;
+
+import matchmaker.backend.constants.ChallengeStatus;
+import matchmaker.backend.constants.ChallengeVisibility;
+import matchmaker.backend.models.*;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class ChallengeTest {
+
+    @Test
+    void canBeSeenByPublicUser() {
+        Challenge testChallenge = new Challenge();
+        User testUser = new User("testUser");
+        testChallenge.visibility = ChallengeVisibility.PUBLIC;
+        assertEquals(testChallenge.canBeSeenBy(testUser), true);
+    }
+
+    @Test
+    void canBeSeenByIntranetUser(){
+        Challenge testChallenge = new Challenge();
+        User testUser = new User("testUser");
+        testChallenge.visibility = ChallengeVisibility.INTRANET;
+        assertEquals(testChallenge.canBeSeenBy(testUser), true);
+    }
+
+    @Test
+    void canBeSeenByInternalUser(){
+        Challenge testChallenge = new Challenge();
+        User testUser = new User("testUser");
+        testUser.department = new Department();
+        testChallenge.visibility = ChallengeVisibility.INTERNAL;
+        assertEquals(testChallenge.canBeSeenBy(testUser), true);
+    }
+
+    @Test
+    void canBeSeenByDepartmentUser() {
+        Challenge testChallenge = new Challenge();
+        User testUser = new User("testUser");
+        Department testDepartment = new Department();
+        testDepartment.id = 1L;
+
+        testUser.department = testDepartment;
+        testChallenge.department = testDepartment;
+        testChallenge.visibility = ChallengeVisibility.DEPARTMENT;
+        assertEquals(testChallenge.canBeSeenBy(testUser), true);
+    }
+
+    @Test
+    void canBeEditedByMatchmaker() {
+        Challenge testChallenge = new Challenge();
+        User testUser = new User("testUser");
+        Department testDepartment = new Department();
+        testDepartment.id = 1L;
+        Role testrole = new Role("testRole");
+        testrole.isMatchmaker = true;
+
+        testChallenge.author = testUser;
+        testChallenge.department = testDepartment;
+        testUser.department = testDepartment;
+        testUser.role = testrole;
+
+        assertEquals(testChallenge.canBeEditedBy(testUser), true);
+    }
+
+    @Test
+    void canBeEditedByDepartment(){
+        Challenge testChallenge = new Challenge();
+        User testUser = new User("testUser");
+        Department testDepartment = new Department();
+        testDepartment.id = 1L;
+        Role testrole = new Role("testRole");
+        testrole.isMatchmaker = false;
+        List<Permission> testList = new ArrayList<>();
+        testList.add(new Permission("CHALLENGE_MANAGE", "testDescription", "testFancyName"));
+        testrole.setPermissions(testList);
+
+        testChallenge.author = testUser;
+        testChallenge.department = testDepartment;
+        testUser.department = testDepartment;
+        testUser.role = testrole;
+
+        assertEquals(testChallenge.canBeEditedBy(testUser), true);
+    }
+
+    @Test
+    void getId() {
+        Challenge testChallenge = new Challenge();
+        testChallenge.id = 1L;
+        assertEquals(testChallenge.getId(), 1L);
+    }
+
+    @Test
+    void getAuthor() {
+        Challenge testChallenge = new Challenge();
+        User testUser = new User("testUser");
+        testChallenge.author = testUser;
+        assertEquals(testChallenge.getAuthor(), testUser);
+    }
+
+    @Test
+    void getDepartment() {
+        Challenge testChallenge = new Challenge();
+        Department testDepartment = new Department();
+        testChallenge.department = testDepartment;
+        assertEquals(testChallenge.getDepartment(), testDepartment);
+    }
+
+    @Test
+    void getContactInformation() {
+        Challenge testChallenge = new Challenge();
+        testChallenge.contactInformation = "testContactInformation";
+        assertEquals(testChallenge.getContactInformation(), "testContactInformation");
+    }
+
+    @Test
+    void getTitle() {
+        Challenge testChallenge = new Challenge();
+        testChallenge.title = "testTitle";
+        assertEquals(testChallenge.getTitle(), "testTitle");
+    }
+
+    @Test
+    void getDescription() {
+        Challenge testChallenge = new Challenge();
+        testChallenge.description = "testDescription";
+        assertEquals(testChallenge.getDescription(), "testDescription");
+    }
+
+    @Test
+    void getBannerImageId() {
+        Challenge testChallenge = new Challenge();
+        testChallenge.bannerImageId = 1L;
+        assertEquals(testChallenge.getBannerImageId(), 1L);
+    }
+
+    @Test
+    void getConcludingRemarks() {
+        Challenge testChallenge = new Challenge();
+        testChallenge.concludingRemarks = "testConcludingRemarks";
+        assertEquals(testChallenge.getConcludingRemarks(), "testConcludingRemarks");
+    }
+
+    @Test
+    void getSummary() {
+        Challenge testChallenge = new Challenge();
+        testChallenge.summary = "testSummary";
+        assertEquals(testChallenge.getSummary(), "testSummary");
+    }
+
+    @Test
+    void getStatus() {
+        Challenge testChallenge = new Challenge();
+        testChallenge.status = ChallengeStatus.OPEN_VOOR_IDEEEN;
+        assertEquals(testChallenge.getStatus(), ChallengeStatus.OPEN_VOOR_IDEEEN);
+    }
+
+    @Test
+    void getCreatedAt() {
+        Challenge testChallenge = new Challenge();
+        Date testdate = new Date();
+        testChallenge.createdAt = testdate;
+        assertEquals(testChallenge.getCreatedAt(), testdate);
+    }
+
+    @Test
+    void getEndDate() {
+        Challenge testChallenge = new Challenge();
+        Date testdate = new Date();
+        testChallenge.endDate = testdate;
+        assertEquals(testChallenge.getEndDate(), testdate);
+    }
+
+    @Test
+    void getTags() {
+        Challenge testChallenge = new Challenge();
+        testChallenge.tags = "testTags";
+        assertEquals(testChallenge.getTags(), "testTags");
+    }
+
+    @Test
+    void getImageAttachmentsIds() {
+        Challenge testChallenge = new Challenge();
+        List<Long> testList = new ArrayList<>();
+        testList.add(1L);
+        testList.add(2L);
+        testChallenge.imageAttachmentsIds = testList;
+        assertEquals(testChallenge.getImageAttachmentsIds(), testList);
+    }
+
+    @Test
+    void getVisibility() {
+        Challenge testChallenge = new Challenge();
+        testChallenge.visibility = ChallengeVisibility.PUBLIC;
+        assertEquals(testChallenge.getVisibility(), ChallengeVisibility.PUBLIC);
+    }
+
+    @Test
+    void setId() {
+        Challenge testChallenge = new Challenge();
+        testChallenge.setId(1L);
+        assertEquals(testChallenge.id, 1L);
+    }
+
+    @Test
+    void setAuthor() {
+        Challenge testChallenge = new Challenge();
+        User testUser = new User("testUser");
+        testChallenge.setAuthor(testUser);
+        assertEquals(testChallenge.author, testUser);
+    }
+
+    @Test
+    void setDepartment() {
+        Challenge testChallenge = new Challenge();
+        Department testDepartment = new Department();
+        testChallenge.setDepartment(testDepartment);
+        assertEquals(testChallenge.department, testDepartment);
+    }
+
+    @Test
+    void setContactInformation() {
+        Challenge testChallenge = new Challenge();
+        testChallenge.setContactInformation("testContactInformation");
+        assertEquals(testChallenge.contactInformation, "testContactInformation");
+    }
+
+    @Test
+    void setTitle() {
+        Challenge testChallenge = new Challenge();
+        testChallenge.setTitle("testTitle");
+        assertEquals(testChallenge.title, "testTitle");
+    }
+
+    @Test
+    void setDescription() {
+        Challenge testChallenge = new Challenge();
+        testChallenge.setDescription("testDescription");
+        assertEquals(testChallenge.description, "testDescription");
+    }
+
+    @Test
+    void setBannerImageId() {
+        Challenge testChallenge = new Challenge();
+        testChallenge.setBannerImageId(1L);
+        assertEquals(testChallenge.bannerImageId, 1L);
+    }
+
+    @Test
+    void setConcludingRemarks() {
+        Challenge testChallenge = new Challenge();
+        testChallenge.setConcludingRemarks("testConcludingRemarks");
+        assertEquals(testChallenge.concludingRemarks, "testConcludingRemarks");
+    }
+
+    @Test
+    void setSummary() {
+        Challenge testChallenge = new Challenge();
+        testChallenge.setSummary("testSummary");
+        assertEquals(testChallenge.summary, "testSummary");
+    }
+
+    @Test
+    void setStatus() {
+        Challenge testChallenge = new Challenge();
+        testChallenge.setStatus(ChallengeStatus.OPEN_VOOR_IDEEEN);
+        assertEquals(testChallenge.status, ChallengeStatus.OPEN_VOOR_IDEEEN);
+    }
+
+    @Test
+    void setCreatedAt() {
+        Challenge testChallenge = new Challenge();
+        Date testdate = new Date();
+        testChallenge.setCreatedAt(testdate);
+        assertEquals(testChallenge.createdAt, testdate);
+    }
+
+    @Test
+    void setEndDate() {
+        Challenge testChallenge = new Challenge();
+        Date testdate = new Date();
+        testChallenge.setEndDate(testdate);
+        assertEquals(testChallenge.endDate, testdate);
+    }
+
+    @Test
+    void setTags() {
+        Challenge testChallenge = new Challenge();
+        testChallenge.setTags("testTags");
+        assertEquals(testChallenge.tags, "testTags");
+    }
+
+    @Test
+    void setImageAttachmentsIds() {
+        Challenge testChallenge = new Challenge();
+        List<Long> testList = new ArrayList<>();
+        testList.add(1L);
+        testList.add(2L);
+        testChallenge.setImageAttachmentsIds(testList);
+        assertEquals(testChallenge.imageAttachmentsIds, testList);
+    }
+
+    @Test
+    void setVisibility() {
+        Challenge testChallenge = new Challenge();
+        testChallenge.setVisibility(ChallengeVisibility.PUBLIC);
+        assertEquals(testChallenge.visibility, ChallengeVisibility.PUBLIC);
+    }
+}

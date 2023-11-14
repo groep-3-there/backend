@@ -59,8 +59,6 @@ public class Challenge {
     @ElementCollection
     public List<Long> imageAttachmentsIds;
 
-    public String ttt;
-
     @Enumerated(EnumType.ORDINAL)
     public ChallengeVisibility visibility;
 
@@ -86,8 +84,7 @@ public class Challenge {
 
 
         if(!user.isInCompany()){ return false; } // If user is not in a company, abort
-        Long userCompanyId = user.department.parentCompany.id;
-        Long userDepartmentId = user.department.id;
+        Long userDepartmentId = user.department.parentCompany.id;
         if(!this.department.parentCompany.id.equals(userCompanyId)){ return false; } // if user is not in the same company as the challenge, abort
         //User is part of same company as the challenge
 
