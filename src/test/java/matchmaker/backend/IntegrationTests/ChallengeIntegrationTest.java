@@ -301,36 +301,43 @@ public class ChallengeIntegrationTest {
         testChallenge.setTags("Website");
         challengeRepository.save(testChallenge);
 
+        //alleen op query
         mockMvc.perform(MockMvcRequestBuilders.get("/challenge/search?query=Management")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.content[0].id").value(testChallenge.id));
 
+        //query en company
         mockMvc.perform(MockMvcRequestBuilders.get("/challenge/search?query=Management&company=Jumbo")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.content[0].id").value(testChallenge.id));
 
+        //query, company en branch
         mockMvc.perform(MockMvcRequestBuilders.get("/challenge/search?query=Management&company=Jumbo&branche=Advies en consultancy")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.content[0].id").value(testChallenge.id));
 
+        //query en branch
         mockMvc.perform(MockMvcRequestBuilders.get("/challenge/search?query=Management&branche=Advies en consultancy")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.content[0].id").value(testChallenge.id));
 
+        //alleen branch
         mockMvc.perform(MockMvcRequestBuilders.get("/challenge/search?branche=Advies en consultancy")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.content[0].id").value(testChallenge.id));
 
+        //company en branch
         mockMvc.perform(MockMvcRequestBuilders.get("/challenge/search?company=Jumbo&branche=Advies en consultancy")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.content[0].id").value(testChallenge.id));
 
+        //alleen company
         mockMvc.perform(MockMvcRequestBuilders.get("/challenge/search?company=Jumbo")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
