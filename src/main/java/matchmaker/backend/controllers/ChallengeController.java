@@ -55,7 +55,10 @@ public class ChallengeController {
     @PutMapping("/challenge/update")
     public ResponseEntity<Challenge> updateChallenge(
             @RequestBody Challenge challengeToUpdate, 
-            @RequestAttribute("loggedInUser") User currentUser){
+            @RequestAttribute(name = "loggedInUser", required = false) User currentUser){
+        if(currentUser == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
         Optional<Challenge> target = repository.findById(challengeToUpdate.id);
         if (target.isEmpty()) {
 
@@ -101,7 +104,10 @@ public class ChallengeController {
     @PostMapping(path = "/challenge")
     public ResponseEntity<Challenge> createChallenge(
             @RequestBody Challenge newChallenge,
-            @RequestAttribute("loggedInUser") User currentUser) {
+            @RequestAttribute(name = "loggedInUser", required = false) User currentUser) {
+        if(currentUser == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
         if (!currentUser.isInCompany()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }

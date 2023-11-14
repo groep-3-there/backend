@@ -39,6 +39,7 @@ public class WebSecurityConfiguration{
                         authorizeRequests
 //                                .requestMatchers("/aapi/*").authenticated()
                                 .anyRequest().permitAll()
+
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);

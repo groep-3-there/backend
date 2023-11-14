@@ -58,6 +58,7 @@ public class UserIntegrationTest {
         testUser.createdAt = new Date();
         testUser.favorites = null;
         testUser.department = null;
+        testUser.firebaseId = "3WUKhR2EcvQkwP6R5R4ZOudrJQO2";
         testUser.info = "Jan Bakker bakt graag bij bakker bart.";
         testUser.isEmailPublic = true;
         testUser.isPhoneNumberPublic = true;

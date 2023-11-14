@@ -1,16 +1,12 @@
 package matchmaker.backend;
 
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
-import javax.annotation.PostConstruct;
 
 import com.google.firebase.auth.FirebaseAuth;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Service;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
@@ -35,7 +31,6 @@ public class FirebaseService {
     FirebaseAuth firebaseAuth() throws IOException {
         return FirebaseAuth.getInstance(firebaseApp());
     }
-
 
 
 }
