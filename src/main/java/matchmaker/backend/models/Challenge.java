@@ -85,7 +85,7 @@ public class Challenge {
 
         if(!user.isInCompany()){ return false; } // If user is not in a company, abort
         Long userDepartmentId = user.department.parentCompany.id;
-        if(!this.department.parentCompany.id.equals(userCompanyId)){ return false; } // if user is not in the same company as the challenge, abort
+        if(!this.department.parentCompany.id.equals(userDepartmentId)){ return false; } // if user is not in the same company as the challenge, abort
         //User is part of same company as the challenge
 
         //If archived, only managers can view the challenge
