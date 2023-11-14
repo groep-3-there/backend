@@ -20,7 +20,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long id;
-
+    public String firebaseId;
     public String name;
     public String info;
     public String tags;
@@ -40,8 +40,6 @@ public class User {
     @ManyToOne
     public Department department;
 
-    @ManyToMany
-    public List<Challenge> favorites = new java.util.ArrayList<>();
 
     public User(String name) {
         this.name = name;

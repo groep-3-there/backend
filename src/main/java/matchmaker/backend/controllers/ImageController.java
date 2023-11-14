@@ -28,7 +28,12 @@ public class ImageController {
 
 
     @PostMapping(value = "/image/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Image uploadImage(@RequestParam("image") MultipartFile multipartFile, @RequestAttribute("loggedInUser") User currentUser, @RequestParam(name = "imgData", required = false, defaultValue = "0") Boolean withImageData) {
+    public Image uploadImage(@RequestParam("image") MultipartFile multipartFile, @RequestAttribute(name="loggedInUser", required = false) User currentUser, @RequestParam(name = "imgData", required = false, defaultValue = "0") Boolean withImageData) {
+        if(currentUser == null){
+            log.warn("Uploading image failed, no user logged in");
+            return null;
+        }
+
         Image img = null;
         try {
             img = new Image(multipartFile.getBytes());

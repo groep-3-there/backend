@@ -1,25 +1,40 @@
 package matchmaker.backend.IntegrationTests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.firebase.FirebaseApp;
+import lombok.SneakyThrows;
 import lombok.extern.java.Log;
+import matchmaker.backend.AuthInterceptor;
 import matchmaker.backend.constants.ChallengeStatus;
 import matchmaker.backend.constants.ChallengeVisibility;
 import matchmaker.backend.controllers.ChallengeController;
+import matchmaker.backend.controllers.CompanyController;
+import matchmaker.backend.controllers.ImageController;
+import matchmaker.backend.controllers.UserController;
 import matchmaker.backend.models.*;
 import matchmaker.backend.repositories.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import javax.management.relation.RoleStatus;
 
+import java.util.Optional;
+
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -48,6 +63,45 @@ public class ChallengeIntegrationTest {
     @Autowired
     public ObjectMapper objectMapper;
 
+    @Autowired
+    private UserController userController;
+
+    @Autowired
+    private ChallengeController challengeController;
+    @Mock
+    private AuthInterceptor authInterceptor;
+
+    @MockBean
+    private FirebaseApp firebaseApp;
+
+    private static final Logger log = LoggerFactory.getLogger(ChallengeInputIntegrationTest.class);
+
+
+    @SneakyThrows
+    @BeforeEach
+    public void before() {
+        MockitoAnnotations.initMocks(this);
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(challengeController)
+                .addInterceptors(authInterceptor)
+                .build();
+        when(authInterceptor.preHandle(Mockito.any(), Mockito.any(), Mockito.any())).then(invocation -> {
+
+            log.info("[Auth Interceptor] Test environment detected, returning user 1");
+            Optional<User> loggedInUser = userRepository.findById(1L);
+            if (loggedInUser.isEmpty()) {
+                log.info("[Auth Interceptor] No matching user found for id 1");
+                invocation.getArgument(0, jakarta.servlet.http.HttpServletRequest.class).setAttribute("loggedInUser", null);
+                return true;
+            }
+            User existingUser = loggedInUser.get();
+            log.info("[Auth Interceptor] Request performed by " + existingUser.name);
+            invocation.getArgument(0, jakarta.servlet.http.HttpServletRequest.class).setAttribute("loggedInUser", existingUser);
+
+            return true;
+        });
+
+    }
     @Test
     public void testChallengesTableNotEmpty() throws Exception {
         Branch testBranch = branchRepository.findById(1L).get();
@@ -87,7 +141,7 @@ public class ChallengeIntegrationTest {
         testChallenge.setTags("Website");
         challengeRepository.save(testChallenge);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/challenges")
+        mockMvc.perform(MockMvcRequestBuilders.get("/challenge")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isNotEmpty());
@@ -132,7 +186,7 @@ public class ChallengeIntegrationTest {
         testChallenge.setTags("Website");
         challengeRepository.save(testChallenge);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/challenges/" + testChallenge.id)
+        mockMvc.perform(MockMvcRequestBuilders.get("/challenge/" + testChallenge.id)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Zuivere Koffie"));

@@ -1,33 +1,44 @@
 package matchmaker.backend.IntegrationTests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.firebase.FirebaseApp;
+import lombok.SneakyThrows;
+import matchmaker.backend.AuthInterceptor;
 import matchmaker.backend.constants.ChallengeReactionType;
 import matchmaker.backend.constants.ChallengeStatus;
 import matchmaker.backend.constants.ChallengeVisibility;
-import matchmaker.backend.models.Challenge;
-import matchmaker.backend.models.ChallengeInput;
-import matchmaker.backend.models.Company;
-import matchmaker.backend.models.Department;
-import matchmaker.backend.repositories.ChallengeRepository;
-import matchmaker.backend.repositories.CompanyRepository;
-import matchmaker.backend.repositories.DepartmentRepository;
+import matchmaker.backend.controllers.ChallengeInputController;
+import matchmaker.backend.controllers.CompanyController;
+import matchmaker.backend.controllers.UserController;
+import matchmaker.backend.models.*;
+import matchmaker.backend.repositories.*;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import matchmaker.backend.repositories.ChallengeInputRepository;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.Optional;
 
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class CompanyInputIntegrationTest {
+public class ChallengeInputIntegrationTest {
 
     @Autowired
     private ChallengeInputRepository challengeInputRepository;
@@ -42,6 +53,83 @@ public class CompanyInputIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
+    @Mock
+    private AuthInterceptor authInterceptor;
+
+    @MockBean
+    private FirebaseApp firebaseApp;
+
+    @Autowired
+    private UserRepository userRepository;
+
+
+    private Logger log = LoggerFactory.getLogger(ChallengeInputIntegrationTest.class);
+    @Autowired
+    private UserController userController;
+
+    @Autowired
+    private ChallengeInputController challengeInputController;
+    @Autowired
+    private RoleRepository roleRepository;
+
+
+    public Long userId = 1L;
+    @SneakyThrows
+    @BeforeEach
+    public void before() {
+            Optional<Role> role = roleRepository.findById(1L);
+            Department department = new Department();
+            department.setName("Test department");
+            Company company = new Company();
+            company.setName("Test company");
+            companyRepository.save(company);
+            department.setParentCompany(company);
+            departmentRepository.save(department);
+            //Make a new user in the repository
+            User testUser = new User();
+            testUser.name = "Jan Bakker";
+            testUser.email = "jan.bakker@mail.com";
+            testUser.acceptedTosDate = new Date();
+            testUser.avatarImageId = 1L;
+            testUser.createdAt = new Date();
+            testUser.department = null;
+            testUser.firebaseId = "3WUKhR2EcvQkwP6R5R4ZOudrJQO2";
+            testUser.info = "Jan Bakker bakt graag bij bakker bart.";
+            testUser.isEmailPublic = true;
+            testUser.isPhoneNumberPublic = true;
+            testUser.lastSeen = new Date();
+            testUser.role = role.get();
+            testUser.setDepartment(department);
+            testUser.phoneNumber = "0612345678";
+            testUser.tags = "tag1,tag2";
+
+            userRepository.save(testUser);
+            userId = testUser.id;
+            log.info("User saved to repository with id " + testUser.id.toString());
+            userRepository.findAll().forEach(user -> log.info("Database users: " + user.id.toString()));
+
+        MockitoAnnotations.initMocks(this);
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(challengeInputController)
+                .addInterceptors(authInterceptor)
+                .build();
+        when(authInterceptor.preHandle(Mockito.any(), Mockito.any(), Mockito.any())).then(invocation -> {
+
+            log.info("[Auth Interceptor] Test environment detected, returning user 1");
+            Optional<User> loggedInUser = userRepository.findById(userId);
+            if (loggedInUser.isEmpty()) {
+                log.info("[Auth Interceptor] No matching user found for id 1");
+                invocation.getArgument(0, jakarta.servlet.http.HttpServletRequest.class).setAttribute("loggedInUser", null);
+                return true;
+            }
+            User existingUser = loggedInUser.get();
+            log.info("[Auth Interceptor] Request performed by " + existingUser.name);
+            invocation.getArgument(0, jakarta.servlet.http.HttpServletRequest.class).setAttribute("loggedInUser", existingUser);
+
+            return true;
+        });
+
+    }
 
     @Test
     public void testGetAllReactionsForChallengeById() throws Exception{

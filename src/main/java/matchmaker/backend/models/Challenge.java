@@ -7,6 +7,8 @@ import lombok.Setter;
 import matchmaker.backend.constants.ChallengeStatus;
 import matchmaker.backend.constants.ChallengeVisibility;
 import matchmaker.backend.constants.Perm;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -56,7 +58,7 @@ public class Challenge {
     public Date endDate;
     public String tags;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     public List<Long> imageAttachmentsIds;
 
     @Enumerated(EnumType.ORDINAL)
@@ -66,6 +68,7 @@ public class Challenge {
     public boolean canBeSeenBy(User user){
         //Opties zonder account
         if(user == null){
+            System.out.println("User is null, so we are checking if the challenge is public " + this.visibility.toString() + " , "  + this.status.toString());
             if(this.visibility == ChallengeVisibility.PUBLIC && this.status != ChallengeStatus.GEARCHIVEERD){
                 return true;
             }
