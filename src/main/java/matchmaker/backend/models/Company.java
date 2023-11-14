@@ -25,7 +25,9 @@ public class Company {
     public Long profileImageId;
     public Long bannerImageId;
     public String tags;
-    public String branch;
+
+    @ManyToOne
+    public Branch branch;
     public Date createdAt;
 
     public Long ownerId;
