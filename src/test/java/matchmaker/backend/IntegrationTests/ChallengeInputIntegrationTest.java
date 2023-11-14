@@ -74,6 +74,34 @@ public class ChallengeInputIntegrationTest {
     @SneakyThrows
     @BeforeEach
     public void before() {
+            Optional<Role> role = roleRepository.findById(1L);
+            Department department = new Department();
+            department.setName("Test department");
+            Company company = new Company();
+            company.setName("Test company");
+            companyRepository.save(company);
+            department.setParentCompany(company);
+            departmentRepository.save(department);
+            //Make a new user in the repository
+            User testUser = new User();
+            testUser.name = "Jan Bakker";
+            testUser.email = "jan.bakker@mail.com";
+            testUser.acceptedTosDate = new Date();
+            testUser.avatarImageId = 1L;
+            testUser.createdAt = new Date();
+            testUser.department = null;
+            testUser.firebaseId = "3WUKhR2EcvQkwP6R5R4ZOudrJQO2";
+            testUser.info = "Jan Bakker bakt graag bij bakker bart.";
+            testUser.isEmailPublic = true;
+            testUser.isPhoneNumberPublic = true;
+            testUser.lastSeen = new Date();
+            testUser.role = role.get();
+            testUser.setDepartment(department);
+            testUser.phoneNumber = "0612345678";
+            testUser.tags = "tag1,tag2";
+
+            userRepository.save(testUser);
+
         MockitoAnnotations.initMocks(this);
         mockMvc = MockMvcBuilders
                 .standaloneSetup(challengeInputController)
@@ -96,37 +124,7 @@ public class ChallengeInputIntegrationTest {
         });
 
     }
-    @Test
-    public void getUserById() throws Exception {
-        Optional<Role> role = roleRepository.findById(1L);
-        Department department = new Department();
-        department.setName("Test department");
-        Company company = new Company();
-        company.setName("Test company");
-        companyRepository.save(company);
-        department.setParentCompany(company);
-        departmentRepository.save(department);
-        //Make a new user in the repository
-        User testUser = new User();
-        testUser.name = "Jan Bakker";
-        testUser.email = "jan.bakker@mail.com";
-        testUser.acceptedTosDate = new Date();
-        testUser.avatarImageId = 1L;
-        testUser.createdAt = new Date();
-        testUser.department = null;
-        testUser.firebaseId = "3WUKhR2EcvQkwP6R5R4ZOudrJQO2";
-        testUser.info = "Jan Bakker bakt graag bij bakker bart.";
-        testUser.isEmailPublic = true;
-        testUser.isPhoneNumberPublic = true;
-        testUser.lastSeen = new Date();
-        testUser.role = role.get();
-        testUser.setDepartment(department);
-        testUser.phoneNumber = "0612345678";
-        testUser.tags = "tag1,tag2";
 
-        userRepository.save(testUser);
-
-    }
     @Test
     public void testGetAllReactionsForChallengeById() throws Exception{
         //Create a challenge
