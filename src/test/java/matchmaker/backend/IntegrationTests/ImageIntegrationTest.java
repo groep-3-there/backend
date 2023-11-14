@@ -103,13 +103,12 @@ public class ImageIntegrationTest {
 
         mockMvc.perform(MockMvcRequestBuilders.multipart("/image/upload")
                         .file(createMockMultipartFile("image", "test.jpg"))
-                        .param("imgData", "true")) // Add this line if you want to include image data in the response
-                .andExpect(status().isOk()) // Check if the status code is OK (200)
+                        .param("imgData", "true"))
+                .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").exists())
                 .andExpect(jsonPath("$.author").exists())
-                // Add more assertions as needed based on your Image class properties
-                .andExpect(jsonPath("$.data").doesNotExist());
+                .andExpect(jsonPath("$.photoData").isEmpty());
     }
 
     @Test
@@ -150,12 +149,11 @@ public class ImageIntegrationTest {
 
         mockMvc.perform(MockMvcRequestBuilders.multipart("/image/upload")
                         .file(createMockMultipartFileWithImage("image", "image.jpg", "image/jpeg"))
-                        .param("imgData", "true")) // Add this line if you want to include image data in the response
-                .andExpect(status().isOk()) // Check if the status code is OK (200)
+                        .param("imgData", "true"))
+                .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").exists())
                 .andExpect(jsonPath("$.author").exists())
-                // Add more assertions as needed based on your Image class properties
-                .andExpect(jsonPath("$.data").doesNotExist());
+                .andExpect(jsonPath("$.photoData").isNotEmpty());
     }
 }
