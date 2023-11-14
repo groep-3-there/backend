@@ -34,3 +34,4 @@ build/
 
 ### Env ###
 #src/main/resources/encrypted.properties
+src/main/resources/firebase_config.json

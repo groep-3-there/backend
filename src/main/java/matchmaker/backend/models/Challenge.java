@@ -7,6 +7,8 @@ import lombok.Setter;
 import matchmaker.backend.constants.ChallengeStatus;
 import matchmaker.backend.constants.ChallengeVisibility;
 import matchmaker.backend.constants.Perm;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -59,10 +61,8 @@ public class Challenge {
     public Date endDate;
     public String tags;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     public List<Long> imageAttachmentsIds;
-
-    public String ttt;
 
     @Enumerated(EnumType.ORDINAL)
     public ChallengeVisibility visibility;

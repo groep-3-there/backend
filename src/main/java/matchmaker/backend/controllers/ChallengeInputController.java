@@ -36,6 +36,7 @@ public class  ChallengeInputController {
 
         if(!repository.existsById(id)){return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);}
 
+        ChallengeInput reaction = repository.findById(id).get();
         return ResponseEntity.status(HttpStatus.OK).body(repository.findById(id).get());
 
     }
@@ -81,6 +82,7 @@ public class  ChallengeInputController {
     @PutMapping("/reaction/{id}/markreaction")
     public ResponseEntity markReactionAsChosen(@PathVariable("id")Long reactionId,
                                                @RequestAttribute(name = "loggedInUser", required = false) User currentUser){
+        if(currentUser == null){ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); }
         Optional<ChallengeInput> reaction = repository.findById(reactionId);
         if(reaction.isEmpty()){ return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); }
         Challenge challenge = reaction.get().challenge;

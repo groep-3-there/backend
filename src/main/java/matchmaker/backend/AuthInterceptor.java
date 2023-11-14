@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -26,6 +27,7 @@ public class AuthInterceptor implements HandlerInterceptor {
     @Autowired
     UserRepository userRepository;
     @Autowired
+    @MockBean
     private FirebaseAuth firebaseAuth;
 
     @Autowired
@@ -34,22 +36,6 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
-        if(("test").equals(env.getProperty("spring.profiles.active"))){
-            log.info("[Auth Interceptor] Test environment detected, returning user 1");
-            Optional<User> loggedInUser = userRepository.findById(1L);
-            if(loggedInUser.isEmpty()){
-                log.info("[Auth Interceptor] No matching user found for id 1");
-                request.setAttribute("loggedInUser", null);
-                return true;
-            }
-            User existingUser = loggedInUser.get();
-            existingUser.getFavorites().stream().count(); // This triggers hiberate to load the (eager) favorite field
-            log.info("[Auth Interceptor] Request performed by " + existingUser.name );
-            request.setAttribute("loggedInUser", existingUser);
-            return true;
-        }
-
         if(request.getUserPrincipal() == null){
             log.info("[Auth Interceptor] No user principal found");
             request.setAttribute("loggedInUser", null);
@@ -64,7 +50,6 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
 
         User existingUser = loggedInUser.get();
-        existingUser.getFavorites().stream().count(); // This triggers hiberate to load the (eager) favorite field
         log.info("[Auth Interceptor] Request performed by " + existingUser.name );
         request.setAttribute("loggedInUser", existingUser);
 

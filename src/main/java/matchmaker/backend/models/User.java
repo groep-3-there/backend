@@ -40,8 +40,6 @@ public class User {
     @ManyToOne
     public Department department;
 
-    @ManyToMany
-    public List<Challenge> favorites = new java.util.ArrayList<>();
 
     public User(String name) {
         this.name = name;
