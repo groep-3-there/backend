@@ -183,7 +183,6 @@ public class ChallengeInputIntegrationTest {
         Department testDepartment = new Department("Integration department", testCompany);
         companyRepository.save(testCompany);
         departmentRepository.save(testDepartment);
-        challenge.setCompany(testCompany);
         challenge.setDepartment(testDepartment);
         challengeRepository.save(challenge);
         ChallengeInput newReaction = new ChallengeInput("Reaction for mark reaction test");
