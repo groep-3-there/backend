@@ -26,7 +26,8 @@ public class Role {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "role_id")
+    @TableGenerator(name="role_id", initialValue = 1000)
     public Long id;
 
 

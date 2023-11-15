@@ -17,7 +17,8 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 public class Permission {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "permission_id")
+    @TableGenerator(name="permission_id", initialValue = 1000)
     public Long id;
     public String codeName;
     public String description;

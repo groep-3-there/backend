@@ -45,7 +45,7 @@ values (1, 'CHALLENGE_READ', 'Het bekijken van een challenge en reacties achterl
        (7, 'COMPANY_GRADE', 'Het goedkeuren van een bedrijfsaanvraag', 'Goedkeuren bedrijfsaanvraag');
 
 insert into roles (id, created_at, is_matchmaker, name)
-values (1, '2020-01-01', false, 'Medewerker'),
+values (1, '2020-01-01', true, 'Medewerker'),
        (2, '2020-01-02 ', false, 'Challenger'),
        (3, '2020-01-03 ', false, 'Department beheerder'),
        (4, '2020-01-04' , false, 'Company beheerder'),
@@ -75,4 +75,13 @@ values (1, 1),
        (5, 5),
        (5, 6),
        (5, 7);
-
+insert into companies (banner_image_id, branch_id, created_at, id, owner_id, profile_image_id, info, name, tags)
+values (null, 1, '2020-01-01', 1, null, null, 'info', 'name', 'tag1,tag2');
+insert into departments (created_at, id, parent_company_id, name)
+values ('2020-01-01', 1, 1, 'department');
+insert into users (is_email_public, is_phone_number_public, accepted_tos_date, avatar_image_id, created_at,
+                   department_id, id, last_seen, role_id, email, firebase_id, info, name, phone_number, tags)
+values (true,true,'2020-01-01', null, '2020-01-01', 1, 1, null, 1, 'matchmaker@mail.com', null, 'info', 'name', '0630384453', 'tag1,tag2');
+update companies
+set  owner_id=1
+where id=1;

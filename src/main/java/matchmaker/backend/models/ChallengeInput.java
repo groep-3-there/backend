@@ -17,7 +17,8 @@ import java.util.Date;
 public class ChallengeInput {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "challengeinput_id")
+    @TableGenerator(name="challengeinput_id", initialValue = 1000)
     public Long id;
 
     @ManyToOne

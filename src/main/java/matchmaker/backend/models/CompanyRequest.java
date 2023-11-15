@@ -16,7 +16,8 @@ import java.util.Date;
 @AllArgsConstructor
 public class CompanyRequest {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "companyrequest_id")
+    @TableGenerator(name="companyrequest_id", initialValue = 1000)
     public Long id;
 
     public String name;

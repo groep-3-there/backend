@@ -1,5 +1,6 @@
 package matchmaker.backend;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,18 +27,26 @@ import java.util.Optional;
 public class AuthInterceptor implements HandlerInterceptor {
     @Autowired
     UserRepository userRepository;
+
     @Autowired
-    @MockBean
     private FirebaseAuth firebaseAuth;
 
     @Autowired
-    Environment env;
+    private FirebaseApp firebaseApp;
+
+    @Autowired
+    private Environment environment;
     private static final Logger log = LoggerFactory.getLogger(AuthInterceptor.class);
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if(request.getUserPrincipal() == null){
             log.info("[Auth Interceptor] No user principal found");
+            if(environment.getProperty("spring.profiles.active").equals("test")){
+                User testUser = userRepository.findById(1L).get();
+                request.setAttribute("loggedInUser", testUser);
+                return true;
+            }
             request.setAttribute("loggedInUser", null);
             return true;
         }

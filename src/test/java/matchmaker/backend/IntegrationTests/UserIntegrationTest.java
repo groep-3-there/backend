@@ -15,6 +15,7 @@ import matchmaker.backend.repositories.RoleRepository;
 import matchmaker.backend.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -24,9 +25,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.Optional;
@@ -36,6 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 public class UserIntegrationTest {
 
 
@@ -57,10 +61,10 @@ public class UserIntegrationTest {
 
 
     // FROM HERE ONWARDS, THE CODE IS NEEDED FOR THE AUTH INTERCEPTOR TO WORK
-    @Mock
+    @InjectMocks
     private AuthInterceptor authInterceptor;
 
-    @MockBean
+    @Mock
     private FirebaseApp firebaseApp;
 
     @Autowired
@@ -68,34 +72,6 @@ public class UserIntegrationTest {
 
     @Autowired
     private UserController userController;
-
-    @SneakyThrows
-    @BeforeEach
-    public void before() {
-        MockitoAnnotations.initMocks(this);
-        mockMvc = MockMvcBuilders
-                .standaloneSetup(userController)
-                .addInterceptors(authInterceptor)
-                .build();
-        when(authInterceptor.preHandle(Mockito.any(), Mockito.any(), Mockito.any())).then(invocation -> {
-
-            log.info("[Auth Interceptor] Test environment detected, returning user 1");
-            Optional<User> loggedInUser = userRepository.findById(1L);
-            if (loggedInUser.isEmpty()) {
-                log.info("[Auth Interceptor] No matching user found for id 1");
-                invocation.getArgument(0, jakarta.servlet.http.HttpServletRequest.class).setAttribute("loggedInUser", null);
-                return true;
-            }
-            User existingUser = loggedInUser.get();
-            log.info("[Auth Interceptor] Request performed by " + existingUser.name);
-            invocation.getArgument(0, jakarta.servlet.http.HttpServletRequest.class).setAttribute("loggedInUser", existingUser);
-
-            return true;
-        });
-
-    }
-    // END OF CODE NEEDED FOR THE AUTH INTERCEPTOR TO WORK
-
 
     @Test
     public void getUserById() throws Exception {

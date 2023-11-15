@@ -17,7 +17,8 @@ import java.util.Date;
 public class Company {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "company_id")
+    @TableGenerator(name="company_id", initialValue = 1000)
     public Long id;
 
     public String name;
