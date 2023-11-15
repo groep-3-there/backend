@@ -81,7 +81,14 @@ insert into departments (created_at, id, parent_company_id, name)
 values ('2020-01-01', 1, 1, 'department');
 insert into users (is_email_public, is_phone_number_public, accepted_tos_date, avatar_image_id, created_at,
                    department_id, id, last_seen, role_id, email, firebase_id, info, name, phone_number, tags)
-values (true,true,'2020-01-01', null, '2020-01-01', 1, 1, null, 1, 'matchmaker@mail.com', null, 'info', 'name', '0630384453', 'tag1,tag2');
+values (true,true,'2020-01-01', null, '2020-01-01', 1, 1, null, 1, 'matchmaker@mail.com', null, 'info', 'MatchMaker', '0630384453', 'tag1,tag2');
+insert into users(is_email_public, is_phone_number_public, accepted_tos_date, avatar_image_id, created_at,
+                  department_id, id, last_seen, role_id, email, firebase_id, info, name, phone_number, tags)
+values (true,true,'2020-01-01', null, '2020-01-01', 1, 2, null, 2, 'Jan.Bakker@Bakker.Jan.com', null, 'info', 'Jan Bakker', '0630384453', 'tag1,tag2');
 update companies
 set  owner_id=1
 where id=1;
+insert into companyrequests (branch_id, id, owner_id, requested_at, name, tags)
+values (1, 1, 1, '2020-01-01', 'Bakker Jan', 'Brood, ICT');
+insert into companyrequests (branch_id, id, owner_id, requested_at, name, tags)
+values (2, 2, 2, '2020-01-01', 'Bakker Bart', 'Brood, ICT');
