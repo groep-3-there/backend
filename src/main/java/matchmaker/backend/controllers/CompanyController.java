@@ -9,8 +9,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @RestController
 public class CompanyController {
@@ -19,8 +23,9 @@ public class CompanyController {
     private CompanyRepository repository;
 
     @GetMapping("/company")
-    public Iterable<Company> getCompanies() {
-        return repository.findAll();
+    public ResponseEntity<Iterable<Company>> getCompanies() {
+        Iterable<Company> company = repository.findAll();
+        return ResponseEntity.status(HttpStatus.OK).body(company);
     }
 
     @GetMapping("/company/{id}")
@@ -32,8 +37,18 @@ public class CompanyController {
         return ResponseEntity.status(HttpStatus.OK).body(company);
     }
 
-
-    @GetMapping("/company/join/{userId}/{companyId}")
-    public void joinCompany(@PathVariable UUID userId, @PathVariable Long companyId){
+    @GetMapping("/company/names")
+    public ResponseEntity<Iterable<String>> getAllCompanyNames(){
+        Iterable<Company> company = repository.findAll();
+        List<Company> result =
+                StreamSupport.stream(company.spliterator(), false)
+                        .collect(Collectors.toList());
+        List<String> names = new ArrayList<>();
+        for (int i = 0; i < result.size(); i++){
+            if(!result.get(i).getName().isEmpty()) {
+                names.add(result.get(i).getName());
+            }
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(names);
     }
 }
