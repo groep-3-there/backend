@@ -46,11 +46,14 @@ public class Challenge {
     @ManyToOne
     public Department department;
 
+    @Column(length = 65535,columnDefinition="Text")
     public String contactInformation;
     public String title;
+    @Column(length = 65535,columnDefinition="Text")
     public String description;
     public Long bannerImageId;
     public String concludingRemarks;
+    @Column(length = 65535,columnDefinition="Text")
     public String summary;
 
     @Enumerated(EnumType.ORDINAL)

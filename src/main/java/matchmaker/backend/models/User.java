@@ -69,4 +69,13 @@ public class User {
 
     }
 
+    public boolean hasPermission(String codename) {
+        for (Permission permission : this.role.getPermissions()) {
+            {
+                return permission.codeName.equals(codename);
+            }
+        }
+        return false;
+    }
+
 }
