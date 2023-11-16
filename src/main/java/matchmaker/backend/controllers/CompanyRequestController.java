@@ -1,5 +1,6 @@
 package matchmaker.backend.controllers;
 
+import matchmaker.backend.constants.Perm;
 import matchmaker.backend.models.Challenge;
 import matchmaker.backend.models.Company;
 import matchmaker.backend.models.CompanyRequest;
@@ -38,7 +39,7 @@ public class CompanyRequestController {
         if(currentUser == null){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
-        if(!currentUser.role.isMatchmaker) {
+        if(currentUser.hasPermission(Perm.COMPANY_GRADE)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
 
