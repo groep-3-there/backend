@@ -31,7 +31,7 @@ public class CompanyRequestController {
         return repository.findAll();
     }
 
-    @PostMapping("/company/request/create")
+    @PostMapping("/company/request")
     public ResponseEntity<CompanyRequest> createCompanyRequest(
             @RequestBody CompanyRequest newCompanyRequest,
             @RequestAttribute(name = "loggedInUser", required = false) User currentUser){
@@ -63,6 +63,8 @@ public class CompanyRequestController {
 
         //set company request owner
         checkedCompanyRequest.owner = currentUser;
+
+        Perm.
 
         try {
             CompanyRequest savedCompanyRequest = repository.save(checkedCompanyRequest);
