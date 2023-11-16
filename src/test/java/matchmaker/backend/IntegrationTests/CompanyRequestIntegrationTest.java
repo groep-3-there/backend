@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import matchmaker.backend.controllers.BranchController;
 import matchmaker.backend.models.Branch;
 import matchmaker.backend.models.CompanyRequest;
+import matchmaker.backend.models.Role;
 import matchmaker.backend.models.User;
 import matchmaker.backend.repositories.BranchRepository;
 import matchmaker.backend.repositories.CompanyRequestRepository;
+import matchmaker.backend.repositories.RoleRepository;
 import matchmaker.backend.repositories.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +38,6 @@ public class CompanyRequestIntegrationTest {
 
     @Autowired
     public CompanyRequestRepository companyRequestRepository;
-
-    @Autowired
-    public ObjectMapper objectMapper;
 
     @Test
     public void testGetAllRequest() throws Exception{
@@ -77,12 +76,8 @@ public class CompanyRequestIntegrationTest {
         companyRequest.setBranch(branch);
         companyRequest.setOwner(user);
         companyRequestRepository.save(companyRequest);
-
-        String Accept = "Accept";
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/company/request/" + companyRequest.id + "/grade")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(Accept))
+        mockMvc.perform(MockMvcRequestBuilders.post("/company/request/" + companyRequest.id + "/accept")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
@@ -101,11 +96,8 @@ public class CompanyRequestIntegrationTest {
         companyRequest.setOwner(user);
         companyRequestRepository.save(companyRequest);
 
-        String Reject = "Reject";
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/company/request/" + companyRequest.id + "/grade")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(Reject))
+        mockMvc.perform(MockMvcRequestBuilders.post("/company/request/" + companyRequest.id + "/reject")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 }
