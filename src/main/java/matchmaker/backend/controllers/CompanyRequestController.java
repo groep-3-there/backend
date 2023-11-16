@@ -64,8 +64,6 @@ public class CompanyRequestController {
         //set company request owner
         checkedCompanyRequest.owner = currentUser;
 
-        Perm.
-
         try {
             CompanyRequest savedCompanyRequest = repository.save(checkedCompanyRequest);
             return ResponseEntity.status(HttpStatus.OK).body(savedCompanyRequest);
