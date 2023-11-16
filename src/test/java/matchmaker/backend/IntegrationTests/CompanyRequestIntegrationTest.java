@@ -31,6 +31,9 @@ public class CompanyRequestIntegrationTest {
     private MockMvc mockMvc;
 
     @Autowired
+    public ObjectMapper objectMapper;
+
+    @Autowired
     public BranchRepository branchRepository;
 
     @Autowired
@@ -61,6 +64,27 @@ public class CompanyRequestIntegrationTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Bakker Bart"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[2].name").value("Test Request"));
     }
+
+//    @Test
+//    public void testCreateCompanyRequest() throws Exception{
+//        Branch branch = branchRepository.findById(1L).get();
+//        User user = new User();
+//        user.setName("Test User");
+//        userRepository.save(user);
+//
+//        CompanyRequest companyRequest = new CompanyRequest();
+//        companyRequest.setName("Test Request");
+//        companyRequest.setTags("ICT");
+//        companyRequest.setBranch(branch);
+//        companyRequestRepository.save(companyRequest);
+//
+//        mockMvc.perform(MockMvcRequestBuilders.get("/company/request/create")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(companyRequest)))
+//                .andExpect(status().isOk());
+//
+//
+//    }
 
     @Test
     public void testGradeRequestAccept() throws Exception{

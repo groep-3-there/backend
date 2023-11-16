@@ -1,12 +1,10 @@
 package matchmaker.backend.controllers;
 
 import matchmaker.backend.constants.Perm;
-import matchmaker.backend.models.Challenge;
-import matchmaker.backend.models.Company;
-import matchmaker.backend.models.CompanyRequest;
-import matchmaker.backend.models.User;
+import matchmaker.backend.models.*;
 import matchmaker.backend.repositories.CompanyRepository;
 import matchmaker.backend.repositories.CompanyRequestRepository;
+import matchmaker.backend.repositories.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,10 +23,55 @@ public class CompanyRequestController {
     @Autowired
     public CompanyRepository companyRepository;
 
+    @Autowired
+    private DepartmentRepository departmentRepository;
+
     @GetMapping("/company/request")
     public Iterable<CompanyRequest> getRequests() {
         return repository.findAll();
     }
+
+    @PostMapping("/company/request/create")
+    public ResponseEntity<CompanyRequest> createCompanyRequest(
+            @RequestBody CompanyRequest newCompanyRequest,
+            @RequestAttribute(name = "loggedInUser", required = false) User currentUser){
+
+        if(currentUser == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        if (currentUser.isInCompany()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
+        CompanyRequest checkedCompanyRequest = new CompanyRequest();
+
+        if (newCompanyRequest.name == null || newCompanyRequest.name.isBlank()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        checkedCompanyRequest.name = newCompanyRequest.name;
+
+        if (newCompanyRequest.branch == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        checkedCompanyRequest.branch = newCompanyRequest.branch;
+
+        //optional fields that can be null
+        checkedCompanyRequest.tags = newCompanyRequest.tags;
+
+        //set the date to now
+        checkedCompanyRequest.requestedAt = new Date();
+
+        //set company request owner
+        checkedCompanyRequest.owner = currentUser;
+
+        try {
+            CompanyRequest savedCompanyRequest = repository.save(checkedCompanyRequest);
+            return ResponseEntity.status(HttpStatus.OK).body(savedCompanyRequest);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
+
 
     @PostMapping(path ="/company/request/{id}/accept")
     public ResponseEntity<CompanyRequest> gradeRequestAccept(
@@ -59,6 +102,12 @@ public class CompanyRequestController {
 
         companyRepository.save(company);
         repository.delete(companyRequest);
+
+        //create default department
+        Department department = new Department("Management", company);
+        department.createdAt = new Date();
+
+        departmentRepository.save(department);
 
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
