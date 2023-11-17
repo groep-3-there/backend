@@ -39,7 +39,7 @@ public class CompanyRequestController {
         if(currentUser == null){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
-        if(currentUser.hasPermission(Perm.COMPANY_GRADE)) {
+        if(!currentUser.hasPermission(Perm.COMPANY_GRADE)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
 
@@ -72,7 +72,7 @@ public class CompanyRequestController {
         if(currentUser == null){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
-        if(!currentUser.role.isMatchmaker) {
+        if(!currentUser.hasPermission(Perm.COMPANY_GRADE)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
 
