@@ -76,25 +76,38 @@ values (1, 1),
        (5, 6),
        (5, 7);
 insert into companies (banner_image_id, branch_id, created_at, id, owner_id, profile_image_id, info, name, tags)
-values (null, 1, '2020-01-01', 1, null, null, 'info', 'name', 'tag1,tag2');
+values (null, 7, '2020-01-01', 1, null, null, 'info', 'Kapper Eline', 'kapper,innovatie'),
+(null, 11, '2022-01-02', 2, null, null, 'LogiTech BV informatie...', 'LogiTech Solutions BV', 'logistiek,proces' );
 insert into departments (created_at, id, parent_company_id, name)
-values ('2020-01-01', 1, 1, 'department');
+values ('2020-01-01', 1, 1, 'Management'),
+    ('2020-01-01', 2, 2, 'Logistiek');
 insert into users (is_email_public, is_phone_number_public, accepted_tos_date, avatar_image_id, created_at,
                    department_id, id, last_seen, role_id, email, firebase_id, info, name, phone_number, tags)
-values (true,true,'2020-01-01', null, '2020-01-01', 1, 1, null, 5, 'matchmaker@mail.com', null, 'info', 'MatchMaker', '0630384453', 'tag1,tag2');
-insert into users(is_email_public, is_phone_number_public, accepted_tos_date, avatar_image_id, created_at,
-                  department_id, id, last_seen, role_id, email, firebase_id, info, name, phone_number, tags)
-values (true,true,'2020-01-01', null, '2020-01-01', 1, 2, null, 2, 'Jan.Bakker@Bakker.Jan.com', null, 'info', 'Jan Bakker', '0630384453', 'tag1,tag2');
+values  (true,true,'2020-01-01', null, '2020-01-01', 1, 1, null, 5, 'matchmaker@mail.com', null, 'info', 'MatchMaker', '0630384453', 'tag1,tag2'),
+        (true,true,'2020-01-01', null, '2020-01-01', 1, 2, null, 2, 'challenger@kapper.nl', '9gJQuvQ2h8PxIvVPae8oTN9ukMW2', 'info', 'Eline de Groot', '0630384453', 'tag1,tag2'),
+        (true,true,'2020-01-01', null, '2020-01-01', 1, 3, null, 1, 'medewerker@kapper.nl', 'SR3TD4Jf2RZ5qbNNF8kcIBu6kjl1', 'info', 'Jelle Jacobs', '0630384453', 'tag1,tag2');
+
+
 update companies
 set  owner_id=1
 where id=1;
+
+update companies
+set  owner_id=1
+where id=2;
+
 insert into companyrequests (branch_id, id, owner_id, requested_at, name, tags)
 values (1, 1, 1, '2020-01-01', 'Bakker Jan', 'Brood, ICT');
 insert into companyrequests (branch_id, id, owner_id, requested_at, name, tags)
 values (2, 2, 2, '2020-01-01', 'Bakker Bart', 'Brood, ICT');
 
 insert into challenges (status, visibility, author_id, banner_image_id, created_at, department_id, end_date, id, contact_information, description, concluding_remarks, summary, tags, title)
-    values (0, 2, 1, null, '2023-01-01', 1, '2024-02-02', 1, 'Mocht je contact op willen nemen buiten het platform, stuur mij een email op Eline@mail.com', 'Ik ben Eline, de trotse eigenaar van Kapperszaak Eline, een bloeiende kapsalon waar we met liefde en passie werken om onze klanten er op hun best uit te laten zien en zich geweldig te laten voelen. Sinds de opening van mijn salon heb ik het voorrecht gehad om vele geweldige mensen te ontmoeten en hun haarwensen te vervullen. Echter, in de altijd veranderende wereld van vandaag staan we voor de uitdaging om onze klanten vaker terug te laten komen en hun tevredenheid te vergroten.
+    values (0, 2, 1, null, '2023-01-01', 2, '2024-02-02', 1, 'Mocht je contact op willen nemen buiten het platform, stuur mij een email op Eline@mail.com', 'LogiTech Solutions BV staat voor een uitdagend vraagstuk en zoekt naar innovatieve oplossingen om onze logistieke processen te optimaliseren. In een voortdurend veranderende markt streven we ernaar om de doorlooptijd te verkorten, kosten te verlagen en duurzaamheid te bevorderen. Wij geloven dat de integratie van machine learning-technologieën een cruciale rol kan spelen in het realiseren van deze doelstellingen.
+
+We zijn geïnteresseerd in voorstellen die niet alleen gebruikmaken van geavanceerde technologieën zoals IoT, machine learning en automatisering, maar die ook gericht zijn op het begrijpen en aanpakken van specifieke uitdagingen binnen onze logistieke keten. Hoe kunnen we machine learning inzetten om de efficiëntie van onze voorraadbeheerprocessen te verbeteren? Welke mogelijkheden zijn er om voorspellende analyses toe te passen op orderverwerking en verzending?
+
+We nodigen bedrijven en professionals uit om met creatieve en praktische oplossingen te komen die ons kunnen helpen een concurrentievoordeel te behalen, terwijl we tegelijkertijd duurzame bedrijfspraktijken omarmen. Samen streven we naar een toekomst van geoptimaliseerde logistieke processen die niet alleen kostenbesparend zijn, maar ook milieuvriendelijk.', '', 'LogiTech Solutions BV zoekt naar innovatieve oplossingen voor de optimalisatie van logistieke processen. De uitdaging omvat het verkorten van doorlooptijden, kostenverlaging en het bevorderen van duurzaamheid, met specifieke interesse in het benutten van machine learning-technologieën. Bedrijven en professionals worden uitgenodigd om creatieve voorstellen in te dienen die gericht zijn op specifieke uitdagingen binnen de logistieke keten.', 'logistiek,optimalisatie,AI,Machine Learning', 'Optimalisatie van Logistieke Processen met Machine Learning'),
+        (0, 2, 1, null, '2023-01-01', 1, '2024-02-02', 2, 'Mocht je contact op willen nemen buiten het platform, stuur mij een email op Eline@mail.com', 'Ik ben Eline, de trotse eigenaar van Kapperszaak Eline, een bloeiende kapsalon waar we met liefde en passie werken om onze klanten er op hun best uit te laten zien en zich geweldig te laten voelen. Sinds de opening van mijn salon heb ik het voorrecht gehad om vele geweldige mensen te ontmoeten en hun haarwensen te vervullen. Echter, in de altijd veranderende wereld van vandaag staan we voor de uitdaging om onze klanten vaker terug te laten komen en hun tevredenheid te vergroten.
 
 Om deze uitdaging aan te gaan, ben ik op zoek naar de hulp en ideeën van experts op het gebied van informatietechnologie (ICT). Ik geloof sterk in de kracht van technologie om ons bedrijf te verbeteren en de klantbeleving te verrijken. Daarom roep ik jullie op om met innovatieve ideeën te komen die ons kunnen helpen klanten vaker terug te laten komen en de band met onze salon te versterken.
 <h2>Enkele van de vragen waar ik graag jullie inzicht over zou willen</h2>
