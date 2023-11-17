@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Date;
+import java.util.Optional;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -60,31 +61,31 @@ public class CompanyRequestIntegrationTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/company/request")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Bakker Jan"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Bakker Bart"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[2].name").value("Test Request"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Bakker Bart"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Test Request"));
     }
 
-//    @Test
-//    public void testCreateCompanyRequest() throws Exception{
-//        Branch branch = branchRepository.findById(1L).get();
-//        User user = new User();
-//        user.setName("Test User");
-//        userRepository.save(user);
-//
-//        CompanyRequest companyRequest = new CompanyRequest();
-//        companyRequest.setName("Test Request");
-//        companyRequest.setTags("ICT");
-//        companyRequest.setBranch(branch);
-//        companyRequestRepository.save(companyRequest);
-//
-//        mockMvc.perform(MockMvcRequestBuilders.get("/company/request/create")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(companyRequest)))
-//                .andExpect(status().isOk());
-//
-//
-//    }
+    @Test
+    public void testCreateCompanyRequest() throws Exception{
+        Branch branch = branchRepository.findById(1L).get();
+        Optional<User> user = userRepository.findById(1L);
+        User testUser = user.get();
+        testUser.setDepartment(null);
+        userRepository.save(testUser);
+
+        CompanyRequest companyRequest = new CompanyRequest();
+        companyRequest.setName("Test Request");
+        companyRequest.setTags("ICT");
+        companyRequest.setBranch(branch);
+        companyRequestRepository.save(companyRequest);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/company/request")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(companyRequest)))
+                .andExpect(status().isOk());
+
+
+    }
 
     @Test
     public void testGradeRequestAccept() throws Exception{

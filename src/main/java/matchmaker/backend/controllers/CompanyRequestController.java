@@ -5,11 +5,13 @@ import matchmaker.backend.models.*;
 import matchmaker.backend.repositories.CompanyRepository;
 import matchmaker.backend.repositories.CompanyRequestRepository;
 import matchmaker.backend.repositories.DepartmentRepository;
+import matchmaker.backend.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Optional;
@@ -26,13 +28,16 @@ public class CompanyRequestController {
     @Autowired
     private DepartmentRepository departmentRepository;
 
+    @Autowired
+    private RoleRepository roleRepository ;
+
     @GetMapping("/company/request")
     public Iterable<CompanyRequest> getRequests() {
         return repository.findAll();
     }
 
     @PostMapping("/company/request")
-    public ResponseEntity<CompanyRequest> createCompanyRequest(
+    public ResponseEntity createCompanyRequest(
             @RequestBody CompanyRequest newCompanyRequest,
             @RequestAttribute(name = "loggedInUser", required = false) User currentUser){
 
@@ -68,13 +73,13 @@ public class CompanyRequestController {
             CompanyRequest savedCompanyRequest = repository.save(checkedCompanyRequest);
             return ResponseEntity.status(HttpStatus.OK).body(savedCompanyRequest);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(e);
         }
     }
 
 
     @PostMapping(path ="/company/request/{id}/accept")
-    public ResponseEntity<CompanyRequest> gradeRequestAccept(
+    public ResponseEntity gradeRequestAccept(
             @PathVariable("id") Long id,
             @RequestAttribute(name = "loggedInUser", required = false) User currentUser) {
 
@@ -106,8 +111,20 @@ public class CompanyRequestController {
         //create default department
         Department department = new Department("Management", company);
         department.createdAt = new Date();
+        Optional<Role> departementOwner = roleRepository.findById(3L);
+
+        //check if the role exists
+        if (departementOwner.isEmpty())
+        {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("De opgevraagde rol is niet gevonden in de database. Neem contact op met de systeembeheerder");
+        }
+
+        //give owner department manager role
+        companyRequest.getOwner().setRole(departementOwner.get());
 
         departmentRepository.save(department);
+
+        companyRequest.owner.setDepartment(department);
 
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
