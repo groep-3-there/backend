@@ -12,4 +12,6 @@ public interface ChallengeRepository extends CrudRepository<Challenge, Long>, Jp
 
     Iterable<Challenge> findAllByDepartmentId(Long departmentId);
     Iterable<Challenge> findChallengeByDepartment_ParentCompanyId(Long parentCompanyId);
+
+    void deleteAllByAuthorId (Long authorId);
 }

@@ -2,10 +2,7 @@ package matchmaker.backend.controllers;
 
 import matchmaker.backend.constants.Perm;
 import matchmaker.backend.models.*;
-import matchmaker.backend.repositories.CompanyRepository;
-import matchmaker.backend.repositories.CompanyRequestRepository;
-import matchmaker.backend.repositories.DepartmentRepository;
-import matchmaker.backend.repositories.RoleRepository;
+import matchmaker.backend.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +24,9 @@ public class CompanyRequestController {
 
     @Autowired
     private DepartmentRepository departmentRepository;
+
+    @Autowired
+    private BranchRepository branchRepository;
 
     @Autowired
     private RoleRepository roleRepository ;
@@ -57,6 +57,10 @@ public class CompanyRequestController {
 
         if (newCompanyRequest.branch == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
+        if (!branchRepository.existsById(newCompanyRequest.getBranch().getId())){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Branch not found");
         }
         checkedCompanyRequest.branch = newCompanyRequest.branch;
 

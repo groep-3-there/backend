@@ -42,13 +42,15 @@ public class AuthInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if(request.getUserPrincipal() == null){
             log.info("[Auth Interceptor] No user principal found");
-            if(environment.getProperty("spring.profiles.active").equals("test")){
+            if(environment.getProperty("spring.profiles.active").equals("test") && userRepository.existsById(1L)){
                 User testUser = userRepository.findById(1L).get();
                 request.setAttribute("loggedInUser", testUser);
                 return true;
             }
-            request.setAttribute("loggedInUser", null);
-            return true;
+            else {
+                request.setAttribute("loggedInUser", null);
+                return true;
+            }
         }
         String firebaseUID = firebaseAuth.getUser(request.getUserPrincipal().getName()).getUid();
         Optional<User> loggedInUser = userRepository.findByFirebaseId(firebaseUID);

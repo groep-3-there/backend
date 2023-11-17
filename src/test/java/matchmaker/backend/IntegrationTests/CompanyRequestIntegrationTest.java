@@ -6,10 +6,7 @@ import matchmaker.backend.models.Branch;
 import matchmaker.backend.models.CompanyRequest;
 import matchmaker.backend.models.Role;
 import matchmaker.backend.models.User;
-import matchmaker.backend.repositories.BranchRepository;
-import matchmaker.backend.repositories.CompanyRequestRepository;
-import matchmaker.backend.repositories.RoleRepository;
-import matchmaker.backend.repositories.UserRepository;
+import matchmaker.backend.repositories.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -44,6 +41,9 @@ public class CompanyRequestIntegrationTest {
 
     @Autowired
     public CompanyRequestRepository companyRequestRepository;
+
+    @Autowired
+    public ChallengeRepository challengeRepository;
 
     @Test
     public void testGetAllRequest() throws Exception{
@@ -85,8 +85,106 @@ public class CompanyRequestIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(companyRequest)))
                 .andExpect(status().isOk());
+    }
 
+    @Test
+    @Transactional
+    public void throwUnauthorizedWithCurrentUserNull() throws Exception{
+        Branch branch = branchRepository.findById(1L).get();
+        Optional<User> user = userRepository.findById(1L);
+        User testUser = user.get();
+        challengeRepository.deleteAllByAuthorId(testUser.getId());
+        userRepository.delete(testUser);
 
+        CompanyRequest companyRequest = new CompanyRequest();
+        companyRequest.setName("Test Request");
+        companyRequest.setTags("ICT");
+        companyRequest.setBranch(branch);
+        companyRequestRepository.save(companyRequest);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/company/request")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(companyRequest)))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @Transactional
+    public void throwBadRequestIfUserIsInCompany() throws Exception{
+        Branch branch = branchRepository.findById(1L).get();
+
+        CompanyRequest companyRequest = new CompanyRequest();
+        companyRequest.setName("Test Request");
+        companyRequest.setTags("ICT");
+        companyRequest.setBranch(branch);
+        companyRequestRepository.save(companyRequest);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/company/request")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(companyRequest)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @Transactional
+    public void throwBadRequestIfNameIsNullOrBlank() throws Exception{
+        Branch branch = branchRepository.findById(1L).get();
+        Optional<User> user = userRepository.findById(1L);
+        User testUser = user.get();
+        testUser.department = null;
+        userRepository.save(testUser);
+
+        CompanyRequest companyRequest = new CompanyRequest();
+        companyRequest.setTags("ICT");
+        companyRequest.setBranch(branch);
+        companyRequestRepository.save(companyRequest);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/company/request")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(companyRequest)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @Transactional
+    public void throwBadRequestIfBranchIsEmpty() throws Exception{
+        Optional<User> user = userRepository.findById(1L);
+        User testUser = user.get();
+        testUser.department = null;
+        userRepository.save(testUser);
+
+        CompanyRequest companyRequest = new CompanyRequest();
+        companyRequest.setName("Test Request");
+        companyRequest.setTags("ICT");
+        companyRequestRepository.save(companyRequest);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/company/request")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(companyRequest)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @Transactional
+    public void throwNotFoundIfBranchDoesNotExist() throws Exception{
+        Optional<User> user = userRepository.findById(1L);
+        User testUser = user.get();
+        testUser.department = null;
+        userRepository.save(testUser);
+
+        Branch branch = new Branch();
+        branchRepository.save(branch);
+
+        CompanyRequest companyRequest = new CompanyRequest();
+        companyRequest.setName("Test Request");
+        companyRequest.setTags("ICT");
+        companyRequest.setBranch(branch);
+        branchRepository.delete(branch);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/company/request")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(companyRequest)))
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -106,6 +204,7 @@ public class CompanyRequestIntegrationTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/company/request/" + companyRequest.id + "/accept")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+        assert !companyRequestRepository.existsById(companyRequest.id);
     }
 
     @Test
@@ -126,5 +225,6 @@ public class CompanyRequestIntegrationTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/company/request/" + companyRequest.id + "/reject")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+        assert !companyRequestRepository.existsById(companyRequest.id);
     }
 }
