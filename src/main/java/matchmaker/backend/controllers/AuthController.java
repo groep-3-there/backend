@@ -7,6 +7,8 @@ import com.google.firebase.auth.UserRecord;
 import matchmaker.backend.models.CreateUserFields;
 import matchmaker.backend.models.User;
 import matchmaker.backend.repositories.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,15 +25,15 @@ public class AuthController {
     private FirebaseAuth firebaseAuth;
 
     @GetMapping("/auth/user")
-    public User getLoggedInUser(@RequestAttribute(name = "loggedInUser", required = false) User currentUser){
+    public User getLoggedInUser(@RequestAttribute(name = "loggedInUser", required = false) User currentUser) {
         return currentUser;
     }
 
     @PostMapping("/auth/create")
-    public ResponseEntity<User> createNewUser(@RequestBody CreateUserFields createUser){
+    public ResponseEntity<User> createNewUser(@RequestBody CreateUserFields createUser) {
 
-        if(userRepository.findByEmail(createUser.email).isPresent()){
-            return ResponseEntity.status(409).body(null);
+        if (userRepository.findByEmail(createUser.email).isPresent()) {
+            return ResponseEntity.badRequest().body(null);
         }
         User checked = new User();
         checked.name = createUser.name;
@@ -48,11 +50,10 @@ public class AuthController {
             checked.firebaseId = createReq.getUid();
 
             User saved = userRepository.save(checked);
-            return ResponseEntity.status(200).body(saved);
+            return ResponseEntity.ok().body(saved);
         } catch (FirebaseAuthException e) {
             throw new RuntimeException(e);
         }
-
     }
 
 }

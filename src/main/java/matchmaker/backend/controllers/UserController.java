@@ -24,9 +24,15 @@ public class UserController {
     @GetMapping("/user/{id}")
     public ResponseEntity<Optional<User>> getUserById(@PathVariable("id") Long id) {
         Optional<User> user = userRepository.findById(id);
-        if(user.isEmpty()){
+        if (user.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Optional.empty());
         }
         return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/user/exist/{email}")
+    public ResponseEntity<Boolean> checkIfUserExists(
+            @PathVariable("email") String email) {
+        return ResponseEntity.ok(userRepository.findByEmail(email).isPresent());
     }
 }
