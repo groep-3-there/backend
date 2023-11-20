@@ -63,8 +63,8 @@ public class CompanyRequestIntegrationTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/company/request")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Bakker Bart"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Test Request"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.content[0].name").value("Bakker Bart"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.content[1].name").value("Kapper Eline"));
     }
 
     @Test

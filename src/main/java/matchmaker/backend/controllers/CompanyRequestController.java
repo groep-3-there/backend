@@ -4,6 +4,9 @@ import matchmaker.backend.constants.Perm;
 import matchmaker.backend.models.*;
 import matchmaker.backend.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,8 +35,19 @@ public class CompanyRequestController {
     private RoleRepository roleRepository ;
 
     @GetMapping("/company/request")
-    public Iterable<CompanyRequest> getRequests() {
-        return repository.findAll();
+    public Page<CompanyRequest> getRequests(
+            @RequestAttribute(name = "loggedInUser", required = false) User currentUser,
+            @RequestParam(defaultValue = "0") int page){
+        if(currentUser == null){
+            return null;
+        }
+        if(!currentUser.hasPermission(Perm.COMPANY_GRADE)) {
+            return null;
+        }
+
+        int pageSize = 3;
+        Pageable pageable = PageRequest.of(page, pageSize);
+        return repository.findAll(pageable);
     }
 
     @PostMapping("/company/request")
