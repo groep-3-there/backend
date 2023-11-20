@@ -80,6 +80,7 @@ public class CompanyIntegrationTest{
         bol.setInfo("Webshop");
         bol.setCreatedAt(new Date());
         bol.setBranch(testBranch);
+
         bol.setTags("Webshop, E-commerce, Retail");
 
         Company nhlStenden = new Company("NHL Stenden");
@@ -107,7 +108,6 @@ public class CompanyIntegrationTest{
     @Test
     public void testGetCompanyById() throws Exception{
         Branch testBranch = branchRepository.findById(1L).get();
-
         //Create a company and add it to the repository
         Company matchmaker = new Company("MatchMaker");
         matchmaker.setInfo("Matching Software");
@@ -122,6 +122,7 @@ public class CompanyIntegrationTest{
                     assert response.contains(matchmaker.getName());
                     assert response.contains(matchmaker.getInfo());
                     assert response.contains(matchmaker.getBranch().name);
+
                     assert response.contains(matchmaker.getTags());
                 })
                 .andExpect(status().isOk());

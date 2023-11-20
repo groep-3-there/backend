@@ -35,6 +35,7 @@ import java.util.Date;
 import java.util.Optional;
 
 import static org.mockito.Mockito.when;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -46,8 +47,6 @@ public class UserIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
-
-
     @Autowired
     private RoleRepository roleRepository;
 
@@ -58,7 +57,6 @@ public class UserIntegrationTest {
     private CompanyRepository companyRepository;
 
     private static final Logger log = LoggerFactory.getLogger(CompanyIntegrationTest.class);
-
 
     // FROM HERE ONWARDS, THE CODE IS NEEDED FOR THE AUTH INTERCEPTOR TO WORK
     @InjectMocks
@@ -116,8 +114,8 @@ public class UserIntegrationTest {
 
     @Test
     public void getUserThatDoesntExist() throws Exception {
-
         var x = mockMvc.perform(MockMvcRequestBuilders.get("/user/44"));
         x.andExpect(status().isNotFound());
+
     }
 }

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
+
 import java.util.HashMap;
 
 @RestController
@@ -50,6 +51,5 @@ public class RootController {
         return map;
 
     }
-
 
 }

@@ -64,7 +64,6 @@ public class AuthInterceptor implements HandlerInterceptor {
         log.info("[Auth Interceptor] Request performed by " + existingUser.name );
         request.setAttribute("loggedInUser", existingUser);
 
-
         return true; // Continue processing the request
     }
 }
