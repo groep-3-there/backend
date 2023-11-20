@@ -44,6 +44,7 @@ public class  ChallengeInputController {
     @PostMapping("/reaction/create/{id}")
     public ResponseEntity createReactionOnChallenge(@RequestBody ChallengeInput inputReaction,
                                                     @RequestAttribute(name = "loggedInUser", required = false) User currentUser,
+
                                                     @PathVariable("id") Long challengeId){
         //Check if the user is logged in
         if(currentUser == null){ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); }

@@ -72,7 +72,6 @@ public class Challenge {
     public boolean canBeSeenBy(User user){
         //Opties zonder account
         if(user == null){
-            System.out.println("User is null, so we are checking if the challenge is public " + this.visibility.toString() + " , "  + this.status.toString());
             if(this.visibility == ChallengeVisibility.PUBLIC && this.status != ChallengeStatus.GEARCHIVEERD){
                 return true;
             }
