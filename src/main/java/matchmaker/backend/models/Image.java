@@ -15,7 +15,8 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 @AllArgsConstructor
 public class Image {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "image_id")
+    @TableGenerator(name="image_id", initialValue = 1000)
     public Long id;
 
     @Lob

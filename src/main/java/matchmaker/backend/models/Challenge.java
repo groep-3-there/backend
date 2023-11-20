@@ -7,6 +7,8 @@ import lombok.Setter;
 import matchmaker.backend.constants.ChallengeStatus;
 import matchmaker.backend.constants.ChallengeVisibility;
 import matchmaker.backend.constants.Perm;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -29,13 +31,13 @@ public class Challenge {
     private static final Logger log = LoggerFactory.getLogger(Challenge.class);
 
 
-    public Challenge(String title, User author){
-        this.author = author;
+    public Challenge(String title){
         this.title = title;
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "challenge_id")
+    @TableGenerator(name="challenge_id", initialValue = 1000)
     public Long id;
 
     @ManyToOne
@@ -44,14 +46,14 @@ public class Challenge {
     @ManyToOne
     public Department department;
 
-    @ManyToOne
-    public Company company;
-
+    @Column(length = 65535,columnDefinition="Text")
     public String contactInformation;
     public String title;
+    @Column(length = 65535,columnDefinition="Text")
     public String description;
     public Long bannerImageId;
     public String concludingRemarks;
+    @Column(length = 65535,columnDefinition="Text")
     public String summary;
 
     @Enumerated(EnumType.ORDINAL)
@@ -60,10 +62,8 @@ public class Challenge {
     public Date endDate;
     public String tags;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     public List<Long> imageAttachmentsIds;
-
-    public String ttt;
 
     @Enumerated(EnumType.ORDINAL)
     public ChallengeVisibility visibility;
@@ -90,9 +90,8 @@ public class Challenge {
 
 
         if(!user.isInCompany()){ return false; } // If user is not in a company, abort
-        Long userCompanyId = user.department.parentCompany.id;
-        Long userDepartmentId = user.department.id;
-        if(!this.company.id.equals(userCompanyId)){ return false; } // if user is not in the same company as the challenge, abort
+        Long userDepartmentId = user.department.parentCompany.id;
+        if(!this.department.parentCompany.id.equals(userDepartmentId)){ return false; } // if user is not in the same company as the challenge, abort
         //User is part of same company as the challenge
 
         //If archived, only managers can view the challenge

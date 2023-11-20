@@ -14,7 +14,8 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 @Setter
 public class Tag {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "tag_id")
+    @TableGenerator(name="tag_id", initialValue = 1000)
     public Long id;
     public String name;
 

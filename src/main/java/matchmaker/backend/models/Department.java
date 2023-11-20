@@ -16,7 +16,8 @@ import java.util.Date;
 @AllArgsConstructor
 public class Department {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "department_id")
+    @TableGenerator(name="department_id", initialValue = 1000)
     public Long id;
     public String name;
 

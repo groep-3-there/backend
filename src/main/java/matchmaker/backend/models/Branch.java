@@ -14,7 +14,8 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 @Table(name = "branches")
 public class Branch {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "branche_id")
+    @TableGenerator(name="branche_id", initialValue = 1000)
     public Long id;
 
     public String name;

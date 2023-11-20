@@ -5,10 +5,7 @@ import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import matchmaker.backend.constants.ChallengeStatus;
 import matchmaker.backend.constants.Perm;
-import matchmaker.backend.models.Branch;
-import matchmaker.backend.models.Challenge;
-import matchmaker.backend.models.Company;
-import matchmaker.backend.models.User;
+import matchmaker.backend.models.*;
 import matchmaker.backend.repositories.ChallengeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -39,7 +36,7 @@ public class ChallengeController {
     @GetMapping("/challenge/{id}")
     public ResponseEntity<Challenge> getChallengeById(
             @PathVariable("id") Long id,
-            @RequestAttribute("loggedInUser") User currentUser) {
+            @RequestAttribute(name = "loggedInUser", required = false) User currentUser) {
         Optional<Challenge> target = repository.findById(id);
         if (target.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -55,7 +52,10 @@ public class ChallengeController {
     @PutMapping("/challenge/update")
     public ResponseEntity<Challenge> updateChallenge(
             @RequestBody Challenge challengeToUpdate, 
-            @RequestAttribute("loggedInUser") User currentUser){
+            @RequestAttribute(name = "loggedInUser", required = false) User currentUser){
+        if(currentUser == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
         Optional<Challenge> target = repository.findById(challengeToUpdate.id);
         if (target.isEmpty()) {
 
@@ -101,7 +101,10 @@ public class ChallengeController {
     @PostMapping(path = "/challenge")
     public ResponseEntity<Challenge> createChallenge(
             @RequestBody Challenge newChallenge,
-            @RequestAttribute("loggedInUser") User currentUser) {
+            @RequestAttribute(name = "loggedInUser", required = false) User currentUser) {
+        if(currentUser == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
         if (!currentUser.isInCompany()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
@@ -163,7 +166,6 @@ public class ChallengeController {
 
         //Set this based on the session, so no bad input can set the author, company & department
         checkedChallenge.author = currentUser;
-        checkedChallenge.company = currentUser.department.parentCompany;
         checkedChallenge.department = currentUser.department;
         checkedChallenge.createdAt = new Date();
 
@@ -250,16 +252,16 @@ public class ChallengeController {
 
             //find on the company name
             if (company != null && !company.isEmpty()) {
-                Join<Challenge, Company> companyJoin = root.join("company");
+                Join<Challenge, Company> companyJoin = root.join("department").join("parentCompany");
                 Expression<String> companyNameExpression = companyJoin.get("name");
                 predicates.add(companyNameExpression.in(company));
             }
 
             //find on the branche name
             if (branche != null && !branche.isEmpty()) {
-                Join<Challenge, Branch> brancheJoin = root.join("branch");
-                Expression<String> brancheNameExpression = brancheJoin.get("name");
-                predicates.add(brancheNameExpression.in(branche));
+                Join<Challenge, Branch> brancheJoin = root.join("department").join("parentCompany").join("branch");
+                Expression<String> branchNameExpression = brancheJoin.get("name");
+                predicates.add(branchNameExpression.in(branche));
             }
 
             predicates.add(builder.notEqual(root.get("status"), ChallengeStatus.GEARCHIVEERD));
@@ -270,5 +272,10 @@ public class ChallengeController {
 
     public Iterable<Challenge> GetChallengesByDepartmentId(Long departmentId){
         return repository.findAllByDepartmentId(departmentId);
+    }
+
+    @GetMapping("/challenge/company/{id}")
+    public Iterable<Challenge> getChallengesByCompanyId(@PathVariable("id") Long companyId){
+        return repository.findChallengeByDepartment_ParentCompanyId(companyId);
     }
 }

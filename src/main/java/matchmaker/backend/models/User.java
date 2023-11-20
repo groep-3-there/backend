@@ -18,9 +18,10 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "user_id")
+    @TableGenerator(name="user_id", initialValue = 1000)
     public Long id;
-
+    public String firebaseId;
     public String name;
     public String info;
     public String tags;
@@ -40,8 +41,6 @@ public class User {
     @ManyToOne
     public Department department;
 
-    @ManyToMany
-    public List<Challenge> favorites = new java.util.ArrayList<>();
 
     public User(String name) {
         this.name = name;
@@ -68,6 +67,15 @@ public class User {
 
     public User() {
 
+    }
+
+    public boolean hasPermission(String codename) {
+        for (Permission permission : this.role.getPermissions()) {
+            if (permission.codeName.equals(codename)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

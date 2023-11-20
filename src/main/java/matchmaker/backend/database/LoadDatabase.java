@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 
 @Component
-@Profile("dev")
 public class LoadDatabase implements CommandLineRunner {
 
     @Autowired

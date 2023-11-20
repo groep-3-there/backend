@@ -1,5 +1,10 @@
 package matchmaker.backend.IntegrationTests;
 
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import lombok.SneakyThrows;
+import matchmaker.backend.AuthInterceptor;
+import matchmaker.backend.controllers.UserController;
 import matchmaker.backend.models.Company;
 import matchmaker.backend.models.Department;
 import matchmaker.backend.models.Role;
@@ -8,27 +13,39 @@ import matchmaker.backend.repositories.CompanyRepository;
 import matchmaker.backend.repositories.DepartmentRepository;
 import matchmaker.backend.repositories.RoleRepository;
 import matchmaker.backend.repositories.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.Optional;
+
+import static org.mockito.Mockito.when;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 public class UserIntegrationTest {
+
 
     @Autowired
     private MockMvc mockMvc;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -38,6 +55,21 @@ public class UserIntegrationTest {
 
     @Autowired
     private CompanyRepository companyRepository;
+
+    private static final Logger log = LoggerFactory.getLogger(CompanyIntegrationTest.class);
+
+    // FROM HERE ONWARDS, THE CODE IS NEEDED FOR THE AUTH INTERCEPTOR TO WORK
+    @InjectMocks
+    private AuthInterceptor authInterceptor;
+
+    @Mock
+    private FirebaseApp firebaseApp;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserController userController;
 
     @Test
     public void getUserById() throws Exception {
@@ -56,8 +88,8 @@ public class UserIntegrationTest {
         testUser.acceptedTosDate = new Date();
         testUser.avatarImageId = 1L;
         testUser.createdAt = new Date();
-        testUser.favorites = null;
         testUser.department = null;
+        testUser.firebaseId = "3WUKhR2EcvQkwP6R5R4ZOudrJQO2";
         testUser.info = "Jan Bakker bakt graag bij bakker bart.";
         testUser.isEmailPublic = true;
         testUser.isPhoneNumberPublic = true;
@@ -70,21 +102,20 @@ public class UserIntegrationTest {
         userRepository.save(testUser);
 
         //Test if the endpoint returns the user
-        mockMvc.perform(MockMvcRequestBuilders.get("/user/" + testUser.id))
-                .andExpect(result -> {
-                    String response = result.getResponse().getContentAsString();
-                    assert response.contains(testUser.name);
-                    assert response.contains(testUser.email);
-                    assert response.contains(testUser.info);
-                    assert response.contains(testUser.phoneNumber);
-                    assert response.contains(testUser.tags);
-                })
-                .andExpect(status().isOk());
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/" + testUser.id)).andExpect(result -> {
+            String response = result.getResponse().getContentAsString();
+            assert response.contains(testUser.name);
+            assert response.contains(testUser.email);
+            assert response.contains(testUser.info);
+            assert response.contains(testUser.phoneNumber);
+            assert response.contains(testUser.tags);
+        }).andExpect(status().isOk());
     }
 
     @Test
     public void getUserThatDoesntExist() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/user/44"))
-                .andExpect(status().isNotFound());
+        var x = mockMvc.perform(MockMvcRequestBuilders.get("/user/44"));
+        x.andExpect(status().isNotFound());
+
     }
 }

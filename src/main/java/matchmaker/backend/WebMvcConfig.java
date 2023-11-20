@@ -1,7 +1,11 @@
 package matchmaker.backend;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -16,8 +20,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
         return new AuthInterceptor();
     }
+
+
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+
         registry.addInterceptor(AuthInterceptorWithBean());
     }
 
@@ -28,5 +36,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
 
     }
+
 
 }
