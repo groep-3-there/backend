@@ -9,13 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class BranchController {
 
-    @Autowired
-    private BranchRepository repository;
+  @Autowired private BranchRepository repository;
 
-    @GetMapping("/branch/all")
-    public Iterable<Branch> getBranches() {
-        return repository.findAll();
-    }
-
-
+  @GetMapping("/branch/all")
+  public Iterable<Branch> getBranches() {
+    return repository.findAll();
+  }
 }

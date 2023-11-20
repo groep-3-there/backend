@@ -10,11 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TagController {
 
-    @Autowired
-    private TagsRepository repository;
+  @Autowired private TagsRepository repository;
 
-    @GetMapping("/tags")
-    public ResponseEntity<Iterable<Tag>> getTags() {
-        return ResponseEntity.ok(repository.findAll());
-    }
+  @GetMapping("/tags")
+  public ResponseEntity<Iterable<Tag>> getTags() {
+    return ResponseEntity.ok(repository.findAll());
+  }
 }

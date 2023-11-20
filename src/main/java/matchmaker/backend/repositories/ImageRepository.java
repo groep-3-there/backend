@@ -5,7 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface ImageRepository extends CrudRepository<Image, Long> {
 
-    Iterable<Image> findAllByAttachmentForChallengeId(Long id);
-
-
+  Iterable<Image> findAllByAttachmentForChallengeId(Long id);
 }

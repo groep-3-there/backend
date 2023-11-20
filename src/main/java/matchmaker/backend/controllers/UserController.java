@@ -15,18 +15,16 @@ import java.util.Optional;
 @RestController
 public class UserController {
 
-    @Autowired
-    private UserRepository userRepository;
+  @Autowired private UserRepository userRepository;
 
-    @Autowired
-    private ImageRepository imageRepository;
+  @Autowired private ImageRepository imageRepository;
 
-    @GetMapping("/user/{id}")
-    public ResponseEntity<Optional<User>> getUserById(@PathVariable("id") Long id) {
-        Optional<User> user = userRepository.findById(id);
-        if(user.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Optional.empty());
-        }
-        return ResponseEntity.ok(user);
+  @GetMapping("/user/{id}")
+  public ResponseEntity<Optional<User>> getUserById(@PathVariable("id") Long id) {
+    Optional<User> user = userRepository.findById(id);
+    if (user.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Optional.empty());
     }
+    return ResponseEntity.ok(user);
+  }
 }
