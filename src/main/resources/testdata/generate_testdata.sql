@@ -83,7 +83,7 @@ values ('2020-01-01', 1, 1, 'Management'),
     ('2020-01-01', 2, 2, 'Logistiek');
 insert into users (is_email_public, is_phone_number_public, accepted_tos_date, avatar_image_id, created_at,
                    department_id, id, last_seen, role_id, email, firebase_id, info, name, phone_number, tags)
-values  (true,true,'2020-01-01', null, '2020-01-01', 1, 1, null, 5, 'matchmaker@mail.com', null, 'info', 'MatchMaker', '0630384453', 'tag1,tag2'),
+values  (true,true,'2020-01-01', null, '2020-01-01', 1, 1, null, 5, 'matchmaker@mail.com', '9qhopxJIdmUjwbBuQHIYPOeheQh2', 'info', 'MatchMaker', '0630384453', 'tag1,tag2'),
         (true,true,'2020-01-01', null, '2020-01-01', 1, 2, null, 2, 'challenger@kapper.nl', '9gJQuvQ2h8PxIvVPae8oTN9ukMW2', 'info', 'Eline de Groot', '0630384453', 'tag1,tag2'),
         (true,true,'2020-01-01', null, '2020-01-01', 1, 3, null, 1, 'medewerker@kapper.nl', 'SR3TD4Jf2RZ5qbNNF8kcIBu6kjl1', 'info', 'Jelle Jacobs', '0630384453', 'tag1,tag2');
 
@@ -97,7 +97,9 @@ set  owner_id=1
 where id=2;
 
 insert into companyrequests (branch_id, id, owner_id, requested_at, name, tags)
-values (2, 2, 2, '2020-01-01', 'Bakker Bart', 'Brood, ICT');
+values (2, 2, 2, '2020-01-01', 'Bakker Bart', 'Brood, ICT'),
+       (1, 3, 3, '2020-01-01', 'Kapper Eline', 'Kapper, Innovatie');
+
 
 insert into challenges (status, visibility, author_id, banner_image_id, created_at, department_id, end_date, id, contact_information, description, concluding_remarks, summary, tags, title)
     values (0, 2, 1, null, '2023-01-01', 2, '2024-02-02', 1, 'Mocht je contact op willen nemen buiten het platform, stuur mij een email op Eline@mail.com', 'LogiTech Solutions BV staat voor een uitdagend vraagstuk en zoekt naar innovatieve oplossingen om onze logistieke processen te optimaliseren. In een voortdurend veranderende markt streven we ernaar om de doorlooptijd te verkorten, kosten te verlagen en duurzaamheid te bevorderen. Wij geloven dat de integratie van machine learning-technologieën een cruciale rol kan spelen in het realiseren van deze doelstellingen.
