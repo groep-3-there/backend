@@ -1,5 +1,6 @@
 package matchmaker.backend.IntegrationTests;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import lombok.SneakyThrows;
@@ -25,9 +26,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +39,7 @@ import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -70,6 +74,9 @@ public class UserIntegrationTest {
 
     @Autowired
     private UserController userController;
+
+    @Autowired
+    public ObjectMapper objectMapper;
 
     @Test
     public void getUserById() throws Exception {
@@ -117,5 +124,26 @@ public class UserIntegrationTest {
         var x = mockMvc.perform(MockMvcRequestBuilders.get("/user/44"));
         x.andExpect(status().isNotFound());
 
+    }
+
+    @Test
+    public void testUpdateUserProfile() throws Exception {
+
+        User testUser = userRepository.findById(1L).get();
+
+        User updateToUser = new User();
+        updateToUser.name = "Bakker Jan";
+        updateToUser.email = "Bakker@Jan.nl";
+        updateToUser.info = "Bakker Jan bakt graag bij bakker bart.";
+        updateToUser.isEmailPublic = false;
+        updateToUser.isPhoneNumberPublic = false;
+        updateToUser.phoneNumber = "0687654321";
+        updateToUser.tags = "tag3,tag4";
+        updateToUser.avatarImageId = 2L;
+
+        mockMvc.perform(put("/user/" + testUser.id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateToUser)))
+                .andExpect(status().isOk());
     }
 }
