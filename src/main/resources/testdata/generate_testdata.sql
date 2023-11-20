@@ -83,7 +83,7 @@ values ('2020-01-01', 1, 1, 'Management'),
     ('2020-01-01', 2, 2, 'Logistiek');
 insert into users (is_email_public, is_phone_number_public, accepted_tos_date, avatar_image_id, created_at,
                    department_id, id, last_seen, role_id, email, firebase_id, info, name, phone_number, tags)
-values  (true,true,'2020-01-01', null, '2020-01-01', 1, 1, null, 5, 'matchmaker@mail.com', null, 'info', 'MatchMaker', '0630384453', 'tag1,tag2'),
+values  (true,true,'2020-01-01', null, '2020-01-01', 1, 1, null, 5, 'matchmaker@mail.com', '9qhopxJIdmUjwbBuQHIYPOeheQh2', 'info', 'MatchMaker', '0630384453', 'tag1,tag2'),
         (true,true,'2020-01-01', null, '2020-01-01', 1, 2, null, 2, 'challenger@kapper.nl', '9gJQuvQ2h8PxIvVPae8oTN9ukMW2', 'info', 'Eline de Groot', '0630384453', 'tag1,tag2'),
         (true,true,'2020-01-01', null, '2020-01-01', 1, 3, null, 1, 'medewerker@kapper.nl', 'SR3TD4Jf2RZ5qbNNF8kcIBu6kjl1', 'info', 'Jelle Jacobs', '0630384453', 'tag1,tag2');
 
