@@ -72,8 +72,8 @@ public class UserController {
 
     // check if the email is not blank or null or valid
     if (user.getEmail() == null
-            || user.getEmail().isBlank()
-            || !EMAIL.matcher(user.getEmail()).matches())
+        || user.getEmail().isBlank()
+        || !EMAIL.matcher(user.getEmail()).matches())
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     checkedUser.setEmail(user.email);
 
