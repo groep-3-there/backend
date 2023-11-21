@@ -14,16 +14,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
+import static matchmaker.backend.constants.Regex.EMAIL;
+import static matchmaker.backend.constants.Regex.PHONENUMBER;
+
 @RestController
 public class UserController {
 
   @Autowired private UserRepository userRepository;
 
   @Autowired private ImageRepository imageRepository;
-
-    private static final Pattern EMAIL = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-
-    private static final Pattern PHONENUMBER = Pattern.compile("^(\\+\\d{1,3}( )?)?((\\(\\d{1,3}\\))|\\d{1,3})[- .]?\\d{3,4}[- .]?\\d{4}$");
 
     @Autowired
     private FirebaseAuth firebaseAuth;
