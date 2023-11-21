@@ -3,7 +3,7 @@ package matchmaker.backend.controllers;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
-import matchmaker.backend.models.CreateUserFields;
+import matchmaker.backend.RequestBodies.CreateUserFields;
 import matchmaker.backend.models.User;
 import matchmaker.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

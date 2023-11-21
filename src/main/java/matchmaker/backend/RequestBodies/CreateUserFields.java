@@ -1,4 +1,4 @@
-package matchmaker.backend.models;
+package matchmaker.backend.RequestBodies;
 
 public class CreateUserFields {
   public String email;

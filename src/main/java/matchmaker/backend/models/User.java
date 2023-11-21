@@ -23,7 +23,10 @@ public class User {
 
   public String firebaseId;
   public String name;
+
+  @Column(length = 65535, columnDefinition = "Text")
   public String info;
+
   public String tags;
   public Date createdAt;
   public Date lastSeen;
@@ -31,7 +34,6 @@ public class User {
   public boolean isEmailPublic;
   public boolean isPhoneNumberPublic;
   public Date acceptedTosDate;
-
   public String email;
   public String phoneNumber;
 
