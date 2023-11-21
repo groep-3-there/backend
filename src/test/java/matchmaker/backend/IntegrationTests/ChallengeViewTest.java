@@ -324,12 +324,32 @@ public class ChallengeViewTest {
     testUser.setRole(role);
     userRepository.save(testUser);
 
+<<<<<<< Updated upstream
     Challenge testChallenge =
         getExampleChallenge(
             ChallengeStatus.IN_UITVOERING,
             ChallengeVisibility.DEPARTMENT,
             testDepartment,
             testUser);
+=======
+        mockMvc
+                .perform(
+                        MockMvcRequestBuilders.get("/challenge/" + testChallenge.id)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+    @Test
+    @Transactional
+    public void medewerkerGetChallengeDepartmentInUitvoeringFromDifferentDepartment() throws Exception {
+        Role role = rolerepository.findById(DefaultRoleId.CHALLENGER).get();
+        User testUser = userRepository.findById(1L).get();
+        Company testCompany = getExampleCompany();
+        Department testDepartment = getExampleDepartment(testCompany);
+        Department testDepartment2 = getExampleDepartment(testCompany);
+        testUser.setDepartment(testDepartment2);   //Don't give the user the department that we use for the challenge
+        testUser.setRole(role);
+        userRepository.save(testUser);
+>>>>>>> Stashed changes
 
     mockMvc
         .perform(
@@ -352,12 +372,138 @@ public class ChallengeViewTest {
     testUser.setRole(role);
     userRepository.save(testUser);
 
+<<<<<<< Updated upstream
     Challenge testChallenge =
         getExampleChallenge(
             ChallengeStatus.IN_UITVOERING,
             ChallengeVisibility.DEPARTMENT,
             testDepartment,
             testUser);
+=======
+    @Test
+    @Transactional
+    public void loggedOutGetChallengePublicInUitvoering() throws Exception {
+        Role role = rolerepository.findById(DefaultRoleId.CHALLENGER).get();
+        User testUser = userRepository.findById(1L).get();
+        Company testCompany = getExampleCompany();
+        Department testDepartment = getExampleDepartment(testCompany);
+        Department testDepartment2 = getExampleDepartment(testCompany);
+        testUser.setDepartment(testDepartment2);   //Don't give the user the department that we use for the challenge
+        testUser.setRole(role);
+        userRepository.save(testUser);
+
+        Challenge testChallenge = getExampleChallenge(ChallengeStatus.IN_UITVOERING, ChallengeVisibility.PUBLIC, testDepartment, testUser);
+
+        mockMvc
+                .perform(
+                        MockMvcRequestBuilders.get("/challenge/" + testChallenge.id + "?loggedOut=1")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+    @Test
+    @Transactional
+    public void loggedOutGetChallengeDepartmentInUitvoering() throws Exception {
+        Role role = rolerepository.findById(DefaultRoleId.CHALLENGER).get();
+        User testUser = userRepository.findById(1L).get();
+        Company testCompany = getExampleCompany();
+        Department testDepartment = getExampleDepartment(testCompany);
+        Department testDepartment2 = getExampleDepartment(testCompany);
+        testUser.setDepartment(testDepartment2);   //Don't give the user the department that we use for the challenge
+        testUser.setRole(role);
+        userRepository.save(testUser);
+
+        Challenge testChallenge = getExampleChallenge(ChallengeStatus.IN_UITVOERING, ChallengeVisibility.DEPARTMENT, testDepartment, testUser);
+
+        mockMvc
+                .perform(
+                        MockMvcRequestBuilders.get("/challenge/" + testChallenge.id + "?loggedOut=1")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());
+    }
+    @Test
+    @Transactional
+    public void loggedOutGetChallengeInternalInUitvoering() throws Exception {
+        Role role = rolerepository.findById(DefaultRoleId.CHALLENGER).get();
+        User testUser = userRepository.findById(1L).get();
+        Company testCompany = getExampleCompany();
+        Department testDepartment = getExampleDepartment(testCompany);
+        Department testDepartment2 = getExampleDepartment(testCompany);
+        testUser.setDepartment(testDepartment2);   //Don't give the user the department that we use for the challenge
+        testUser.setRole(role);
+        userRepository.save(testUser);
+
+        Challenge testChallenge = getExampleChallenge(ChallengeStatus.IN_UITVOERING, ChallengeVisibility.INTERNAL, testDepartment, testUser);
+
+        mockMvc
+                .perform(
+                        MockMvcRequestBuilders.get("/challenge/" + testChallenge.id + "?loggedOut=1")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());
+    }
+    @Test
+    @Transactional
+    public void loggedOutGetChallengeIntranetInUitvoering() throws Exception {
+        Role role = rolerepository.findById(DefaultRoleId.CHALLENGER).get();
+        User testUser = userRepository.findById(1L).get();
+        Company testCompany = getExampleCompany();
+        Department testDepartment = getExampleDepartment(testCompany);
+        Department testDepartment2 = getExampleDepartment(testCompany);
+        testUser.setDepartment(testDepartment2);   //Don't give the user the department that we use for the challenge
+        testUser.setRole(role);
+        userRepository.save(testUser);
+
+        Challenge testChallenge = getExampleChallenge(ChallengeStatus.IN_UITVOERING, ChallengeVisibility.INTRANET, testDepartment, testUser);
+
+        mockMvc
+                .perform(
+                        MockMvcRequestBuilders.get("/challenge/" + testChallenge.id + "?loggedOut=1")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());
+    }
+    @Test
+    @Transactional
+    public void loggedOutGetChallengePublicArchived() throws Exception {
+        Role role = rolerepository.findById(DefaultRoleId.CHALLENGER).get();
+        User testUser = userRepository.findById(1L).get();
+        Company testCompany = getExampleCompany();
+        Department testDepartment = getExampleDepartment(testCompany);
+        Department testDepartment2 = getExampleDepartment(testCompany);
+        testUser.setDepartment(testDepartment2);   //Don't give the user the department that we use for the challenge
+        testUser.setRole(role);
+        userRepository.save(testUser);
+
+        Challenge testChallenge = getExampleChallenge(ChallengeStatus.GEARCHIVEERD, ChallengeVisibility.PUBLIC, testDepartment, testUser);
+
+        mockMvc
+                .perform(
+                        MockMvcRequestBuilders.get("/challenge/" + testChallenge.id + "?loggedOut=1")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());
+    }
+    @Test
+    @Transactional
+    public void loggedOutGetChallengeInternalArchived() throws Exception {
+        Role role = rolerepository.findById(DefaultRoleId.CHALLENGER).get();
+        User testUser = userRepository.findById(1L).get();
+        Company testCompany = getExampleCompany();
+        Department testDepartment = getExampleDepartment(testCompany);
+        Department testDepartment2 = getExampleDepartment(testCompany);
+        testUser.setDepartment(testDepartment2);   //Don't give the user the department that we use for the challenge
+        testUser.setRole(role);
+        userRepository.save(testUser);
+
+        Challenge testChallenge = getExampleChallenge(ChallengeStatus.GEARCHIVEERD, ChallengeVisibility.INTERNAL, testDepartment, testUser);
+
+        mockMvc
+                .perform(
+                        MockMvcRequestBuilders.get("/challenge/" + testChallenge.id + "?loggedOut=1")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());
+    }
+
+
+
+>>>>>>> Stashed changes
 
     mockMvc
         .perform(
