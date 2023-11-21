@@ -48,18 +48,6 @@ public class UserController {
     if (!currentUser.getId().equals(id)) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
-  @PutMapping("/user/{id}")
-  public ResponseEntity<User> UpdateUserProfile(
-      @PathVariable("id") Long id,
-      @RequestBody User user,
-      @RequestAttribute(name = "loggedInUser", required = false) User currentUser) {
-    // check if the user can edit the profile
-    if (currentUser == null) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-    }
-    if (!currentUser.getId().equals(id)) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-    }
 
     Optional<User> targetUser = userRepository.findById(id);
     Optional<User> targetUser = userRepository.findById(id);
