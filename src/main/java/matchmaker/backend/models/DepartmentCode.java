@@ -17,11 +17,9 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 @AllArgsConstructor
 public class DepartmentCode {
 
-    @Id
-    public String code;
+  @Id public String code;
 
-    @OneToOne
-    public Department department;
+  @OneToOne public Department department;
 
-    public DepartmentCode() {}
+  public DepartmentCode() {}
 }

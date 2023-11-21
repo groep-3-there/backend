@@ -11,7 +11,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -19,24 +18,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Transactional
 public class DepartmentCodeIntegrationTest {
-    @Autowired
-    private MockMvc mockMvc;
+  @Autowired private MockMvc mockMvc;
 
-    @Autowired
-    public DepartmentCodeRepository departmentCodeRepository;
+  @Autowired public DepartmentCodeRepository departmentCodeRepository;
 
-    @Autowired
-    public DepartmentRepository departmentRepository;
+  @Autowired public DepartmentRepository departmentRepository;
 
-    @Test
-    public void getDepartmentCode() throws Exception {
-        Department testDepartment = new Department();
-        testDepartment.setName("Test Department");
-        departmentRepository.save(testDepartment);
+  @Test
+  public void getDepartmentCode() throws Exception {
+    Department testDepartment = new Department();
+    testDepartment.setName("Test Department");
+    departmentRepository.save(testDepartment);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/departmentcode/" + testDepartment.getId()))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.code").exists())
-            .andExpect(jsonPath("$.department.id").value(testDepartment.getId()));
-    }
+    mockMvc
+        .perform(MockMvcRequestBuilders.get("/departmentcode/" + testDepartment.getId()))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.code").exists())
+        .andExpect(jsonPath("$.department.id").value(testDepartment.getId()));
+  }
 }
