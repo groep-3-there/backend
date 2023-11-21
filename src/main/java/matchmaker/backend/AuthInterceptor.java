@@ -44,6 +44,11 @@ public class AuthInterceptor implements HandlerInterceptor {
             log.info("[Auth Interceptor] No user principal found");
             if(environment.getProperty("spring.profiles.active").equals("test") && userRepository.existsById(1L)){
                 User testUser = userRepository.findById(1L).get();
+                if(request.getParameter("loggedOut") != null){
+                    log.info("[Auth Interceptor] Forcing Logged out action");
+                    request.setAttribute("loggedInUser", null);
+                    return true;
+                }
                 request.setAttribute("loggedInUser", testUser);
                 return true;
             }
