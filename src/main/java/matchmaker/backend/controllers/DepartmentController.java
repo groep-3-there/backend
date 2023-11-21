@@ -51,6 +51,10 @@ public class DepartmentController {
       // user is not in the same company
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
+    if(targetDepartmentAdmin.role.isDepartmentAdmin){
+        // target admin is already a department admin
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
 
     // User has permission.
     Department newDepartment = new Department();
