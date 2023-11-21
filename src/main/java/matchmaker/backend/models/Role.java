@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import matchmaker.backend.constants.Perm;
-import matchmaker.backend.controllers.ImageController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,37 +20,32 @@ import java.util.List;
 @Setter
 public class Role {
 
-    private static final Logger log = LoggerFactory.getLogger(Role.class);
+  private static final Logger log = LoggerFactory.getLogger(Role.class);
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.TABLE, generator = "role_id")
+  @TableGenerator(name = "role_id", initialValue = 1000)
+  public Long id;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.TABLE, generator = "role_id")
-    @TableGenerator(name="role_id", initialValue = 1000)
-    public Long id;
+  public String name;
+  public Date createdAt;
+  public boolean isMatchmaker;
 
+  @ManyToMany(fetch = FetchType.EAGER)
+  public List<Permission> permissions = new java.util.ArrayList<>();
 
-    public String name;
-    public Date createdAt;
-    public boolean isMatchmaker;
+  public Role(String name) {
+    this.name = name;
+  }
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    public List<Permission> permissions = new java.util.ArrayList<>();
-
-    public Role(String name) {
-        this.name = name;
+  public void addPermission(Permission p) {
+    if (p.id == null) {
+      log.warn("!!!!! Permission must be fetched from database, skipping !!!!!");
+      return;
     }
 
-    public void addPermission(Permission p){
-        if(p.id == null){
-            log.warn("!!!!! Permission must be fetched from database, skipping !!!!!");
-            return;
-        }
+    this.permissions.add(p);
+  }
 
-        this.permissions.add(p);
-    }
-
-
-    public Role(){
-
-    }
+  public Role() {}
 }

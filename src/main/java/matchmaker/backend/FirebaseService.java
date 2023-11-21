@@ -1,6 +1,5 @@
 package matchmaker.backend;
 
-
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -15,22 +14,21 @@ import com.google.firebase.FirebaseOptions;
 @Configuration
 public class FirebaseService {
 
-    @Bean
-    public FirebaseApp firebaseApp() throws IOException {
-        InputStream serviceAccount = this.getClass().getResourceAsStream("/firebase_config.json");
+  @Bean
+  public FirebaseApp firebaseApp() throws IOException {
+    InputStream serviceAccount = this.getClass().getResourceAsStream("/firebase_config.json");
 
-        FirebaseOptions options = new FirebaseOptions.Builder()
-                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                .setDatabaseUrl("https://your-database-url.firebaseio.com")
-                .build();
+    FirebaseOptions options =
+        new FirebaseOptions.Builder()
+            .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+            .setDatabaseUrl("https://your-database-url.firebaseio.com")
+            .build();
 
-        return FirebaseApp.initializeApp(options);
-    }
+    return FirebaseApp.initializeApp(options);
+  }
 
-    @Bean
-    FirebaseAuth firebaseAuth() throws IOException {
-        return FirebaseAuth.getInstance(firebaseApp());
-    }
-
-
+  @Bean
+  FirebaseAuth firebaseAuth() throws IOException {
+    return FirebaseAuth.getInstance(firebaseApp());
+  }
 }
