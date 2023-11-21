@@ -15,23 +15,19 @@ import java.util.Date;
 @EnableAutoConfiguration
 @AllArgsConstructor
 public class CompanyRequest {
-    @Id
-    @GeneratedValue(strategy = GenerationType.TABLE, generator = "companyrequest_id")
-    @TableGenerator(name="companyrequest_id", initialValue = 1000)
-    public Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.TABLE, generator = "companyrequest_id")
+  @TableGenerator(name = "companyrequest_id", initialValue = 1000)
+  public Long id;
 
-    public String name;
+  public String name;
 
-    @ManyToOne
-    public Branch branch;
+  @ManyToOne public Branch branch;
 
-    public String tags;
-    public Date requestedAt;
+  public String tags;
+  public Date requestedAt;
 
-    @OneToOne
-    public User owner;
+  @OneToOne public User owner;
 
-    public CompanyRequest() {
-
-    }
+  public CompanyRequest() {}
 }

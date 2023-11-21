@@ -9,7 +9,10 @@ import matchmaker.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestAttribute;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -17,11 +20,9 @@ import java.util.regex.Pattern;
 @RestController
 public class UserController {
 
-    @Autowired
-    private UserRepository userRepository;
+  @Autowired private UserRepository userRepository;
 
-    @Autowired
-    private ImageRepository imageRepository;
+  @Autowired private ImageRepository imageRepository;
 
     private static final Pattern EMAIL = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
@@ -118,4 +119,9 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.OK).body(saveUser);
     }
+
+  @GetMapping("/user/exist/{email}")
+  public ResponseEntity<Boolean> checkIfUserExists(@PathVariable("email") String email) {
+    return ResponseEntity.ok(userRepository.findByEmail(email).isPresent());
+  }
 }

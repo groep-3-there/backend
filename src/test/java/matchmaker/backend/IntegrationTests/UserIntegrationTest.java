@@ -2,8 +2,6 @@ package matchmaker.backend.IntegrationTests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.FirebaseAuth;
-import lombok.SneakyThrows;
 import matchmaker.backend.AuthInterceptor;
 import matchmaker.backend.controllers.UserController;
 import matchmaker.backend.models.Company;
@@ -14,12 +12,9 @@ import matchmaker.backend.repositories.CompanyRepository;
 import matchmaker.backend.repositories.DepartmentRepository;
 import matchmaker.backend.repositories.RoleRepository;
 import matchmaker.backend.repositories.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +32,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.Optional;
 
-import static org.mockito.Mockito.when;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -46,7 +39,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Transactional
 public class UserIntegrationTest {
-
 
     @Autowired
     private MockMvc mockMvc;
