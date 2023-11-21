@@ -32,8 +32,8 @@ public class UserController {
     if (user.isEmpty()) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
-    User privacyApplied = user.get().viewAs(currentUser);
-    return ResponseEntity.ok(privacyApplied);
+    User privacyChecked = user.get().viewAs(currentUser);
+    return ResponseEntity.ok(privacyChecked);
   }
 
   @PutMapping("/user/{id}")
