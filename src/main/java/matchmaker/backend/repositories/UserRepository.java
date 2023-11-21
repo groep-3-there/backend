@@ -13,4 +13,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
   Optional<User> findFirstByOrderByIdAsc();
 
   Optional<User> findByFirebaseId(String firebaseId);
+
+  Iterable<User> findAllByDepartment_ParentCompany_Id(Long id);
 }

@@ -22,7 +22,10 @@ public class Company {
   public Long id;
 
   public String name;
+
+  @Column(length = 65535, columnDefinition = "Text")
   public String info;
+
   public Long profileImageId;
   public Long bannerImageId;
   public String tags;
