@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,8 +39,10 @@ public class CompanyRequestController {
       return null;
     }
 
+    Sort sortOder = Sort.by("requestedAt").ascending();
+
     int pageSize = 3;
-    Pageable pageable = PageRequest.of(page, pageSize);
+    Pageable pageable = PageRequest.of(page, pageSize, sortOder);
     return repository.findAll(pageable);
   }
 
