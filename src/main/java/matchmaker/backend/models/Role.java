@@ -30,10 +30,7 @@ public class Role {
   public String name;
   public Date createdAt;
   public boolean isMatchmaker;
-    public String name;
-    public Date createdAt;
-    public boolean isMatchmaker;
-    public boolean isDepartmentAdmin;
+  public boolean isDepartmentAdmin;
 
   @ManyToMany(fetch = FetchType.EAGER)
   public List<Permission> permissions = new java.util.ArrayList<>();

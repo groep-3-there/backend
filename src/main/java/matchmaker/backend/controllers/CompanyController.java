@@ -1,6 +1,7 @@
 package matchmaker.backend.controllers;
 
 import matchmaker.backend.models.Company;
+import matchmaker.backend.models.User;
 import matchmaker.backend.repositories.CompanyRepository;
 import matchmaker.backend.repositories.DepartmentRepository;
 import matchmaker.backend.repositories.UserRepository;

@@ -29,27 +29,26 @@ public class DepartmentController {
 
     @PostMapping("/department/create")
     public ResponseEntity<Department> createDepartment(@RequestBody CreateDepartmentFields fields,
-                                           @RequestAttribute("loggedInUser") User currentUser)
-    {
-        if(currentUser == null || !currentUser.isInCompany()){
+                                                       @RequestAttribute("loggedInUser") User currentUser) {
+        if (currentUser == null || !currentUser.isInCompany()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
 
-        if(!currentUser.hasPermissionAtDepartment(Perm.DEPARTMENT_CREATE, currentUser.department.getId())){
+        if (!currentUser.hasPermissionAtDepartment(Perm.DEPARTMENT_CREATE, currentUser.department.getId())) {
             //User does not have permission to create department
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
-        if(userRepository.findById(fields.adminId).isEmpty()){
+        if (userRepository.findById(fields.adminId).isEmpty()) {
             //target admin does not exist
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
         User targetDepartmentAdmin = userRepository.findById(fields.adminId).get();
 
-        if(!targetDepartmentAdmin.isInCompany()){
+        if (!targetDepartmentAdmin.isInCompany()) {
             //target admin is not in a company
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
-        if(!targetDepartmentAdmin.department.parentCompany.id.equals(currentUser.department.parentCompany.id)){
+        if (!targetDepartmentAdmin.department.parentCompany.id.equals(currentUser.department.parentCompany.id)) {
             //user is not in the same company
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
@@ -62,7 +61,7 @@ public class DepartmentController {
         //Save the department
         Department saved = departmentRepository.save(newDepartment);
         Optional<Role> departmentAdmin = roleRepository.findById(3L);
-        if(departmentAdmin.isEmpty()){
+        if (departmentAdmin.isEmpty()) {
             //If this happens, the role is not in the database, check testdata
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
@@ -72,32 +71,26 @@ public class DepartmentController {
 
         return ResponseEntity.status(HttpStatus.OK).body(saved);
     }
+
     @GetMapping("/department/company/{id}")
-    public Iterable<Department> getAllDepartmentsForCompanyById(@PathVariable("id") Long id){
+    public Iterable<Department> getAllDepartmentsForCompanyById(@PathVariable("id") Long id) {
         //Get all the departments where partenCompany is equal to the id
         return departmentRepository.findAllByParentCompanyId(id);
     }
 
     @PostMapping("/department/exists")
-    public ResponseEntity<Optional<Department>> departmentExists(@RequestBody SearchDepartmentFields fields){
+    public ResponseEntity<Optional<Department>> departmentExists(@RequestBody SearchDepartmentFields fields) {
         //Check if the department exists
 
         return ResponseEntity.ok(departmentRepository.findByNameAndParentCompanyId(fields.name, fields.parentCompanyId));
     }
 
-   
-  @GetMapping("/department/company/{id}")
-  public Iterable<Department> getAllDepartmentsForCompanyById(@PathVariable("id") Long id) {
-    // Get all the departments where partenCompany is equal to the id
-    return departmentRepository.findAllByParentCompanyId(id);
-  }
-
-  @GetMapping("/department/{id}")
-  public ResponseEntity getDepartmentById(@PathVariable("id") Long id) {
-    Optional<Department> optionalDepartment = departmentRepository.findById(id);
-    if (optionalDepartment.isEmpty()) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    @GetMapping("/department/{id}")
+    public ResponseEntity getDepartmentById(@PathVariable("id") Long id) {
+        Optional<Department> optionalDepartment = departmentRepository.findById(id);
+        if (optionalDepartment.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(optionalDepartment.get());
     }
-    return ResponseEntity.status(HttpStatus.OK).body(optionalDepartment.get());
-  }
 }
