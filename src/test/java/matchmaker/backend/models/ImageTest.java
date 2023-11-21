@@ -4,43 +4,33 @@ import org.junit.jupiter.api.Test;
 
 class ImageTest {
 
-    @Test
-    void getId() {
-    }
+  @Test
+  void getId() {}
 
-    @Test
-    void getChallenge() {
-    }
+  @Test
+  void getChallenge() {}
 
-    @Test
-    void getChallengeInput() {
-    }
+  @Test
+  void getChallengeInput() {}
 
-    @Test
-    void getData() {
-    }
+  @Test
+  void getData() {}
 
-    @Test
-    void getPhotoData() {
-    }
+  @Test
+  void getPhotoData() {}
 
-    @Test
-    void setId() {
-    }
+  @Test
+  void setId() {}
 
-    @Test
-    void setChallenge() {
-    }
+  @Test
+  void setChallenge() {}
 
-    @Test
-    void setChallengeInput() {
-    }
+  @Test
+  void setChallengeInput() {}
 
-    @Test
-    void setData() {
-    }
+  @Test
+  void setData() {}
 
-    @Test
-    void setPhotoData() {
-    }
+  @Test
+  void setPhotoData() {}
 }

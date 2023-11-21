@@ -16,28 +16,25 @@ import java.util.Date;
 @Setter
 public class Company {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.TABLE, generator = "company_id")
-    @TableGenerator(name="company_id", initialValue = 1000)
-    public Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.TABLE, generator = "company_id")
+  @TableGenerator(name = "company_id", initialValue = 1000)
+  public Long id;
 
-    public String name;
-    public String info;
-    public Long profileImageId;
-    public Long bannerImageId;
-    public String tags;
+  public String name;
+  public String info;
+  public Long profileImageId;
+  public Long bannerImageId;
+  public String tags;
 
-    @ManyToOne
-    public Branch branch;
-    public Date createdAt;
+  @ManyToOne public Branch branch;
+  public Date createdAt;
 
-    public Long ownerId;
+  public Long ownerId;
 
-    public Company() {
+  public Company() {}
 
-    }
-    public Company(String name){
-        this.name = name;
-    }
-
+  public Company(String name) {
+    this.name = name;
+  }
 }

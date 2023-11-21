@@ -16,26 +16,24 @@ import java.util.Optional;
 @RestController
 public class UserController {
 
-    @Autowired
-    private UserRepository userRepository;
+  @Autowired private UserRepository userRepository;
 
-    @Autowired
-    private ImageRepository imageRepository;
+  @Autowired private ImageRepository imageRepository;
 
-    @GetMapping("/user/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable("id") Long id,
-             @RequestAttribute(name = "loggedInUser", required = false) User currentUser){
-        Optional<User> user = userRepository.findById(id);
-        if(user.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
-        User appliedPrivacy = user.get().viewAs(currentUser);
-        return ResponseEntity.status(200).body(appliedPrivacy);
+  @GetMapping("/user/{id}")
+  public ResponseEntity<User> getUserById(
+      @PathVariable("id") Long id,
+      @RequestAttribute(name = "loggedInUser", required = false) User currentUser) {
+    Optional<User> user = userRepository.findById(id);
+    if (user.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
+    User appliedPrivacy = user.get().viewAs(currentUser);
+    return ResponseEntity.status(200).body(appliedPrivacy);
+  }
 
-    @GetMapping("/user/exist/{email}")
-    public ResponseEntity<Boolean> checkIfUserExists(
-            @PathVariable("email") String email) {
-        return ResponseEntity.ok(userRepository.findByEmail(email).isPresent());
-    }
+  @GetMapping("/user/exist/{email}")
+  public ResponseEntity<Boolean> checkIfUserExists(@PathVariable("email") String email) {
+    return ResponseEntity.ok(userRepository.findByEmail(email).isPresent());
+  }
 }
