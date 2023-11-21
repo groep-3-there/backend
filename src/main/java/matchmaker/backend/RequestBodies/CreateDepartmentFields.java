@@ -5,8 +5,7 @@ public class CreateDepartmentFields {
   public Long adminId;
 
   public CreateDepartmentFields(String name, Long adminId) {
-        this.name = name;
-        this.adminId = adminId;
+    this.name = name;
+    this.adminId = adminId;
   }
-
 }
