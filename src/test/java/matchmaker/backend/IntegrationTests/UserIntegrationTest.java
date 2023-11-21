@@ -72,6 +72,7 @@ public class UserIntegrationTest {
     private UserController userController;
 
     @Test
+    @Transactional
     public void getUserById() throws Exception {
         Optional<Role> role = roleRepository.findById(1L);
         Department department = new Department();
@@ -111,6 +112,132 @@ public class UserIntegrationTest {
             assert response.contains(testUser.tags);
         }).andExpect(status().isOk());
     }
+    @Test
+    @Transactional
+    public void getUserByIdPrivatePhoneAndEmail() throws Exception {
+        Optional<Role> role = roleRepository.findById(1L);
+        Department department = new Department();
+        department.setName("Test department");
+        Company company = new Company();
+        company.setName("Test company");
+        companyRepository.save(company);
+        department.setParentCompany(company);
+        departmentRepository.save(department);
+        //Make a new user in the repository
+        User testUser = new User();
+        testUser.name = "Jan Bakker";
+        testUser.email = "jan.bakker@mail.com";
+        testUser.acceptedTosDate = new Date();
+        testUser.avatarImageId = 1L;
+        testUser.createdAt = new Date();
+        testUser.department = null;
+        testUser.firebaseId = "3WUKhR2EcvQkwP6R5R4ZOudrJQO2";
+        testUser.info = "Jan Bakker bakt graag bij bakker bart.";
+        testUser.isEmailPublic = false;
+        testUser.isPhoneNumberPublic = false;
+        testUser.lastSeen = new Date();
+        testUser.role = role.get();
+        testUser.setDepartment(department);
+        testUser.phoneNumber = "0612345678";
+        testUser.tags = "tag1,tag2";
+
+        userRepository.save(testUser);
+
+        //Test if the endpoint returns the user
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/" + testUser.id)).andExpect(result -> {
+            String response = result.getResponse().getContentAsString();
+            assert response.contains(testUser.name);
+            assert response.contains(testUser.info);
+            assert !response.contains(testUser.phoneNumber);
+            assert !response.contains(testUser.email);
+            assert response.contains(testUser.tags);
+        }).andExpect(status().isOk());
+    }
+    @Test
+    @Transactional
+    public void getUserByIdPublicPhoneAndEmailWhileLoggedOut() throws Exception {
+
+        Optional<Role> role = roleRepository.findById(1L);
+        Department department = new Department();
+        department.setName("Test department");
+        Company company = new Company();
+        company.setName("Test company");
+        companyRepository.save(company);
+        department.setParentCompany(company);
+        departmentRepository.save(department);
+        //Make a new user in the repository
+        User testUser = new User();
+        testUser.name = "Jan Bakker";
+        testUser.email = "jan.bakker@mail.com";
+        testUser.acceptedTosDate = new Date();
+        testUser.avatarImageId = 1L;
+        testUser.createdAt = new Date();
+        testUser.department = null;
+        testUser.firebaseId = "3WUKhR2EcvQkwP6R5R4ZOudrJQO2";
+        testUser.info = "Jan Bakker bakt graag bij bakker bart.";
+        testUser.isEmailPublic = true;
+        testUser.isPhoneNumberPublic = true;
+        testUser.lastSeen = new Date();
+        testUser.role = role.get();
+        testUser.setDepartment(department);
+        testUser.phoneNumber = "0612345678";
+        testUser.tags = "tag1,tag2";
+
+        userRepository.save(testUser);
+
+        //Test if the endpoint returns the user
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/" + testUser.id + "?loggedOut=1")).andExpect(result -> {
+            String response = result.getResponse().getContentAsString();
+            assert response.contains(testUser.name);
+            assert response.contains(testUser.info);
+            assert response.contains(testUser.phoneNumber);
+            assert response.contains(testUser.email);
+            assert response.contains(testUser.tags);
+        }).andExpect(status().isOk());
+    }
+    @Test
+    @Transactional
+    public void getUserByIdPrivatePhoneAndEmailWhileLoggedOut() throws Exception {
+
+        Optional<Role> role = roleRepository.findById(1L);
+        Department department = new Department();
+        department.setName("Test department");
+        Company company = new Company();
+        company.setName("Test company");
+        companyRepository.save(company);
+        department.setParentCompany(company);
+        departmentRepository.save(department);
+        //Make a new user in the repository
+        User testUser = new User();
+        testUser.name = "Jan Bakker";
+        testUser.email = "jan.bakker@mail.com";
+        testUser.acceptedTosDate = new Date();
+        testUser.avatarImageId = 1L;
+        testUser.createdAt = new Date();
+        testUser.department = null;
+        testUser.firebaseId = "3WUKhR2EcvQkwP6R5R4ZOudrJQO2";
+        testUser.info = "Jan Bakker bakt graag bij bakker bart.";
+        testUser.isEmailPublic = false;
+        testUser.isPhoneNumberPublic = false;
+        testUser.lastSeen = new Date();
+        testUser.role = role.get();
+        testUser.setDepartment(department);
+        testUser.phoneNumber = "0612345678";
+        testUser.tags = "tag1,tag2";
+
+        userRepository.save(testUser);
+
+        //Test if the endpoint returns the user
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/" + testUser.id + "?loggedOut=1")).andExpect(result -> {
+            String response = result.getResponse().getContentAsString();
+            assert response.contains(testUser.name);
+            assert response.contains(testUser.info);
+            assert !response.contains(testUser.phoneNumber);
+            assert !response.contains(testUser.email);
+            assert response.contains(testUser.tags);
+        }).andExpect(status().isOk());
+    }
+
 
     @Test
     public void getUserThatDoesntExist() throws Exception {

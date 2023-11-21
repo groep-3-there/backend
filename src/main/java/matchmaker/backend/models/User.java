@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
 import java.util.Date;
@@ -46,6 +47,8 @@ public class User {
         this.name = name;
     }
 
+
+
     public boolean hasPermissionAtDepartment(String m, Long departmentId){
         if(this.role.isMatchmaker) { return true; }
         if(!department.id.equals(departmentId)){
@@ -68,6 +71,24 @@ public class User {
     public User() {
 
     }
+    public User(User u){
+        this.id = u.id;
+        this.firebaseId = u.firebaseId;
+        this.name = u.name;
+        this.info = u.info;
+        this.tags = u.tags;
+        this.createdAt = u.createdAt;
+        this.lastSeen = u.lastSeen;
+        this.avatarImageId = u.avatarImageId;
+        this.isEmailPublic = u.isEmailPublic;
+        this.isPhoneNumberPublic = u.isPhoneNumberPublic;
+        this.acceptedTosDate = u.acceptedTosDate;
+        this.email = u.email;
+        this.phoneNumber = u.phoneNumber;
+        this.role = u.role;
+        this.department = u.department;
+
+    }
 
     public boolean hasPermission(String codename) {
         for (Permission permission : this.role.getPermissions()) {
@@ -78,4 +99,20 @@ public class User {
         return false;
     }
 
+    public User viewAs(User user){
+        User copy = new User(this);
+        if(user != null && user.id.equals(this.id)){
+            return copy;
+        }
+        //user might be null!
+        if(!this.isEmailPublic){
+            copy.email = null;
+        }
+        if(!this.isPhoneNumberPublic){
+            copy.phoneNumber = null;
+        }
+
+        return copy;
+
+    }
 }
