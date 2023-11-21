@@ -1,14 +1,11 @@
 package matchmaker.backend.controllers;
 
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
-import matchmaker.backend.models.CreateUserFields;
+import matchmaker.backend.RequestBodies.CreateUserFields;
 import matchmaker.backend.models.User;
 import matchmaker.backend.repositories.UserRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

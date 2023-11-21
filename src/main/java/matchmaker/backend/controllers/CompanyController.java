@@ -6,6 +6,7 @@ import matchmaker.backend.models.Department;
 import matchmaker.backend.models.User;
 import matchmaker.backend.repositories.CompanyRepository;
 import matchmaker.backend.repositories.DepartmentRepository;
+import matchmaker.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,8 @@ public class CompanyController {
 
     @Autowired
     private CompanyRepository repository;
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping("/company")
     public ResponseEntity<Iterable<Company>> getCompanies() {
@@ -35,6 +38,31 @@ public class CompanyController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(company);
     }
+    @GetMapping("/company/{id}/members")
+    public ResponseEntity<Iterable<User>> getCompanyMembers(@PathVariable("id") Long id, @RequestAttribute(name = "loggedInUser", required = false) User currentUser){
+        Optional<Company> company = repository.findById(id);
+        if(company.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        if(currentUser == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        if(!currentUser.isInCompany()){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        if(!currentUser.department.parentCompany.id.equals(id)){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        Iterable<User> members = userRepository.findAllByDepartment_ParentCompany_Id(id);
+        List<User> serialized = new ArrayList<>();
+        for (User member : members) {
+            serialized.add(member.viewAs(currentUser));
+        }
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(serialized);
+    }
+
 
     @GetMapping("/company/names")
     public ResponseEntity<Iterable<String>> getAllCompanyNames(){

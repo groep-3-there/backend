@@ -24,6 +24,7 @@ public class User {
     public Long id;
     public String firebaseId;
     public String name;
+    @Column(length = 65535,columnDefinition="Text")
     public String info;
     public String tags;
     public Date createdAt;
