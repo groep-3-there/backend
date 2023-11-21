@@ -35,9 +35,9 @@ public class Role {
   @ManyToMany(fetch = FetchType.EAGER)
   public List<Permission> permissions = new java.util.ArrayList<>();
 
-    public Role(String name) {
-        this.name = name;
-    }
+  public Role(String name) {
+    this.name = name;
+  }
 
   public void addPermission(Permission p) {
     if (p.id == null) {

@@ -18,12 +18,15 @@ public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.TABLE, generator = "user_id")
-  @TableGenerator(name="user_id", initialValue = 1000)
+  @TableGenerator(name = "user_id", initialValue = 1000)
   public Long id;
+
   public String firebaseId;
   public String name;
-  @Column(length = 65535,columnDefinition="Text")
+
+  @Column(length = 65535, columnDefinition = "Text")
   public String info;
+
   public String tags;
   public Date createdAt;
   public Date lastSeen;

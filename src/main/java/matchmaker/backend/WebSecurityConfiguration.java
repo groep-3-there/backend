@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.web.configurers.oauth2.ser
 
 import java.util.List;
 
-
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfiguration {
