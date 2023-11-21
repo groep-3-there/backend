@@ -139,7 +139,6 @@ public class UserIntegrationTest {
         updateToUser.isPhoneNumberPublic = false;
         updateToUser.phoneNumber = "0687654321";
         updateToUser.tags = "tag3,tag4";
-        updateToUser.avatarImageId = 2L;
 
         mockMvc.perform(put("/user/" + testUser.id)
                         .contentType(MediaType.APPLICATION_JSON)

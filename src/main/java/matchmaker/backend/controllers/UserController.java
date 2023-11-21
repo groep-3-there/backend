@@ -2,6 +2,7 @@ package matchmaker.backend.controllers;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserRecord;
+import matchmaker.backend.models.Image;
 import matchmaker.backend.models.User;
 import matchmaker.backend.repositories.ImageRepository;
 import matchmaker.backend.repositories.UserRepository;
@@ -31,10 +32,21 @@ public class UserController {
 
 
     @GetMapping("/user/{id}")
-    public ResponseEntity<Optional<User>> getUserById(@PathVariable("id") Long id) {
+    public ResponseEntity<Optional<User>> getUserById(
+            @PathVariable("id") Long id,
+            @RequestAttribute(name = "loggedInUser", required = false) User currentUser) {
         Optional<User> user = userRepository.findById(id);
         if(user.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Optional.empty());
+        }
+        //checks if the current user can see the profile's email and phone number
+        if (currentUser == null || !currentUser.id.equals(user.get().id)) {
+            if (!user.get().isEmailPublic) {
+                user.get().email = null;
+            }
+            if (!user.get().isPhoneNumberPublic) {
+                user.get().phoneNumber = null;
+            }
         }
         return ResponseEntity.ok(user);
     }
@@ -82,6 +94,20 @@ public class UserController {
             user.tags = tags.substring(0, tags.length() - 1);
         }
         checkedUser.setTags(user.tags);
+
+        //get the current avatar image if there is one
+        Optional<Image> image = Optional.empty();
+        if (user.avatarImageId != null){
+            image = imageRepository.findById(user.avatarImageId);
+        }
+
+        //check if the image the user wants is in the database
+        if (image.isEmpty() && user.avatarImageId != null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
+        //set the avatar image
+        checkedUser.setAvatarImageId(user.avatarImageId);
 
         //set public information
         checkedUser.setEmailPublic(user.isEmailPublic);
