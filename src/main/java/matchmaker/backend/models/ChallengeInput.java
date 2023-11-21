@@ -16,32 +16,28 @@ import java.util.Date;
 @Table(name = "challengeinputs")
 public class ChallengeInput {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.TABLE, generator = "challengeinput_id")
-    @TableGenerator(name="challengeinput_id", initialValue = 1000)
-    public Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.TABLE, generator = "challengeinput_id")
+  @TableGenerator(name = "challengeinput_id", initialValue = 1000)
+  public Long id;
 
-    @ManyToOne
-    public User author;
+  @ManyToOne public User author;
 
-    @ManyToOne
-    public Challenge challenge;
+  @ManyToOne public Challenge challenge;
 
-    @Enumerated(EnumType.ORDINAL)
-    public ChallengeReactionType type;
+  @Enumerated(EnumType.ORDINAL)
+  public ChallengeReactionType type;
 
-    @Column(length = 65535,columnDefinition="Text")
-    public String text;
+  @Column(length = 65535, columnDefinition = "Text")
+  public String text;
 
-    public boolean isChosenAnswer;
+  public boolean isChosenAnswer;
 
-    public Date createdAt;
+  public Date createdAt;
 
-    public ChallengeInput() {
+  public ChallengeInput() {}
 
-    }
-
-    public ChallengeInput(String name){
-        this.text = name;
-    }
+  public ChallengeInput(String name) {
+    this.text = name;
+  }
 }

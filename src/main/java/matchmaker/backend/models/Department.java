@@ -15,21 +15,20 @@ import java.util.Date;
 @EnableAutoConfiguration
 @AllArgsConstructor
 public class Department {
-    @Id
-    @GeneratedValue(strategy = GenerationType.TABLE, generator = "department_id")
-    @TableGenerator(name="department_id", initialValue = 1000)
-    public Long id;
-    public String name;
+  @Id
+  @GeneratedValue(strategy = GenerationType.TABLE, generator = "department_id")
+  @TableGenerator(name = "department_id", initialValue = 1000)
+  public Long id;
 
-    @ManyToOne
-    public Company parentCompany;
-    public Date createdAt;
+  public String name;
 
-    public Department() {
+  @ManyToOne public Company parentCompany;
+  public Date createdAt;
 
-    }
-    public Department(String name, Company parentCompany){
-        this.name = name;
-        this.parentCompany = parentCompany;
-    }
+  public Department() {}
+
+  public Department(String name, Company parentCompany) {
+    this.name = name;
+    this.parentCompany = parentCompany;
+  }
 }

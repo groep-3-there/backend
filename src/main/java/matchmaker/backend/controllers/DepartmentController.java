@@ -85,12 +85,19 @@ public class DepartmentController {
         return ResponseEntity.ok(departmentRepository.findByNameAndParentCompanyId(fields.name, fields.parentCompanyId));
     }
 
-    @GetMapping("/department/{id}")
-    public ResponseEntity getDepartmentById(@PathVariable("id") Long id){
-        Optional<Department> optionalDepartment = departmentRepository.findById(id);
-        if(optionalDepartment.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(optionalDepartment.get());
+   
+  @GetMapping("/department/company/{id}")
+  public Iterable<Department> getAllDepartmentsForCompanyById(@PathVariable("id") Long id) {
+    // Get all the departments where partenCompany is equal to the id
+    return departmentRepository.findAllByParentCompanyId(id);
+  }
+
+  @GetMapping("/department/{id}")
+  public ResponseEntity getDepartmentById(@PathVariable("id") Long id) {
+    Optional<Department> optionalDepartment = departmentRepository.findById(id);
+    if (optionalDepartment.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
+    return ResponseEntity.status(HttpStatus.OK).body(optionalDepartment.get());
+  }
 }
