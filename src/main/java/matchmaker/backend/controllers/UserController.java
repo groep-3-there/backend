@@ -25,23 +25,15 @@ public class UserController {
   @Autowired private FirebaseAuth firebaseAuth;
 
   @GetMapping("/user/{id}")
-  public ResponseEntity<Optional<User>> getUserById(
+  public ResponseEntity<User> getUserById(
       @PathVariable("id") Long id,
       @RequestAttribute(name = "loggedInUser", required = false) User currentUser) {
     Optional<User> user = userRepository.findById(id);
     if (user.isEmpty()) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Optional.empty());
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
-    // checks if the current user can see the profile's email and phone number
-    if (currentUser == null || !currentUser.id.equals(user.get().id)) {
-      if (!user.get().isEmailPublic) {
-        user.get().email = null;
-      }
-      if (!user.get().isPhoneNumberPublic) {
-        user.get().phoneNumber = null;
-      }
-    }
-    return ResponseEntity.ok(user);
+    User privacyChecked = user.get().viewAs(currentUser);
+    return ResponseEntity.ok(privacyChecked);
   }
 
   @PutMapping("/user/{id}")
