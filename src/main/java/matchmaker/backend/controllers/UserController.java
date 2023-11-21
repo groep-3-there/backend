@@ -32,4 +32,10 @@ public class UserController {
         User appliedPrivacy = user.get().viewAs(currentUser);
         return ResponseEntity.status(200).body(appliedPrivacy);
     }
+
+    @GetMapping("/user/exist/{email}")
+    public ResponseEntity<Boolean> checkIfUserExists(
+            @PathVariable("email") String email) {
+        return ResponseEntity.ok(userRepository.findByEmail(email).isPresent());
+    }
 }
