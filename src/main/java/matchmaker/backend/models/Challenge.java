@@ -90,15 +90,15 @@ public class Challenge {
     if (!user.isInCompany()) {
       return false;
     } // If user is not in a company, abort
-    Long userDepartmentId = user.department.parentCompany.id;
-    if (!this.department.parentCompany.id.equals(userDepartmentId)) {
+    Long userCompanyId = user.department.parentCompany.id;
+    if (!this.department.parentCompany.id.equals(userCompanyId)) {
       return false;
     } // if user is not in the same company as the challenge, abort
     // User is part of same company as the challenge
 
     // If archived, only managers can view the challenge
     if (status == ChallengeStatus.GEARCHIVEERD) {
-      return user.hasPermissionAtDepartment(Perm.CHALLENGE_MANAGE, userDepartmentId);
+      return user.hasPermissionAtDepartment(Perm.CHALLENGE_MANAGE, user.department.id);
     }
 
     if (this.visibility == ChallengeVisibility.INTERNAL) {
@@ -107,7 +107,7 @@ public class Challenge {
 
     if (this.visibility == ChallengeVisibility.DEPARTMENT) {
       // If the user is in the same department
-      return userDepartmentId.equals(this.department.id);
+      return user.department.id.equals(this.department.id);
     }
 
     log.warn(
