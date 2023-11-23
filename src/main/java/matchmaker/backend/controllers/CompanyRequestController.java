@@ -27,6 +27,7 @@ public class CompanyRequestController {
   @Autowired private BranchRepository branchRepository;
 
   @Autowired private RoleRepository roleRepository;
+  @Autowired private UserRepository userRepository;
 
   @GetMapping("/company/request")
   public Page<CompanyRequest> getRequests(
@@ -70,12 +71,15 @@ public class CompanyRequestController {
     }
 
     if (!branchRepository.existsById(newCompanyRequest.getBranch().getId())) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Branch not found");
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
     checkedCompanyRequest.branch = newCompanyRequest.branch;
 
     // optional fields that can be null
     checkedCompanyRequest.tags = newCompanyRequest.tags;
+    if(checkedCompanyRequest.tags.endsWith(",")){
+      checkedCompanyRequest.tags = checkedCompanyRequest.tags.substring(0, checkedCompanyRequest.tags.length() - 1);
+    }
 
     // set the date to now
     checkedCompanyRequest.requestedAt = new Date();
@@ -87,7 +91,7 @@ public class CompanyRequestController {
       CompanyRequest savedCompanyRequest = repository.save(checkedCompanyRequest);
       return ResponseEntity.status(HttpStatus.OK).body(savedCompanyRequest);
     } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(e);
+      return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null);
     }
   }
 
@@ -140,6 +144,7 @@ public class CompanyRequestController {
     departmentRepository.save(department);
 
     companyRequest.owner.setDepartment(department);
+    userRepository.save(companyRequest.owner);
 
     return ResponseEntity.status(HttpStatus.OK).body(null);
   }
