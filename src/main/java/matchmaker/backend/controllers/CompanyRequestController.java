@@ -77,8 +77,9 @@ public class CompanyRequestController {
 
     // optional fields that can be null
     checkedCompanyRequest.tags = newCompanyRequest.tags;
-    if(checkedCompanyRequest.tags.endsWith(",")){
-      checkedCompanyRequest.tags = checkedCompanyRequest.tags.substring(0, checkedCompanyRequest.tags.length() - 1);
+    if (checkedCompanyRequest.tags.endsWith(",")) {
+      checkedCompanyRequest.tags =
+          checkedCompanyRequest.tags.substring(0, checkedCompanyRequest.tags.length() - 1);
     }
 
     // set the date to now
