@@ -42,7 +42,8 @@ values (1, 'CHALLENGE_READ', 'Het bekijken van een challenge en reacties achterl
 --        (4, ''CHALLENGE_MARK_REACTION'', ''Het markeren van een reactie'', ''Markeer reactie''),
        (5, 'DEPARTMENT_CREATE', 'Het creeeren van een department', 'Creeer department'),
        (6, 'COMPANY_EDIT', 'Het bewerken van een bedrijf', 'Bewerk bedrijf'),
-       (7, 'COMPANY_GRADE', 'Het goedkeuren van een bedrijfsaanvraag', 'Goedkeuren bedrijfsaanvraag');
+       (7, 'COMPANY_GRADE', 'Het goedkeuren van een bedrijfsaanvraag', 'Goedkeuren bedrijfsaanvraag'),
+        (8, 'DEPARTMENT_MANAGE', 'Het beheren van een afdeling', 'Afdeling beheren');
 
 insert into roles (id, created_at, is_matchmaker, name, is_department_admin)
 values (1, '2020-01-01', false, 'Medewerker', false),
@@ -61,6 +62,7 @@ values (1, 1),
        (3, 1),
 --        (3,2),
        (3, 3),
+       (3,8),
 --        (3,4),
        (4, 1),
 --        (4,2),
@@ -68,6 +70,7 @@ values (1, 1),
 --        (4,4),
        (4, 5),
        (4, 6),
+       (4,8),
        (5, 1),
 --        (5,2),
        (5, 3),
