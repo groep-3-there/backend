@@ -5,4 +5,5 @@ public class CreateUserFields {
   public String name;
   public String password;
   public String companyCode;
+
 }

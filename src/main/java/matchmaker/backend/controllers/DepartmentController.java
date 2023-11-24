@@ -2,10 +2,13 @@ package matchmaker.backend.controllers;
 
 import matchmaker.backend.RequestBodies.CreateDepartmentFields;
 import matchmaker.backend.RequestBodies.SearchDepartmentFields;
+import matchmaker.backend.constants.DefaultRoleId;
 import matchmaker.backend.constants.Perm;
 import matchmaker.backend.models.Department;
+import matchmaker.backend.models.DepartmentCode;
 import matchmaker.backend.models.Role;
 import matchmaker.backend.models.User;
+import matchmaker.backend.repositories.DepartmentCodeRepository;
 import matchmaker.backend.repositories.DepartmentRepository;
 import matchmaker.backend.repositories.RoleRepository;
 import matchmaker.backend.repositories.UserRepository;
@@ -22,6 +25,7 @@ public class DepartmentController {
   @Autowired private DepartmentRepository departmentRepository;
   @Autowired private UserRepository userRepository;
   @Autowired private RoleRepository roleRepository;
+  @Autowired private DepartmentCodeRepository departmentCodeRepository;
 
   @PostMapping("/department/create")
   public ResponseEntity<Department> createDepartment(
@@ -90,6 +94,17 @@ public class DepartmentController {
         departmentRepository.findByNameAndParentCompanyId(fields.name, fields.parentCompanyId));
   }
 
+  @GetMapping("/department/code/{code}")
+    public ResponseEntity<Department> getDepartmentByCode(@PathVariable("code") String code) {
+        Optional<DepartmentCode> optionalDepartmentCode = departmentCodeRepository.findByCode(code);
+        if (optionalDepartmentCode.isEmpty()) {
+          System.out.print("Department code not found");
+          System.out.println(code);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(optionalDepartmentCode.get().department);
+    }
+
   @GetMapping("/department/{id}")
   public ResponseEntity getDepartmentById(@PathVariable("id") Long id) {
     Optional<Department> optionalDepartment = departmentRepository.findById(id);
@@ -98,4 +113,39 @@ public class DepartmentController {
     }
     return ResponseEntity.status(HttpStatus.OK).body(optionalDepartment.get());
   }
+
+  @PostMapping("/department/join/{code}")
+  public ResponseEntity<Department> joinDepartment(
+      @PathVariable("code") String code,
+      @RequestAttribute("loggedInUser") User currentUser) {
+    if (currentUser == null) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+    }
+    if(currentUser.isInCompany()){
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+    }
+
+    Optional<DepartmentCode> optionalDepartmentCode = departmentCodeRepository.findByCode(code);
+    if (optionalDepartmentCode.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    }
+    DepartmentCode departmentCode = optionalDepartmentCode.get();
+    if (departmentCode.department == null) {
+      //should not happen
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    }
+
+    Optional<Role> optionalRole = roleRepository.findById(DefaultRoleId.MEDEWERKER);
+    if(optionalRole.isEmpty()){
+        //should not happen
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+    }
+
+    currentUser.setDepartment(departmentCode.department);
+    currentUser.setRole(optionalRole.get());
+    userRepository.save(currentUser);
+
+    return ResponseEntity.status(HttpStatus.OK).body(departmentCode.department);
+  }
+
 }

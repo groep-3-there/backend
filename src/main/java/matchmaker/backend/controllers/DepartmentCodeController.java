@@ -34,7 +34,7 @@ public class DepartmentCodeController {
     }
 
     // check if the user has the permission to see the department code
-    if (!currentUser.hasPermissionAtDepartment(Perm.DEPARTMENT_CREATE, DepartmentId)) {
+    if (!currentUser.hasPermissionAtDepartment(Perm.DEPARTMENT_MANAGE, DepartmentId)) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
