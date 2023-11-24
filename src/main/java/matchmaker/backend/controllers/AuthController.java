@@ -51,14 +51,14 @@ public class AuthController {
     checked.acceptedTosDate = new Date();
 
     if (createUser.companyCode != null) {
-        departmentCodeRepository.findByCode(createUser.companyCode);
-        if(departmentCodeRepository.findByCode(createUser.companyCode).isEmpty()) {
-            log.info("Department code niet geldig");
-        }
-        else{
-            checked.department = departmentCodeRepository.findByCode(createUser.companyCode).get().department;
-            checked.role = roleRepository.findById(DefaultRoleId.MEDEWERKER).get();
-        }
+      departmentCodeRepository.findByCode(createUser.companyCode);
+      if (departmentCodeRepository.findByCode(createUser.companyCode).isEmpty()) {
+        log.info("Department code niet geldig");
+      } else {
+        checked.department =
+            departmentCodeRepository.findByCode(createUser.companyCode).get().department;
+        checked.role = roleRepository.findById(DefaultRoleId.MEDEWERKER).get();
+      }
     }
 
     try {
