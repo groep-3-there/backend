@@ -1,5 +1,6 @@
 package matchmaker.backend.controllers;
 
+import matchmaker.backend.constants.DefaultRoleId;
 import matchmaker.backend.constants.Perm;
 import matchmaker.backend.models.*;
 import matchmaker.backend.repositories.*;
@@ -129,10 +130,10 @@ public class CompanyRequestController {
     // create default department
     Department department = new Department("Management", company);
     department.createdAt = new Date();
-    Optional<Role> departementOwner = roleRepository.findById(3L);
+    Optional<Role> companyOwner = roleRepository.findById(DefaultRoleId.COMPANY_BEHEERDER);
 
     // check if the role exists
-    if (departementOwner.isEmpty()) {
+    if (companyOwner.isEmpty()) {
       return ResponseEntity.status(HttpStatus.NO_CONTENT)
           .body(
               "De opgevraagde rol is niet gevonden in de database. Neem contact op met de"
@@ -140,7 +141,7 @@ public class CompanyRequestController {
     }
 
     // give owner department manager role
-    companyRequest.getOwner().setRole(departementOwner.get());
+    companyRequest.getOwner().setRole(companyOwner.get());
 
     departmentRepository.save(department);
 
