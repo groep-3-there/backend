@@ -116,7 +116,7 @@ public class UserController {
       return ResponseEntity.ok(true);
 
     } catch (FirebaseAuthException e) {
-        return ResponseEntity.ok(inOurDatabase);
+      return ResponseEntity.ok(inOurDatabase);
     }
   }
 }
