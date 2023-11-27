@@ -1,6 +1,8 @@
 package matchmaker.backend.controllers;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.UserRecord;
 import matchmaker.backend.models.Image;
 import matchmaker.backend.models.User;
 import matchmaker.backend.repositories.ImageRepository;
@@ -108,6 +110,13 @@ public class UserController {
 
   @GetMapping("/user/exist/{email}")
   public ResponseEntity<Boolean> checkIfUserExists(@PathVariable("email") String email) {
-    return ResponseEntity.ok(userRepository.findByEmail(email).isPresent());
+    boolean inOurDatabase = userRepository.findByEmail(email).isPresent();
+    try {
+      UserRecord firebaseUser = firebaseAuth.getUserByEmail(email);
+      return ResponseEntity.ok(true);
+
+    } catch (FirebaseAuthException e) {
+        return ResponseEntity.ok(inOurDatabase);
+    }
   }
 }
