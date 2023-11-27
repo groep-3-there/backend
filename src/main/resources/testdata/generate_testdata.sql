@@ -45,6 +45,7 @@ values (1, 'CHALLENGE_READ', 'Het bekijken van een challenge en reacties achterl
        (7, 'COMPANY_GRADE', 'Het goedkeuren van een bedrijfsaanvraag', 'Goedkeuren bedrijfsaanvraag'),
        (8, 'DEPARTMENT_MANAGE', 'Het beheren van en afdeling', 'Afdeling beheren');
 
+
 insert into roles (id, created_at, is_matchmaker, name, is_department_admin)
 values (1, '2020-01-01', false, 'Medewerker', false),
        (2, '2020-01-01 ', false, 'Challenger', false),
