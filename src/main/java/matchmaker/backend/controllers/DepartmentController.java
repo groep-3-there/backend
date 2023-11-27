@@ -95,15 +95,15 @@ public class DepartmentController {
   }
 
   @GetMapping("/department/code/{code}")
-    public ResponseEntity<Department> getDepartmentByCode(@PathVariable("code") String code) {
-        Optional<DepartmentCode> optionalDepartmentCode = departmentCodeRepository.findByCode(code);
-        if (optionalDepartmentCode.isEmpty()) {
-          System.out.print("Department code not found");
-          System.out.println(code);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(optionalDepartmentCode.get().department);
+  public ResponseEntity<Department> getDepartmentByCode(@PathVariable("code") String code) {
+    Optional<DepartmentCode> optionalDepartmentCode = departmentCodeRepository.findByCode(code);
+    if (optionalDepartmentCode.isEmpty()) {
+      System.out.print("Department code not found");
+      System.out.println(code);
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
+    return ResponseEntity.status(HttpStatus.OK).body(optionalDepartmentCode.get().department);
+  }
 
   @GetMapping("/department/{id}")
   public ResponseEntity getDepartmentById(@PathVariable("id") Long id) {
@@ -116,13 +116,12 @@ public class DepartmentController {
 
   @PostMapping("/department/join/{code}")
   public ResponseEntity<Department> joinDepartment(
-      @PathVariable("code") String code,
-      @RequestAttribute("loggedInUser") User currentUser) {
+      @PathVariable("code") String code, @RequestAttribute("loggedInUser") User currentUser) {
     if (currentUser == null) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
-    if(currentUser.isInCompany()){
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+    if (currentUser.isInCompany()) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
     Optional<DepartmentCode> optionalDepartmentCode = departmentCodeRepository.findByCode(code);
@@ -131,14 +130,14 @@ public class DepartmentController {
     }
     DepartmentCode departmentCode = optionalDepartmentCode.get();
     if (departmentCode.department == null) {
-      //should not happen
+      // should not happen
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 
     Optional<Role> optionalRole = roleRepository.findById(DefaultRoleId.MEDEWERKER);
-    if(optionalRole.isEmpty()){
-        //should not happen
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+    if (optionalRole.isEmpty()) {
+      // should not happen
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
     }
 
     currentUser.setDepartment(departmentCode.department);
@@ -147,5 +146,4 @@ public class DepartmentController {
 
     return ResponseEntity.status(HttpStatus.OK).body(departmentCode.department);
   }
-
 }
