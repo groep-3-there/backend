@@ -14,34 +14,29 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 @EnableAutoConfiguration
 @AllArgsConstructor
 public class Image {
-    @Id
-    @GeneratedValue(strategy = GenerationType.TABLE, generator = "image_id")
-    @TableGenerator(name="image_id", initialValue = 1000)
-    public Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.TABLE, generator = "image_id")
+  @TableGenerator(name = "image_id", initialValue = 1000)
+  public Long id;
 
-    @Lob
-    public byte[] photoData;
+  @Lob public byte[] photoData;
 
-    @ManyToOne
-    @JoinColumn(name = "author_id")
-    public User author;
+  @ManyToOne
+  @JoinColumn(name = "author_id")
+  public User author;
 
-    @ManyToOne
-    @Nullable
-    public Challenge attachmentForChallenge;
+  @ManyToOne @Nullable public Challenge attachmentForChallenge;
 
-    public Image() {
+  public Image() {}
 
-    }
+  public Image(byte[] photoData) {
+    this.photoData = photoData;
+  }
 
-    public Image(byte[] photoData) {
-        this.photoData = photoData;
-    }
-    public Image withoutData(){
-        Image m = new Image();
-        m.id = this.id;
-        m.author = this.author;
-        return m;
-    }
+  public Image withoutData() {
+    Image m = new Image();
+    m.id = this.id;
+    m.author = this.author;
+    return m;
+  }
 }
-
