@@ -181,12 +181,12 @@ public class ChallengeController {
    * / Get 10 challenges per page by search criteria (filters) / The method will return a Page
    * object with the challenges for that page
    *
-   * @param query   - words to search for in the title, tags, description and summary
+   * @param query - words to search for in the title, tags, description and summary
    * @param company - the company name to search for
    * @param branche - the branche name to search for
-   * @param sort    - the sort order, can be Newest_first or deadline_closest_first / if empty,
-   *                Newest_first will be used
-   * @param page    - the page number to return / if empty, the first page (0) will be returned
+   * @param sort - the sort order, can be Newest_first or deadline_closest_first / if empty,
+   *     Newest_first will be used
+   * @param page - the page number to return / if empty, the first page (0) will be returned
    */
   @GetMapping("/challenge/search")
   public Streamable<Challenge> search(
@@ -196,8 +196,9 @@ public class ChallengeController {
       @RequestParam(value = "sort", defaultValue = "Newest_first") String sort,
       @RequestParam(value = "includeArchived", required = false) boolean includeArchived,
       @RequestParam(value = "page", defaultValue = "0") int page,
-    @RequestAttribute(name = "loggedInUser", required = false) User currentUser) {
-    Specification<Challenge> specification = getSpecification(query, company, branche,includeArchived);
+      @RequestAttribute(name = "loggedInUser", required = false) User currentUser) {
+    Specification<Challenge> specification =
+        getSpecification(query, company, branche, includeArchived);
 
     // sort the results in this order: the most recent ones and the ones where the deadline is
     // closest
@@ -216,9 +217,11 @@ public class ChallengeController {
 
     // Use a repository method to find challenges with the criteria, sorted and paginated
     Iterable<Challenge> challenges = repository.findAll(specification);
-    Streamable<Challenge> filteredForUser = Streamable.of(challenges).filter(challenge -> challenge.canBeSeenBy(currentUser));
-    Page<Challenge> pageFilled = PageableExecutionUtils.getPage(filteredForUser.toList(), pageable,
-            () -> Streamable.of(challenges).toList().size());
+    Streamable<Challenge> filteredForUser =
+        Streamable.of(challenges).filter(challenge -> challenge.canBeSeenBy(currentUser));
+    Page<Challenge> pageFilled =
+        PageableExecutionUtils.getPage(
+            filteredForUser.toList(), pageable, () -> Streamable.of(challenges).toList().size());
     return pageFilled;
   }
 
@@ -233,8 +236,9 @@ public class ChallengeController {
       @RequestParam(value = "query", required = false) String query,
       @RequestParam(value = "company", required = false) List<String> company,
       @RequestParam(value = "includeArchived", required = false) boolean includeArchived,
-      @RequestParam(value = "branche", required = false) List<String> branche){
-    Specification<Challenge> specification = getSpecification(query, company, branche, includeArchived);
+      @RequestParam(value = "branche", required = false) List<String> branche) {
+    Specification<Challenge> specification =
+        getSpecification(query, company, branche, includeArchived);
     return repository.findAll(specification).size();
   }
 
@@ -268,7 +272,7 @@ public class ChallengeController {
         Expression<String> branchNameExpression = brancheJoin.get("name");
         predicates.add(branchNameExpression.in(branche));
       }
-      if(!includeArchived){
+      if (!includeArchived) {
         predicates.add(builder.notEqual(root.get("status"), ChallengeStatus.GEARCHIVEERD));
       }
 
