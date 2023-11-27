@@ -27,6 +27,10 @@ public class WebSecurityConfiguration {
                               "http://localhost:3000",
                               "http://161.35.84.133:3000",
                               "http://161.35.84.133",
+                              "http://www.matchmakergroep3.nl",
+                              "https://www.matchmakergroep3.nl",
+                              "http://matchmakergroep3.nl",
+                              "https://matchmakergroep3.nl",
                               "https://groep-3-there.github.io"));
                       corss.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                       corss.setAllowedHeaders(List.of("*"));
