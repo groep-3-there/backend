@@ -12,7 +12,6 @@ import matchmaker.backend.repositories.CompanyRepository;
 import matchmaker.backend.repositories.DepartmentRepository;
 import matchmaker.backend.repositories.RoleRepository;
 import matchmaker.backend.repositories.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -36,7 +35,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Transactional
 public class UserIntegrationTest {
-
 
   @Autowired private MockMvc mockMvc;
 
