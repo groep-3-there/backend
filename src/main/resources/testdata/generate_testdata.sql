@@ -77,6 +77,7 @@ values
 (5, 6),
 (5, 7),
 (5, 8);
+
 insert into companies (banner_image_id, branch_id, created_at, id, owner_id, profile_image_id, info, name, tags)
 values (null, 7, '2020-01-01', 1, null, null,
         'Kapper Eline is een kapper die niet stilstaat, ik sta voorop in de technologische ontwikkelingen',

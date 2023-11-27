@@ -272,6 +272,7 @@ public class ChallengeController {
         Expression<String> branchNameExpression = brancheJoin.get("name");
         predicates.add(branchNameExpression.in(branche));
       }
+
       if (!includeArchived) {
         predicates.add(builder.notEqual(root.get("status"), ChallengeStatus.GEARCHIVEERD));
       }
