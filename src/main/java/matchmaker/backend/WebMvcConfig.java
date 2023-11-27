@@ -30,6 +30,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
             "http://localhost:3000",
             "http://161.35.84.133:3000",
             "http://161.35.84.133",
+            "http://matchmakergroep3.nl",
+            "http://www.matchmakergroep3.nl",
+            "https://www.matchmakergroep3.nl",
+            "https://matchmakergroep3.nl",
             "https://groep-3-there.github.io")
         .allowedMethods("*");
   }
