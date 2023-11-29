@@ -1,6 +1,5 @@
 package matchmaker.backend.controllers;
 
-import jakarta.persistence.Id;
 import matchmaker.backend.RequestBodies.CreateDepartmentFields;
 import matchmaker.backend.RequestBodies.SearchDepartmentFields;
 import matchmaker.backend.constants.DefaultRoleId;
@@ -148,31 +147,30 @@ public class DepartmentController {
   }
 
   @GetMapping("/department/{id}/members")
-  public Iterable<User> getUsersinDepartment(@PathVariable("id") Long id){
+  public Iterable<User> getUsersinDepartment(@PathVariable("id") Long id) {
     // Get all the users in the department
     return userRepository.findAllByDepartment_Id(id);
   }
 
   @PutMapping("/department/{id}/updateroles")
   public ResponseEntity<Role> updateRoles(
-          @PathVariable("id") Long departmentId,
-          @RequestBody Map<String, List<Map<String, Long>>> requestMap,
-          @RequestAttribute("loggedInUser") User currentUser)
-  {
-    //check if department exists
+      @PathVariable("id") Long departmentId,
+      @RequestBody Map<String, List<Map<String, Long>>> requestMap,
+      @RequestAttribute("loggedInUser") User currentUser) {
+    // check if department exists
     Optional<Department> department = departmentRepository.findById(departmentId);
     if (department.isEmpty()) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 
-    //check if user is logged in and in a company
+    // check if user is logged in and in a company
     if (currentUser == null || !currentUser.isInCompany()) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
-    //check if user has the permission to update the roles
-    if (!currentUser.hasPermissionAtDepartment(Perm.DEPARTMENT_MANAGE, departmentId) ||
-            !currentUser.hasPermissionAtDepartment(Perm.COMPANY_MANAGE, departmentId)) {
+    // check if user has the permission to update the roles
+    if (!currentUser.hasPermissionAtDepartment(Perm.DEPARTMENT_MANAGE, departmentId)
+        || !currentUser.hasPermissionAtDepartment(Perm.COMPANY_MANAGE, departmentId)) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
@@ -185,7 +183,7 @@ public class DepartmentController {
     Iterable<User> users = userRepository.findAllByDepartment_Id(departmentId);
     boolean hasDepartmentAdmin = false;
 
-    //check if there is a department admin in the updates
+    // check if there is a department admin in the updates
     for (Map<String, Long> toUpdateUser : updates) {
       Optional<User> tempUser = userRepository.findById(toUpdateUser.get("userId"));
       if (tempUser.isEmpty()) {
@@ -197,11 +195,11 @@ public class DepartmentController {
       }
     }
 
-    //check if there is a department admin in the department already
+    // check if there is a department admin in the department already
     if (!hasDepartmentAdmin) {
       for (User user : users) {
-        if (user.role.id.equals(DefaultRoleId.DEPARTMENT_BEHEERDER) &&
-                updates.stream().noneMatch(update -> update.get("userId").equals(user.id))) {
+        if (user.role.id.equals(DefaultRoleId.DEPARTMENT_BEHEERDER)
+            && updates.stream().noneMatch(update -> update.get("userId").equals(user.id))) {
           hasDepartmentAdmin = true;
           break;
         }
