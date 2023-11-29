@@ -121,7 +121,7 @@ values (2, 2, 2, '2020-01-01', 'Bakker Bart', 'Brood, ICT'),
 
 insert into challenges (status, visibility, author_id, banner_image_id, created_at, department_id, end_date, id,
                         contact_information, description, concluding_remarks, summary, tags, title)
-values (0, 2, 1, null, '2023-01-01', 2, '2024-02-02', 1,
+values (0, 2, 2, null, '2023-01-01', 2, '2024-02-02', 1,
         'Mocht je contact op willen nemen buiten het platform, stuur mij een email op Eline@mail.com', 'LogiTech Solutions BV staat voor een uitdagend vraagstuk en zoekt naar innovatieve oplossingen om onze logistieke processen te optimaliseren. In een voortdurend veranderende markt streven we ernaar om de doorlooptijd te verkorten, kosten te verlagen en duurzaamheid te bevorderen. Wij geloven dat de integratie van machine learning-technologieën een cruciale rol kan spelen in het realiseren van deze doelstellingen.
 
 We zijn geïnteresseerd in voorstellen die niet alleen gebruikmaken van geavanceerde technologieën zoals IoT, machine learning en automatisering, maar die ook gericht zijn op het begrijpen en aanpakken van specifieke uitdagingen binnen onze logistieke keten. Hoe kunnen we machine learning inzetten om de efficiëntie van onze voorraadbeheerprocessen te verbeteren? Welke mogelijkheden zijn er om voorspellende analyses toe te passen op orderverwerking en verzending?
