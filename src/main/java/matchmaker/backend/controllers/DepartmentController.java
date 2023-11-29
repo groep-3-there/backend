@@ -183,7 +183,8 @@ public class DepartmentController {
     Iterable<User> users = userRepository.findAllByDepartment_Id(departmentId);
     boolean hasDepartmentAdmin = false;
 
-    //check if there is a department admin in the updates, this means that there will be at least one department admin
+    // check if there is a department admin in the updates, this means that there will be at least
+    // one department admin
     for (Map<String, Long> toUpdateUser : updates) {
       Optional<User> tempUser = userRepository.findById(toUpdateUser.get("userId"));
       if (tempUser.isEmpty()) {
@@ -194,8 +195,10 @@ public class DepartmentController {
         break;
       }
     }
-    //if there is no department admin in the updates, check if there is a department admin in the department already
-    //if there is one in the department already, make sure that the to update user is not the same as the department admin, this would mean that there would be no department admin
+    // if there is no department admin in the updates, check if there is a department admin in the
+    // department already
+    // if there is one in the department already, make sure that the to update user is not the same
+    // as the department admin, this would mean that there would be no department admin
     if (!hasDepartmentAdmin) {
       for (User user : users) {
         if (user.role.id.equals(DefaultRoleId.DEPARTMENT_BEHEERDER)
