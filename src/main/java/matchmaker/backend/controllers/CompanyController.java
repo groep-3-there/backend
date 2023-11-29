@@ -42,15 +42,7 @@ public class CompanyController {
     if (company.isEmpty()) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
-    if (currentUser == null) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-    }
-    if (!currentUser.isInCompany()) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-    }
-    if (!currentUser.department.parentCompany.id.equals(id)) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-    }
+
     Iterable<User> members = userRepository.findAllByDepartment_ParentCompany_Id(id);
     List<User> serialized = new ArrayList<>();
     for (User member : members) {
