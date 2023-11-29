@@ -46,12 +46,12 @@ values (1, 'CHALLENGE_READ', 'Het bekijken van een challenge en reacties achterl
        (8, 'DEPARTMENT_MANAGE', 'Het beheren van en afdeling', 'Afdeling beheren');
 
 
-insert into roles (id, created_at, is_matchmaker, name, is_department_admin)
-values (1, '2020-01-01', false, 'Medewerker', false),
-       (2, '2020-01-01 ', false, 'Challenger', false),
-       (3, '2020-01-01 ', false, 'Afdeling beheerder', true),
-       (4, '2020-01-01', false, 'Bedrijf beheerder', true),
-       (5, '2020-01-01', true, 'MatchMaker', true);
+insert into roles (id, created_at, is_matchmaker, name, is_department_admin, is_assignable)
+values (1, '2020-01-01', false, 'Medewerker', false, true),
+       (2, '2020-01-01 ', false, 'Challenger', false, true),
+       (3, '2020-01-01 ', false, 'Afdeling beheerder', true, true),
+       (4, '2020-01-01', false, 'Bedrijf beheerder', true, false),
+       (5, '2020-01-01', true, 'MatchMaker', true, false);
 
 insert into roles_permissions (role_id, permissions_id)
 values
