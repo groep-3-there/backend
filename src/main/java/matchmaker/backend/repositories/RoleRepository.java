@@ -9,5 +9,6 @@ import java.util.Optional;
 @Repository
 public interface RoleRepository extends CrudRepository<Role, Long> {
   Optional<Role> findById(Long id);
+
   Iterable<Role> findAllByIsAssignable(boolean isAssignable);
 }
