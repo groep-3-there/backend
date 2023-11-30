@@ -99,7 +99,7 @@ values (true, true, '2020-01-01', null, '2020-01-01', 3, 1, null, 5, 'matchmaker
        (true, true, '2020-01-01', null, '2020-01-01', 1, 2, null, 2, 'challenger@kapper.nl',
         '9gJQuvQ2h8PxIvVPae8oTN9ukMW2', 'Hoiii ik ben Eline, enthousiaste kapster.', 'Eline de Groot', '0630384453',
         'kapper,technologie,innovatie'),
-       (true, true, '2020-01-01', null, '2020-01-01', 1, 3, null, 1, 'medewerker@kapper.nl',
+       (true, true, '2020-01-01', null, '2020-01-01', 1, 3, null, 3, 'medewerker@kapper.nl',
         'SR3TD4Jf2RZ5qbNNF8kcIBu6kjl1', 'Hallo ik ben Jelle, en loop sinds kort stage bij Kapper Eline', 'Jelle Jacobs',
         '0630384453', 'stage,kapper,enthousiast,technologie'),
        (true, true, '2020-01-01', null, '2020-01-01', 1, 4, null, 4, 'admin@kapper.nl', 'ULQK7SLhTbNZERR3jFk0hSlRtub2',

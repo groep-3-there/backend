@@ -149,11 +149,11 @@ public class DepartmentController {
   @GetMapping("/department/{id}/members")
   public Iterable<User> getUsersinDepartment(@PathVariable("id") Long id) {
     // Get all the users in the department
-    return userRepository.findAllByDepartment_Id(id);
+    return userRepository.findAllByDepartment_IdAndRole_IdIsNot(id, DefaultRoleId.COMPANY_BEHEERDER);
   }
 
   @PutMapping("/department/{id}/updateroles")
-  public ResponseEntity<Role> updateRoles(
+  public ResponseEntity<Iterable<User>> updateRoles(
       @PathVariable("id") Long departmentId,
       @RequestBody Map<String, List<Map<String, Long>>> requestMap,
       @RequestAttribute("loggedInUser") User currentUser) {
@@ -169,28 +169,26 @@ public class DepartmentController {
     }
 
     // check if user has the permission to update the roles
-    if (!currentUser.hasPermissionAtDepartment(Perm.DEPARTMENT_MANAGE, departmentId)
-        || !currentUser.hasPermissionAtDepartment(Perm.COMPANY_MANAGE, departmentId)) {
+    if (!currentUser.hasPermissionAtDepartment(Perm.DEPARTMENT_MANAGE, departmentId)){
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
     List<Map<String, Long>> updates = requestMap.get("updates");
 
-    if (updates == null) {
+    if (updates.isEmpty()) {
       return ResponseEntity.badRequest().body(null);
     }
 
-    Iterable<User> users = userRepository.findAllByDepartment_Id(departmentId);
+    Iterable<User> users = userRepository.findAllByDepartment_IdAndRole_IdIsNot(departmentId, DefaultRoleId.COMPANY_BEHEERDER);
     boolean hasDepartmentAdmin = false;
 
     // check if there is a department admin in the updates, this means that there will be at least
     // one department admin
     for (Map<String, Long> toUpdateUser : updates) {
-      Optional<User> tempUser = userRepository.findById(toUpdateUser.get("userId"));
-      if (tempUser.isEmpty()) {
+      if (toUpdateUser.get("roleId") == null || toUpdateUser.get("userId") == null) {
         return ResponseEntity.badRequest().body(null);
       }
-      if (tempUser.get().role.id.equals(DefaultRoleId.DEPARTMENT_BEHEERDER)) {
+      if (toUpdateUser.get("roleId").equals(DefaultRoleId.DEPARTMENT_BEHEERDER)) {
         hasDepartmentAdmin = true;
         break;
       }
@@ -201,14 +199,13 @@ public class DepartmentController {
     // as the department admin, this would mean that there would be no department admin
     if (!hasDepartmentAdmin) {
       for (User user : users) {
-        if (user.role.id.equals(DefaultRoleId.DEPARTMENT_BEHEERDER)
-            && updates.stream().noneMatch(update -> update.get("userId").equals(user.id))) {
+        if (user.getRole().id.equals(DefaultRoleId.DEPARTMENT_BEHEERDER) &&
+                updates.stream().noneMatch(update -> user.id.equals(update.get("userId")))) {
           hasDepartmentAdmin = true;
           break;
         }
       }
     }
-
     if (!hasDepartmentAdmin) {
       return ResponseEntity.badRequest().body(null);
     }
@@ -228,6 +225,7 @@ public class DepartmentController {
       user.get().setRole(role.get());
       userRepository.save(user.get());
     }
-    return ResponseEntity.ok().body(null);
+    Iterable<User> updatedUsers = userRepository.findAllByDepartment_IdAndRole_IdIsNot(departmentId, DefaultRoleId.COMPANY_BEHEERDER);
+    return ResponseEntity.ok().body(updatedUsers);
   }
 }

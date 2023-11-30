@@ -16,5 +16,5 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
   Iterable<User> findAllByDepartment_ParentCompany_Id(Long id);
 
-  Iterable<User> findAllByDepartment_Id(Long id);
+  Iterable<User> findAllByDepartment_IdAndRole_IdIsNot(Long id, Long roleId);
 }
