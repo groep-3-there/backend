@@ -149,7 +149,8 @@ public class DepartmentController {
   @GetMapping("/department/{id}/members")
   public Iterable<User> getUsersinDepartment(@PathVariable("id") Long id) {
     // Get all the users in the department
-    return userRepository.findAllByDepartment_IdAndRole_IdIsNot(id, DefaultRoleId.COMPANY_BEHEERDER);
+    return userRepository.findAllByDepartment_IdAndRole_IdIsNot(
+        id, DefaultRoleId.COMPANY_BEHEERDER);
   }
 
   @PutMapping("/department/{id}/updateroles")
@@ -169,7 +170,7 @@ public class DepartmentController {
     }
 
     // check if user has the permission to update the roles
-    if (!currentUser.hasPermissionAtDepartment(Perm.DEPARTMENT_MANAGE, departmentId)){
+    if (!currentUser.hasPermissionAtDepartment(Perm.DEPARTMENT_MANAGE, departmentId)) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
@@ -179,7 +180,9 @@ public class DepartmentController {
       return ResponseEntity.badRequest().body(null);
     }
 
-    Iterable<User> users = userRepository.findAllByDepartment_IdAndRole_IdIsNot(departmentId, DefaultRoleId.COMPANY_BEHEERDER);
+    Iterable<User> users =
+        userRepository.findAllByDepartment_IdAndRole_IdIsNot(
+            departmentId, DefaultRoleId.COMPANY_BEHEERDER);
     boolean hasDepartmentAdmin = false;
 
     // check if there is a department admin in the updates, this means that there will be at least
@@ -199,8 +202,8 @@ public class DepartmentController {
     // as the department admin, this would mean that there would be no department admin
     if (!hasDepartmentAdmin) {
       for (User user : users) {
-        if (user.getRole().id.equals(DefaultRoleId.DEPARTMENT_BEHEERDER) &&
-                updates.stream().noneMatch(update -> user.id.equals(update.get("userId")))) {
+        if (user.getRole().id.equals(DefaultRoleId.DEPARTMENT_BEHEERDER)
+            && updates.stream().noneMatch(update -> user.id.equals(update.get("userId")))) {
           hasDepartmentAdmin = true;
           break;
         }
@@ -225,7 +228,9 @@ public class DepartmentController {
       user.get().setRole(role.get());
       userRepository.save(user.get());
     }
-    Iterable<User> updatedUsers = userRepository.findAllByDepartment_IdAndRole_IdIsNot(departmentId, DefaultRoleId.COMPANY_BEHEERDER);
+    Iterable<User> updatedUsers =
+        userRepository.findAllByDepartment_IdAndRole_IdIsNot(
+            departmentId, DefaultRoleId.COMPANY_BEHEERDER);
     return ResponseEntity.ok().body(updatedUsers);
   }
 }
