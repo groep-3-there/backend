@@ -1,5 +1,6 @@
 package matchmaker.backend.repositories;
 
+import matchmaker.backend.constants.ChallengeVisibility;
 import matchmaker.backend.models.Challenge;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
@@ -13,6 +14,8 @@ public interface ChallengeRepository
   Iterable<Challenge> findAllByDepartmentId(Long departmentId);
 
   Iterable<Challenge> findChallengeByDepartment_ParentCompanyId(Long parentCompanyId);
+
+  Iterable<Challenge> findChallengesByVisibilityIs(ChallengeVisibility status);
 
   void deleteAllByAuthorId(Long authorId);
 }
