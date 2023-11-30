@@ -130,7 +130,7 @@ We nodigen bedrijven en professionals uit om met creatieve en praktische oplossi
         '',
         'LogiTech Solutions BV zoekt naar innovatieve oplossingen voor de optimalisatie van logistieke processen. De uitdaging omvat het verkorten van doorlooptijden, kostenverlaging en het bevorderen van duurzaamheid, met specifieke interesse in het benutten van machine learning-technologieën. Bedrijven en professionals worden uitgenodigd om creatieve voorstellen in te dienen die gericht zijn op specifieke uitdagingen binnen de logistieke keten.',
         'logistiek,optimalisatie,AI,Machine Learning', 'Optimalisatie van Logistieke Processen met Machine Learning'),
-       (0, 2, 1, null, '2023-01-01', 1, '2024-02-02', 2,
+       (0, 2, 2, null, '2023-01-01', 1, '2024-02-02', 2,
         'Mocht je contact op willen nemen buiten het platform, stuur mij een email op Eline@mail.com', 'Ik ben Eline, de trotse eigenaar van Kapperszaak Eline, een bloeiende kapsalon waar we met liefde en passie werken om onze klanten er op hun best uit te laten zien en zich geweldig te laten voelen. Sinds de opening van mijn salon heb ik het voorrecht gehad om vele geweldige mensen te ontmoeten en hun haarwensen te vervullen. Echter, in de altijd veranderende wereld van vandaag staan we voor de uitdaging om onze klanten vaker terug te laten komen en hun tevredenheid te vergroten.
 
 Om deze uitdaging aan te gaan, ben ik op zoek naar de hulp en ideeën van experts op het gebied van informatietechnologie (ICT). Ik geloof sterk in de kracht van technologie om ons bedrijf te verbeteren en de klantbeleving te verrijken. Daarom roep ik jullie op om met innovatieve ideeën te komen die ons kunnen helpen klanten vaker terug te laten komen en de band met onze salon te versterken.
