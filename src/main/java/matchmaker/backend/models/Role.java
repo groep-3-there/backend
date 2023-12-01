@@ -31,6 +31,7 @@ public class Role {
   public LocalDate createdAt;
   public boolean isMatchmaker;
   public boolean isDepartmentAdmin;
+  public boolean isAssignable;
 
   @ManyToMany(fetch = FetchType.EAGER)
   public List<Permission> permissions = new java.util.ArrayList<>();

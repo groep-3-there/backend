@@ -46,12 +46,12 @@ values (1, 'CHALLENGE_READ', 'Het bekijken van een challenge en reacties achterl
        (8, 'DEPARTMENT_MANAGE', 'Het beheren van en afdeling', 'Afdeling beheren');
 
 
-insert into roles (id, created_at, is_matchmaker, name, is_department_admin)
-values (1, '2020-01-01', false, 'Medewerker', false),
-       (2, '2020-01-01 ', false, 'Challenger', false),
-       (3, '2020-01-01 ', false, 'Afdeling beheerder', true),
-       (4, '2020-01-01', false, 'Bedrijf beheerder', true),
-       (5, '2020-01-01', true, 'MatchMaker', true);
+insert into roles (id, created_at, is_matchmaker, name, is_department_admin, is_assignable)
+values (1, '2020-01-01', false, 'Medewerker', false, true),
+       (2, '2020-01-01 ', false, 'Challenger', false, true),
+       (3, '2020-01-01 ', false, 'Afdeling beheerder', true, true),
+       (4, '2020-01-01', false, 'Bedrijf beheerder', true, false),
+       (5, '2020-01-01', true, 'MatchMaker', true, false);
 
 insert into roles_permissions (role_id, permissions_id)
 values
@@ -99,7 +99,7 @@ values (true, true, '2020-01-01', null, '2020-01-01', 3, 1, null, 5, 'matchmaker
        (true, true, '2020-01-01', null, '2020-01-01', 1, 2, null, 2, 'challenger@kapper.nl',
         '9gJQuvQ2h8PxIvVPae8oTN9ukMW2', 'Hoiii ik ben Eline, enthousiaste kapster.', 'Eline de Groot', '0630384453',
         'kapper,technologie,innovatie'),
-       (true, true, '2020-01-01', null, '2020-01-01', 1, 3, null, 1, 'medewerker@kapper.nl',
+       (true, true, '2020-01-01', null, '2020-01-01', 1, 3, null, 3, 'medewerker@kapper.nl',
         'SR3TD4Jf2RZ5qbNNF8kcIBu6kjl1', 'Hallo ik ben Jelle, en loop sinds kort stage bij Kapper Eline', 'Jelle Jacobs',
         '0630384453', 'stage,kapper,enthousiast,technologie'),
        (true, true, '2020-01-01', null, '2020-01-01', 1, 4, null, 4, 'admin@kapper.nl', 'ULQK7SLhTbNZERR3jFk0hSlRtub2',
