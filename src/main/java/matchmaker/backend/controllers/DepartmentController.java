@@ -147,7 +147,8 @@ public class DepartmentController {
   }
 
   @GetMapping("/department/{id}/members")
-  public Iterable<User> getUsersinDepartment(@PathVariable("id") Long id) {
+  public Iterable<User> getUsersinDepartment(
+          @PathVariable("id") Long id) {
     // Get all the users in the department
     return userRepository.findAllByDepartment_IdAndRole_IdIsNot(
         id, DefaultRoleId.COMPANY_BEHEERDER);
