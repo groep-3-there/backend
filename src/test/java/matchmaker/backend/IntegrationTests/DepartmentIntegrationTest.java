@@ -170,17 +170,19 @@ public class DepartmentIntegrationTest {
     User testUser2 = getExampleUser(testDepartment, role);
     userRepository.save(testUser2);
 
+    Map<String, List<Map<String, Long>>> requestMap =
+        Map.of("updates", List.of(Map.of("userId", testUser2.id, "roleId", 2L)));
 
-    Map<String, List<Map<String, Long>>> requestMap = Map.of("updates", List.of(Map.of("userId", testUser2.id, "roleId", 2L)));
-
-    mockMvc.perform(MockMvcRequestBuilders.put("/department/" + testUser.department.id + "/updateroles")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(requestMap)))
-            .andExpect(status().isOk());
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.put("/department/" + testUser.department.id + "/updateroles")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(requestMap)))
+        .andExpect(status().isOk());
   }
 
   @Test
-  public void testGetDepartmentMembers() throws Exception{
+  public void testGetDepartmentMembers() throws Exception {
     Role role = rolerepository.findById(DefaultRoleId.DEPARTMENT_BEHEERDER).get();
     User testUser = userRepository.findById(1L).get();
     testUser.setRole(role);
@@ -195,10 +197,11 @@ public class DepartmentIntegrationTest {
     User testUser2 = getExampleUser(testDepartment, role);
     userRepository.save(testUser2);
 
-    mockMvc.perform(MockMvcRequestBuilders.get("/department/" + testUser.department.id + "/members")
-                    .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").exists());
-
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.get("/department/" + testUser.department.id + "/members")
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").exists());
   }
 }
