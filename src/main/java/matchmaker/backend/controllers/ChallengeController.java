@@ -19,8 +19,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -162,12 +162,12 @@ public class ChallengeController {
     }
 
     // set the date to now
-    checkedChallenge.createdAt = new Date();
+    checkedChallenge.createdAt = LocalDate.now();
 
     // Set this based on the session, so no bad input can set the author, company & department
     checkedChallenge.author = currentUser;
     checkedChallenge.department = currentUser.department;
-    checkedChallenge.createdAt = new Date();
+    checkedChallenge.createdAt = LocalDate.now();
 
     try {
       Challenge savedChallenge = repository.save(checkedChallenge);

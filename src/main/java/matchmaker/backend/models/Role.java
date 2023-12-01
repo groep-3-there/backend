@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -28,7 +28,7 @@ public class Role {
   public Long id;
 
   public String name;
-  public Date createdAt;
+  public LocalDate createdAt;
   public boolean isMatchmaker;
   public boolean isDepartmentAdmin;
   public boolean isAssignable;

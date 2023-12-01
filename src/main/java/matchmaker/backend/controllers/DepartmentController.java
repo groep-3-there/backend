@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.time.LocalDate;
 
 import java.util.*;
 
@@ -63,7 +64,7 @@ public class DepartmentController {
     Department newDepartment = new Department();
     newDepartment.setName(fields.name);
     newDepartment.setParentCompany(currentUser.getDepartment().getParentCompany());
-    newDepartment.setCreatedAt(new Date());
+    newDepartment.setCreatedAt(LocalDate.now());
     // Save the department
     Department saved = departmentRepository.save(newDepartment);
     Optional<Role> departmentAdmin = roleRepository.findById(3L);

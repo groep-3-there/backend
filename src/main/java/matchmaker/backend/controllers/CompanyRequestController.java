@@ -13,7 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Optional;
 
 @RestController
@@ -84,7 +84,7 @@ public class CompanyRequestController {
     }
 
     // set the date to now
-    checkedCompanyRequest.requestedAt = new Date();
+    checkedCompanyRequest.requestedAt = LocalDate.now();
 
     // set company request owner
     checkedCompanyRequest.owner = currentUser;
@@ -120,7 +120,7 @@ public class CompanyRequestController {
     Company company = new Company();
     company.setName(companyRequest.name);
     company.setBranch(companyRequest.branch);
-    company.setCreatedAt(new Date());
+    company.setCreatedAt(LocalDate.now());
     company.setOwnerId(companyRequest.owner.id);
     company.setTags(companyRequest.tags);
 
@@ -129,7 +129,7 @@ public class CompanyRequestController {
 
     // create default department
     Department department = new Department("Management", company);
-    department.createdAt = new Date();
+    department.createdAt = LocalDate.now();
     Optional<Role> companyOwner = roleRepository.findById(DefaultRoleId.COMPANY_BEHEERDER);
 
     // check if the role exists

@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -55,8 +55,8 @@ public class Challenge {
   @Enumerated(EnumType.ORDINAL)
   public ChallengeStatus status;
 
-  public Date createdAt;
-  public Date endDate;
+  public LocalDate createdAt;
+  public LocalDate endDate;
   public String tags;
 
   @ElementCollection(fetch = FetchType.EAGER)

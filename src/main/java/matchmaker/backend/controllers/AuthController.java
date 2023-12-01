@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @RestController
 public class AuthController {
@@ -43,12 +43,12 @@ public class AuthController {
     User checked = new User();
     checked.name = createUser.name;
     checked.email = createUser.email;
-    checked.createdAt = new Date();
+    checked.createdAt = LocalDate.now();
     checked.isEmailPublic = false;
     checked.isPhoneNumberPublic = false;
     checked.info = "";
     checked.tags = "";
-    checked.acceptedTosDate = new Date();
+    checked.acceptedTosDate = LocalDate.now();
 
     if (createUser.companyCode != null) {
       departmentCodeRepository.findByCode(createUser.companyCode);

@@ -28,6 +28,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -97,8 +98,8 @@ public class ImageIntegrationTest {
     testChallenge.setDescription(
         "Ik wil graag een nieuwe website. Ik zoek een team van 3 personen die mij hierbij kunnen"
             + " helpen.");
-    testChallenge.setCreatedAt(new java.util.Date());
-    testChallenge.setEndDate(new java.util.Date());
+    testChallenge.setCreatedAt(LocalDate.now());
+    testChallenge.setEndDate(LocalDate.now());
     testChallenge.setSummary("nieuwe website");
     testChallenge.setDepartment(testDepartment);
     testChallenge.setStatus(ChallengeStatus.OPEN_VOOR_IDEEEN);
@@ -147,8 +148,8 @@ public class ImageIntegrationTest {
     testChallenge.setDescription(
         "Ik wil graag mijn workflow verbeteren. Ik zoek een team van 3 personen die mij hierbij"
             + " kunnen helpen.");
-    testChallenge.setCreatedAt(new java.util.Date());
-    testChallenge.setEndDate(new java.util.Date());
+    testChallenge.setCreatedAt(LocalDate.now());
+    testChallenge.setEndDate(LocalDate.now());
     testChallenge.setSummary("workflow verbeteren");
     testChallenge.setDepartment(testDepartment);
     testChallenge.setStatus(ChallengeStatus.OPEN_VOOR_IDEEEN);

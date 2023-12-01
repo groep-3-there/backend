@@ -18,7 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import org.slf4j.Logger;
@@ -53,26 +53,26 @@ public class CompanyIntegrationTest {
     // Add four companies to the repository
     Company chipSoft = new Company("ChipSoft");
     chipSoft.setInfo("Medische Software");
-    chipSoft.setCreatedAt(new Date());
+    chipSoft.setCreatedAt(LocalDate.now());
     chipSoft.setBranch(testBranch);
     chipSoft.setTags("Medisch, Software, Zorg");
 
     Company bol = new Company("Bol.com");
     bol.setInfo("Webshop");
-    bol.setCreatedAt(new Date());
+    bol.setCreatedAt(LocalDate.now());
     bol.setBranch(testBranch);
 
     bol.setTags("Webshop, E-commerce, Retail");
 
     Company nhlStenden = new Company("NHL Stenden");
     nhlStenden.setInfo("Hogeschool");
-    nhlStenden.setCreatedAt(new Date());
+    nhlStenden.setCreatedAt(LocalDate.now());
     nhlStenden.setBranch(testBranch);
     nhlStenden.setTags("Hogeschool, Onderwijs, HBO");
 
     Company google = new Company("Google");
     google.setInfo("Zoekmachine");
-    google.setCreatedAt(new Date());
+    google.setCreatedAt(LocalDate.now());
     google.setBranch(testBranch);
     google.setTags("Zoekmachine, Software, Internet");
 
@@ -92,7 +92,7 @@ public class CompanyIntegrationTest {
     // Create a company and add it to the repository
     Company matchmaker = new Company("MatchMaker");
     matchmaker.setInfo("Matching Software");
-    matchmaker.setCreatedAt(new Date());
+    matchmaker.setCreatedAt(LocalDate.now());
     matchmaker.setBranch(testBranch);
     matchmaker.setTags("Matching, Software, There");
 
