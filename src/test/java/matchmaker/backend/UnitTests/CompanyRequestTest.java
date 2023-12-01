@@ -5,6 +5,7 @@ import matchmaker.backend.models.CompanyRequest;
 import matchmaker.backend.models.User;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -43,7 +44,7 @@ public class CompanyRequestTest {
   @Test
   public void testGetRequestedAt() {
     CompanyRequest companyRequest = new CompanyRequest();
-    Date date = new Date();
+    LocalDate date = LocalDate.now();
     companyRequest.requestedAt = date;
     assertEquals(companyRequest.getRequestedAt(), date);
   }
@@ -88,7 +89,7 @@ public class CompanyRequestTest {
   @Test
   public void testSetRequestedAt() {
     CompanyRequest companyRequest = new CompanyRequest();
-    Date date = new Date();
+    LocalDate date = LocalDate.now();
     companyRequest.setRequestedAt(date);
     assertEquals(companyRequest.requestedAt, date);
   }

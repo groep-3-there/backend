@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -23,7 +24,7 @@ public class Department {
   public String name;
 
   @ManyToOne public Company parentCompany;
-  public Date createdAt;
+  public LocalDate createdAt;
 
   public Department() {}
 

@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -60,7 +61,7 @@ public class ChallengeInputIntegrationTest {
     // Create a challenge
     Challenge testChallenge = new Challenge("TestChallenge");
     testChallenge.setDescription("Description");
-    testChallenge.setCreatedAt(new Date());
+    testChallenge.setCreatedAt(LocalDate.now());
     testChallenge.setTitle("Titel van de challenge");
 
     // Create a reaction

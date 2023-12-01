@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -28,12 +29,12 @@ public class User {
   public String info;
 
   public String tags;
-  public Date createdAt;
-  public Date lastSeen;
+  public LocalDate createdAt;
+  public LocalDate lastSeen;
   public Long avatarImageId;
   public boolean isEmailPublic;
   public boolean isPhoneNumberPublic;
-  public Date acceptedTosDate;
+  public LocalDate acceptedTosDate;
   public String email;
   public String phoneNumber;
 

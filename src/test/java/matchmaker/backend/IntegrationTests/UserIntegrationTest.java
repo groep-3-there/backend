@@ -25,6 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Optional;
 
@@ -71,15 +72,15 @@ public class UserIntegrationTest {
     User testUser = new User();
     testUser.name = "Jan Bakker";
     testUser.email = "jan.bakker@mail.com";
-    testUser.acceptedTosDate = new Date();
+    testUser.acceptedTosDate = LocalDate.now();
     testUser.avatarImageId = 1L;
-    testUser.createdAt = new Date();
+    testUser.createdAt = LocalDate.now();
     testUser.department = null;
     testUser.firebaseId = "3WUKhR2EcvQkwP6R5R4ZOudrJQO2";
     testUser.info = "Jan Bakker bakt graag bij bakker bart.";
     testUser.isEmailPublic = true;
     testUser.isPhoneNumberPublic = true;
-    testUser.lastSeen = new Date();
+    testUser.lastSeen = LocalDate.now();
     testUser.role = role.get();
     testUser.setDepartment(department);
     testUser.phoneNumber = "0612345678";

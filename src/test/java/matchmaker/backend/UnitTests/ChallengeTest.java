@@ -5,6 +5,7 @@ import matchmaker.backend.constants.ChallengeVisibility;
 import matchmaker.backend.models.*;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -171,7 +172,7 @@ class ChallengeTest {
   @Test
   void getCreatedAt() {
     Challenge testChallenge = new Challenge();
-    Date testdate = new Date();
+    LocalDate testdate = LocalDate.now();
     testChallenge.createdAt = testdate;
     assertEquals(testChallenge.getCreatedAt(), testdate);
   }
@@ -179,7 +180,7 @@ class ChallengeTest {
   @Test
   void getEndDate() {
     Challenge testChallenge = new Challenge();
-    Date testdate = new Date();
+    LocalDate testdate = LocalDate.now();
     testChallenge.endDate = testdate;
     assertEquals(testChallenge.getEndDate(), testdate);
   }
@@ -283,7 +284,7 @@ class ChallengeTest {
   @Test
   void setCreatedAt() {
     Challenge testChallenge = new Challenge();
-    Date testdate = new Date();
+    LocalDate testdate = LocalDate.now();
     testChallenge.setCreatedAt(testdate);
     assertEquals(testChallenge.createdAt, testdate);
   }
@@ -291,7 +292,7 @@ class ChallengeTest {
   @Test
   void setEndDate() {
     Challenge testChallenge = new Challenge();
-    Date testdate = new Date();
+    LocalDate testdate = LocalDate.now();
     testChallenge.setEndDate(testdate);
     assertEquals(testChallenge.endDate, testdate);
   }

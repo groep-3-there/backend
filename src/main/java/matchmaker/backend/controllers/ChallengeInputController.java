@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import matchmaker.backend.repositories.ChallengeInputRepository;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -76,7 +76,7 @@ public class ChallengeInputController {
     // The user can see the challenge, and the challenge is open for ideas, so we can save the
     // reaction.
     ChallengeInput checked = new ChallengeInput();
-    checked.createdAt = new Date();
+    checked.createdAt = LocalDate.now();
     checked.isChosenAnswer = false;
     if (inputReaction.type != null) {
       checked.type = inputReaction.type;
