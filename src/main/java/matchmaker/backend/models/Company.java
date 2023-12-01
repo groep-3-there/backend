@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
 import java.time.LocalDate;
 
-
 @Entity
 @Table(name = "companies")
 @EnableAutoConfiguration

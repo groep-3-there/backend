@@ -8,7 +8,6 @@ import matchmaker.backend.constants.ChallengeReactionType;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
 @Setter

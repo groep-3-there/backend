@@ -7,7 +7,6 @@ import lombok.Setter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
 @Table(name = "companyrequests")

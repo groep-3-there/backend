@@ -9,7 +9,6 @@ import matchmaker.backend.constants.ChallengeStatus;
 import matchmaker.backend.constants.ChallengeVisibility;
 import matchmaker.backend.models.Challenge;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.view.feed.AbstractRssFeedView;
 
@@ -37,7 +36,7 @@ public class RssFeedView extends AbstractRssFeedView {
 
   @Override
   protected List<Item> buildFeedItems(
-          Map<String, Object> model, HttpServletRequest request, HttpServletResponse response)
+      Map<String, Object> model, HttpServletRequest request, HttpServletResponse response)
       throws Exception {
     List<Item> items = new ArrayList<>();
 
@@ -45,38 +44,42 @@ public class RssFeedView extends AbstractRssFeedView {
 
     if (status == null && created == null) {
       challenges = challengeRepository.findChallengesByVisibilityIs(ChallengeVisibility.PUBLIC);
+    } else if (created == null && status != null) {
+      challenges =
+          challengeRepository.findChallengesByVisibilityIsAndStatusIs(
+              ChallengeVisibility.PUBLIC, status);
+    } else if (created != null && status == null) {
+      challenges =
+          challengeRepository.findChallengesByVisibilityIsAndCreatedAt(
+              ChallengeVisibility.PUBLIC, created);
+    } else {
+      challenges =
+          challengeRepository.findChallengesByVisibilityIsAndStatusIsAndCreatedAt(
+              ChallengeVisibility.PUBLIC, status, created);
     }
-    else if (created == null && status != null){
-      challenges = challengeRepository.findChallengesByVisibilityIsAndStatusIs(ChallengeVisibility.PUBLIC, status);
-    }
-    else if(created != null && status == null){
-        challenges = challengeRepository.findChallengesByVisibilityIsAndCreatedAt(ChallengeVisibility.PUBLIC, created);
-    }
-    else{
-        challenges = challengeRepository.findChallengesByVisibilityIsAndStatusIsAndCreatedAt(ChallengeVisibility.PUBLIC, status, created);
-    }
-   challenges
-        .forEach(
-            challenge -> {
-              Item item = new Item();
-              item.setTitle(challenge.getTitle());
-              item.setLink("http://matchmakergroep3.nl/challenge/" + challenge.getId());
-              item.setPubDate(Date.from(challenge.getEndDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
-              item.setExpirationDate(Date.from(challenge.getEndDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
-              item.setAuthor(challenge.getAuthor().getName());
-              Description description = new Description();
-              description.setValue(challenge.getSummary());
-              item.setDescription(description);
-              items.add(item);
-            });
+    challenges.forEach(
+        challenge -> {
+          Item item = new Item();
+          item.setTitle(challenge.getTitle());
+          item.setLink("http://matchmakergroep3.nl/challenge/" + challenge.getId());
+          item.setPubDate(
+              Date.from(challenge.getEndDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+          item.setExpirationDate(
+              Date.from(challenge.getEndDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+          item.setAuthor(challenge.getAuthor().getName());
+          Description description = new Description();
+          description.setValue(challenge.getSummary());
+          item.setDescription(description);
+          items.add(item);
+        });
     return items;
   }
 
-    public void setStatus(ChallengeStatus status) {
-        this.status = status;
-    }
+  public void setStatus(ChallengeStatus status) {
+    this.status = status;
+  }
 
-    public void setCreated(LocalDate created) {
-        this.created = created;
-    }
+  public void setCreated(LocalDate created) {
+    this.created = created;
+  }
 }
