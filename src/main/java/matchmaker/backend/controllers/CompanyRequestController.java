@@ -30,6 +30,8 @@ public class CompanyRequestController {
   @Autowired private RoleRepository roleRepository;
   @Autowired private UserRepository userRepository;
 
+  @Autowired private CountryRepository countryRepository;
+
   @GetMapping("/company/request")
   public Page<CompanyRequest> getRequests(
       @RequestAttribute(name = "loggedInUser", required = false) User currentUser,
@@ -89,6 +91,16 @@ public class CompanyRequestController {
     // set company request owner
     checkedCompanyRequest.owner = currentUser;
 
+    //Country code, we get the country only using the code
+    String countryCodeInput = newCompanyRequest.country.getCode();
+    Optional<Country> country = countryRepository.findByCode(countryCodeInput);
+    if (country.isPresent()) {
+      checkedCompanyRequest.country = country.get();
+    } else {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
+
+
     try {
       CompanyRequest savedCompanyRequest = repository.save(checkedCompanyRequest);
       return ResponseEntity.status(HttpStatus.OK).body(savedCompanyRequest);
@@ -123,6 +135,7 @@ public class CompanyRequestController {
     company.setCreatedAt(LocalDate.now());
     company.setOwnerId(companyRequest.owner.id);
     company.setTags(companyRequest.tags);
+    company.setCountry(companyRequest.country);
 
     companyRepository.save(company);
     repository.delete(companyRequest);
