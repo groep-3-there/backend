@@ -44,11 +44,11 @@ public class GraphDataController {
 
     @GetMapping("/graph-data/challenges/filter/date")
     public ResponseEntity<String> getChallengesForRangeOfMonthsFilter(
-            @RequestParam(value = "from", required = true) @DateTimeFormat(pattern = "yyyy.MM.dd")
+            @RequestParam(value = "from") @DateTimeFormat(pattern = "yyyy.MM.dd")
             LocalDate from,
-            @RequestParam(value = "till", required = true) @DateTimeFormat(pattern = "yyyy.MM.dd")
+            @RequestParam(value = "till") @DateTimeFormat(pattern = "yyyy.MM.dd")
             LocalDate till) {
-        HashMap<String, Long> json = new HashMap<String, Long>();
+        HashMap<String, Long> json = new HashMap<>();
         //For each month between from and till, get the amount of challenges
         for (LocalDate date = from; date.isBefore(till) || date.isEqual(till); date = date.plusMonths(1)) {
             json.put(date.getMonth().name(), challengeRepository.countByCreatedAtBetween(date, date.plusMonths(1)));
@@ -78,11 +78,11 @@ public class GraphDataController {
 
     @GetMapping("/graph-data/companies/filter/date")
     public ResponseEntity<String> getCompaniesForRangeOfMonthsFilter(
-            @RequestParam(value = "from", required = true) @DateTimeFormat(pattern = "yyyy.MM.dd")
+            @RequestParam(value = "from") @DateTimeFormat(pattern = "yyyy.MM.dd")
             LocalDate from,
-            @RequestParam(value = "till", required = true) @DateTimeFormat(pattern = "yyyy.MM.dd")
+            @RequestParam(value = "till") @DateTimeFormat(pattern = "yyyy.MM.dd")
             LocalDate till) {
-        HashMap<String, Long> json = new HashMap<String, Long>();
+        HashMap<String, Long> json = new HashMap<>();
 
         for (LocalDate date = from; date.isBefore(till) || date.isEqual(till); date = date.plusMonths(1)) {
             json.put(date.getMonth().name(), companyRepository.countByCreatedAtBetween(date, date.plusMonths(1)));
@@ -97,7 +97,7 @@ public class GraphDataController {
             LocalDate from,
             @RequestParam(value = "till", required = true) @DateTimeFormat(pattern = "yyyy.MM.dd")
             LocalDate till) {
-        HashMap<String, Long> json = new HashMap<String, Long>();
+        HashMap<String, Long> json = new HashMap<>();
 
         for (LocalDate date = from; date.isBefore(till) || date.isEqual(till); date = date.plusMonths(1)) {
             json.put(date.getMonth().name(), challengeInputRepository.countByCreatedAtBetween(date, date.plusMonths(1)));
