@@ -50,7 +50,7 @@ public class CompanyRequestController {
   }
 
   @PostMapping("/company/request")
-  public ResponseEntity createCompanyRequest(
+  public ResponseEntity<CompanyRequest> createCompanyRequest(
       @RequestBody CompanyRequest newCompanyRequest,
       @RequestAttribute(name = "loggedInUser", required = false) User currentUser) {
 
