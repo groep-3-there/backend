@@ -32,5 +32,10 @@ public interface ChallengeRepository
   List<Challenge> findChallengesByVisibilityIsAndStatusIsAndCreatedAt(
       ChallengeVisibility aPublic, ChallengeStatus status, LocalDate createdAtDate);
 
+  long count();
+  long countByStatus(ChallengeStatus status);
 
+  Iterable<Object> findChallengesByDepartment_ParentCompanyId(Long companyId);
+
+  Long countByCreatedAtBetween(LocalDate date, LocalDate localDate);
 }
