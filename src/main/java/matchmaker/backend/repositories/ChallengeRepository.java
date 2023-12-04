@@ -31,4 +31,6 @@ public interface ChallengeRepository
 
   List<Challenge> findChallengesByVisibilityIsAndStatusIsAndCreatedAt(
       ChallengeVisibility aPublic, ChallengeStatus status, LocalDate createdAtDate);
+
+
 }
