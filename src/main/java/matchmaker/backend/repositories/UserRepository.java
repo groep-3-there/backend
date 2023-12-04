@@ -15,4 +15,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
   Optional<User> findByFirebaseId(String firebaseId);
 
   Iterable<User> findAllByDepartment_ParentCompany_Id(Long id);
+
+  Iterable<User> findAllByDepartment_IdAndRole_IdIsNot(Long id, Long roleId);
 }

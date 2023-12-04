@@ -6,7 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 import matchmaker.backend.constants.ChallengeReactionType;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import java.util.Date;
+
+import java.time.LocalDate;
 
 @Entity
 @Setter
@@ -33,7 +34,7 @@ public class ChallengeInput {
 
   public boolean isChosenAnswer;
 
-  public Date createdAt;
+  public LocalDate createdAt;
 
   public ChallengeInput() {}
 

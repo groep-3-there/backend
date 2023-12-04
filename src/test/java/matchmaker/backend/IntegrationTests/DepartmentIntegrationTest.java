@@ -3,6 +3,7 @@ package matchmaker.backend.IntegrationTests;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.firebase.FirebaseApp;
 import matchmaker.backend.AuthInterceptor;
+import matchmaker.backend.constants.DefaultRoleId;
 import matchmaker.backend.constants.Perm;
 import matchmaker.backend.controllers.ChallengeController;
 import matchmaker.backend.controllers.UserController;
@@ -23,6 +24,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -149,5 +152,56 @@ public class DepartmentIntegrationTest {
         .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").exists())
         .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").exists());
     // expect list
+  }
+
+  @Test
+  public void testUpdateRoles() throws Exception {
+    Role role = rolerepository.findById(DefaultRoleId.DEPARTMENT_BEHEERDER).get();
+    User testUser = userRepository.findById(1L).get();
+    testUser.setRole(role);
+
+    Company testCompany = getExampleCompany();
+    companyRepository.save(testCompany);
+    Department testDepartment = getExampleDepartment(testCompany);
+    departmentRepository.save(testDepartment);
+    testUser.setDepartment(testDepartment);
+    userRepository.save(testUser);
+
+    User testUser2 = getExampleUser(testDepartment, role);
+    userRepository.save(testUser2);
+
+    Map<String, List<Map<String, Long>>> requestMap =
+        Map.of("updates", List.of(Map.of("userId", testUser2.id, "roleId", 2L)));
+
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.put("/department/" + testUser.department.id + "/updateroles")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(requestMap)))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  public void testGetDepartmentMembers() throws Exception {
+    Role role = rolerepository.findById(DefaultRoleId.DEPARTMENT_BEHEERDER).get();
+    User testUser = userRepository.findById(1L).get();
+    testUser.setRole(role);
+
+    Company testCompany = getExampleCompany();
+    companyRepository.save(testCompany);
+    Department testDepartment = getExampleDepartment(testCompany);
+    departmentRepository.save(testDepartment);
+    testUser.setDepartment(testDepartment);
+    userRepository.save(testUser);
+
+    User testUser2 = getExampleUser(testDepartment, role);
+    userRepository.save(testUser2);
+
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.get("/department/" + testUser.department.id + "/members")
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").exists());
   }
 }

@@ -23,6 +23,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -83,8 +85,8 @@ public class ChallengeIntegrationTest {
     testChallenge.setDescription(
         "Ik wil graag mijn kapperszaak innoveren. Ik zoek een team van 3 personen die mij hierbij"
             + " kunnen helpen.");
-    testChallenge.setCreatedAt(new java.util.Date());
-    testChallenge.setEndDate(new java.util.Date());
+    testChallenge.setCreatedAt(LocalDate.now());
+    testChallenge.setEndDate(LocalDate.now());
     testChallenge.setSummary("Kapperszaak Innoveren");
     testChallenge.setDepartment(testDepartment);
     testChallenge.setStatus(ChallengeStatus.OPEN_VOOR_IDEEEN);
@@ -130,8 +132,8 @@ public class ChallengeIntegrationTest {
     testChallenge.setDescription(
         "Ik wil graag mijn bedrijf innoveren. Ik zoek een team van 3 personen die mij hierbij"
             + " kunnen helpen.");
-    testChallenge.setCreatedAt(new java.util.Date());
-    testChallenge.setEndDate(new java.util.Date());
+    testChallenge.setCreatedAt(LocalDate.now());
+    testChallenge.setEndDate(LocalDate.now());
     testChallenge.setSummary("Bedrijf Innoveren");
     testChallenge.setDepartment(testDepartment);
     testChallenge.setStatus(ChallengeStatus.OPEN_VOOR_IDEEEN);
@@ -184,8 +186,8 @@ public class ChallengeIntegrationTest {
     testChallenge.setDescription(
         "Ik wil graag mijn vergadering verbeteren. Ik zoek een team van 3 personen die mij hierbij"
             + " kunnen helpen.");
-    testChallenge.setCreatedAt(new java.util.Date());
-    testChallenge.setEndDate(new java.util.Date());
+    testChallenge.setCreatedAt(LocalDate.now());
+    testChallenge.setEndDate(LocalDate.now());
     testChallenge.setSummary("Vergadering verbeteren");
     testChallenge.setDepartment(testDepartment);
     testChallenge.setStatus(ChallengeStatus.OPEN_VOOR_IDEEEN);
@@ -244,8 +246,8 @@ public class ChallengeIntegrationTest {
     testChallenge.setDescription(
         "Ik wil graag mijn website verbeteren. Ik zoek een team van 3 personen die mij hierbij"
             + " kunnen helpen.");
-    testChallenge.setCreatedAt(new java.util.Date());
-    testChallenge.setEndDate(new java.util.Date());
+    testChallenge.setCreatedAt(LocalDate.now());
+    testChallenge.setEndDate(LocalDate.now());
     testChallenge.setSummary("website verbeteren");
     testChallenge.setDepartment(testDepartment);
     testChallenge.setStatus(ChallengeStatus.OPEN_VOOR_IDEEEN);
@@ -312,8 +314,8 @@ public class ChallengeIntegrationTest {
     testChallenge.setDescription(
         "Ik wil graag mijn management verbeteren. Ik zoek een team van 3 personen die mij hierbij"
             + " kunnen helpen.");
-    testChallenge.setCreatedAt(new java.util.Date());
-    testChallenge.setEndDate(new java.util.Date());
+    testChallenge.setCreatedAt(LocalDate.now());
+    testChallenge.setEndDate(LocalDate.now());
     testChallenge.setSummary("Management verbeteren");
     testChallenge.setDepartment(testDepartment);
     testChallenge.setStatus(ChallengeStatus.OPEN_VOOR_IDEEEN);

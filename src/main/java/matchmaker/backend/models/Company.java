@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "companies")
@@ -31,7 +31,7 @@ public class Company {
   public String tags;
 
   @ManyToOne public Branch branch;
-  public Date createdAt;
+  public LocalDate createdAt;
 
   public Long ownerId;
 

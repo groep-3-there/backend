@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -45,7 +45,7 @@ public class CompanyRequestIntegrationTest {
     userRepository.save(user);
 
     CompanyRequest companyRequest = new CompanyRequest();
-    companyRequest.setRequestedAt(new Date());
+    companyRequest.setRequestedAt(LocalDate.now());
     companyRequest.setTags("ICT");
     companyRequest.setName("Test Request");
     companyRequest.setBranch(branch);
@@ -200,7 +200,7 @@ public class CompanyRequestIntegrationTest {
     userRepository.save(user);
 
     CompanyRequest companyRequest = new CompanyRequest();
-    companyRequest.setRequestedAt(new Date());
+    companyRequest.setRequestedAt(LocalDate.now());
     companyRequest.setTags("ICT");
     companyRequest.setName("Test Request");
     companyRequest.setBranch(branch);
@@ -222,7 +222,7 @@ public class CompanyRequestIntegrationTest {
     userRepository.save(user);
 
     CompanyRequest companyRequest = new CompanyRequest();
-    companyRequest.setRequestedAt(new Date());
+    companyRequest.setRequestedAt(LocalDate.now());
     companyRequest.setTags("ICT");
     companyRequest.setName("Test Request");
     companyRequest.setBranch(branch);
