@@ -93,9 +93,9 @@ public class GraphDataController {
 
     @GetMapping("/graph-data/challenge-inputs/filter/date")
     public ResponseEntity<String> getChallengeInputsForRangeOfMonthsFilter(
-            @RequestParam(value = "from", required = true) @DateTimeFormat(pattern = "yyyy.MM.dd")
+            @RequestParam(value = "from") @DateTimeFormat(pattern = "yyyy.MM.dd")
             LocalDate from,
-            @RequestParam(value = "till", required = true) @DateTimeFormat(pattern = "yyyy.MM.dd")
+            @RequestParam(value = "till") @DateTimeFormat(pattern = "yyyy.MM.dd")
             LocalDate till) {
         HashMap<String, Long> json = new HashMap<>();
 
