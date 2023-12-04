@@ -3,7 +3,6 @@ package matchmaker.backend.IntegrationTests;
 import com.google.firebase.FirebaseApp;
 import matchmaker.backend.AuthInterceptor;
 import matchmaker.backend.controllers.BranchController;
-import matchmaker.backend.models.Branch;
 import matchmaker.backend.repositories.*;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
