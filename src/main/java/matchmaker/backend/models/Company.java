@@ -26,10 +26,9 @@ public class Company {
 
   @Column(length = 65535, columnDefinition = "Text")
   public String info;
-  @Nullable
-  public Long profileImageId;
-  @Nullable
-  public Long bannerImageId;
+
+  @Nullable public Long profileImageId;
+  @Nullable public Long bannerImageId;
   public String tags;
 
   @ManyToOne public Branch branch;

@@ -52,8 +52,8 @@ public class LoadDatabase implements CommandLineRunner {
     try {
       Resource resource = new ClassPathResource("testdata/generate_countries.sql");
       String sql =
-              StreamUtils.copyToString(
-                      resource.getInputStream(), java.nio.charset.StandardCharsets.UTF_8);
+          StreamUtils.copyToString(
+              resource.getInputStream(), java.nio.charset.StandardCharsets.UTF_8);
       jdbcTemplate.execute(sql);
     } catch (Exception e) {
       System.out.println("Error loading countries data: " + e.getMessage());

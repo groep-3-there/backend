@@ -1,6 +1,5 @@
 package matchmaker.backend.repositories;
 
-import matchmaker.backend.models.Branch;
 import matchmaker.backend.models.Country;
 import org.springframework.data.repository.CrudRepository;
 
