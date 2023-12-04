@@ -31,9 +31,9 @@ public class CompanyRequestController {
   @Autowired private UserRepository userRepository;
 
   @GetMapping("/company/request")
-  public Page<CompanyRequest> getRequests(
+  public ResponseEntity<Page<CompanyRequest>> getRequests(
       @RequestAttribute(name = "loggedInUser", required = false) User currentUser,
-      @RequestParam(defaultValue = "0") int page) {
+      @RequestParam(value="page", defaultValue = "0") int page) {
     if (currentUser == null) {
       return null;
     }
@@ -45,7 +45,8 @@ public class CompanyRequestController {
 
     int pageSize = 3;
     Pageable pageable = PageRequest.of(page, pageSize, sortOder);
-    return repository.findAll(pageable);
+
+    return ResponseEntity.ok(repository.findAll(pageable));
   }
 
   @PostMapping("/company/request")
