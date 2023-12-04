@@ -114,9 +114,9 @@ update companies
 set owner_id=1
 where id = 2;
 
-insert into companyrequests (branch_id, id, owner_id, requested_at, name, tags)
-values (2, 2, 2, '2020-01-01', 'Bakker Bart', 'Brood, ICT'),
-       (1, 3, 3, '2019-01-01', 'Kapper Eline', 'Kapper, Innovatie');
+insert into companyrequests (branch_id, id, owner_id, requested_at, name, tags, country_code)
+values (2, 2, 2, '2020-01-01', 'Bakker Bart', 'Brood, ICT', 'NL'),
+       (1, 3, 3, '2019-01-01', 'Kapper Eline', 'Kapper, Innovatie', 'NL');
 
 
 insert into challenges (status, visibility, author_id, banner_image_id, created_at, department_id, end_date, id,
