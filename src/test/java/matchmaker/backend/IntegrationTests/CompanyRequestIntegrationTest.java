@@ -37,6 +37,8 @@ public class CompanyRequestIntegrationTest {
 
   @Autowired public ChallengeRepository challengeRepository;
 
+  @Autowired public CountryRepository countryRepository;
+
   @Test
   public void testGetAllRequest() throws Exception {
     Branch branch = branchRepository.findById(1L).get();
@@ -72,6 +74,7 @@ public class CompanyRequestIntegrationTest {
     companyRequest.setName("Test Request");
     companyRequest.setTags("ICT");
     companyRequest.setBranch(branch);
+    companyRequest.setCountry(countryRepository.findByCode("NL").get());
     companyRequestRepository.save(companyRequest);
 
     mockMvc
