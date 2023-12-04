@@ -29,5 +29,7 @@ public class CompanyRequest {
 
   @OneToOne public User owner;
 
+  @ManyToOne public Country country;
+
   public CompanyRequest() {}
 }
