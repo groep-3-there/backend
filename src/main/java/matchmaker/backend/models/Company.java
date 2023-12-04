@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.lang.Nullable;
 
 import java.time.LocalDate;
 
@@ -26,14 +27,16 @@ public class Company {
   @Column(length = 65535, columnDefinition = "Text")
   public String info;
 
-  public Long profileImageId;
-  public Long bannerImageId;
+  @Nullable public Long profileImageId;
+  @Nullable public Long bannerImageId;
   public String tags;
 
   @ManyToOne public Branch branch;
   public LocalDate createdAt;
 
   public Long ownerId;
+
+  @ManyToOne public Country country;
 
   public Company() {}
 

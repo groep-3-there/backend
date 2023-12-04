@@ -78,13 +78,13 @@ values
 (5, 7),
 (5, 8);
 
-insert into companies (banner_image_id, branch_id, created_at, id, owner_id, profile_image_id, info, name, tags)
+insert into companies (banner_image_id, branch_id, created_at, id, owner_id, profile_image_id, info, name, tags, country_code)
 values (null, 7, '2020-01-01', 1, null, null,
         'Kapper Eline is een kapper die niet stilstaat, ik sta voorop in de technologische ontwikkelingen',
-        'Kapper Eline', 'kapper,innovatie'),
+        'Kapper Eline', 'kapper,innovatie', 'NL'),
        (null, 11, '2022-01-02', 2, null, null, 'LogiTech BV informatie...', 'LogiTech Solutions BV',
-        'logistiek,proces'),
-       (null, 1, '2023-01-01', 3, 1, null, 'Beheerder van Matchmaker platform', 'MatchMaker', 'matchmaker,platform');
+        'logistiek,proces','NL'),
+       (null, 1, '2023-01-01', 3, 1, null, 'Beheerder van Matchmaker platform', 'MatchMaker', 'matchmaker,platform','NL');
 
 insert into departments (created_at, id, parent_company_id, name)
 values ('2020-01-01', 1, 1, 'Management'),
@@ -114,9 +114,9 @@ update companies
 set owner_id=1
 where id = 2;
 
-insert into companyrequests (branch_id, id, owner_id, requested_at, name, tags)
-values (2, 2, 2, '2020-01-01', 'Bakker Bart', 'Brood, ICT'),
-       (1, 3, 3, '2019-01-01', 'Kapper Eline', 'Kapper, Innovatie');
+insert into companyrequests (branch_id, id, owner_id, requested_at, name, tags, country_code)
+values (2, 2, 2, '2020-01-01', 'Bakker Bart', 'Brood, ICT', 'NL'),
+       (1, 3, 3, '2019-01-01', 'Kapper Eline', 'Kapper, Innovatie', 'NL');
 
 
 insert into challenges (status, visibility, author_id, banner_image_id, created_at, department_id, end_date, id,
