@@ -33,7 +33,7 @@ public class CompanyRequestController {
   @GetMapping("/company/request")
   public ResponseEntity<Page<CompanyRequest>> getRequests(
       @RequestAttribute(name = "loggedInUser", required = false) User currentUser,
-      @RequestParam(value="page", defaultValue = "0") int page) {
+      @RequestParam(value = "page", defaultValue = "0") int page) {
     if (currentUser == null) {
       return null;
     }
