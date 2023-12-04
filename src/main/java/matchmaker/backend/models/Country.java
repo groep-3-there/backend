@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
-import java.time.LocalDate;
 
 @Entity
 @Table(name = "countries")
@@ -16,10 +15,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class Country {
 
-    @Id
-    public String code;
+  @Id public String code;
 
-    public String name;
+  public String name;
 
-    public Country(){};
+  public Country() {}
+  ;
 }

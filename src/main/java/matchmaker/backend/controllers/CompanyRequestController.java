@@ -91,7 +91,7 @@ public class CompanyRequestController {
     // set company request owner
     checkedCompanyRequest.owner = currentUser;
 
-    //Country code, we get the country only using the code
+    // Country code, we get the country only using the code
     String countryCodeInput = newCompanyRequest.country.getCode();
     Optional<Country> country = countryRepository.findByCode(countryCodeInput);
     if (country.isPresent()) {
@@ -99,7 +99,6 @@ public class CompanyRequestController {
     } else {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
-
 
     try {
       CompanyRequest savedCompanyRequest = repository.save(checkedCompanyRequest);
