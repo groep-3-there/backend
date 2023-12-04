@@ -25,6 +25,7 @@ public class LoadDatabase implements CommandLineRunner {
   @Override
   public void run(String... args) throws Exception {
     if (!testDataExists()) {
+      loadCountries();
       loadTestData();
     }
   }
@@ -44,6 +45,18 @@ public class LoadDatabase implements CommandLineRunner {
       jdbcTemplate.execute(sql);
     } catch (Exception e) {
       System.out.println("Error loading test data: " + e.getMessage());
+    }
+  }
+
+  private void loadCountries() {
+    try {
+      Resource resource = new ClassPathResource("testdata/generate_countries.sql");
+      String sql =
+          StreamUtils.copyToString(
+              resource.getInputStream(), java.nio.charset.StandardCharsets.UTF_8);
+      jdbcTemplate.execute(sql);
+    } catch (Exception e) {
+      System.out.println("Error loading countries data: " + e.getMessage());
     }
   }
 }
