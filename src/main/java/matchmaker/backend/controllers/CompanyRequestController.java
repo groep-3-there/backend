@@ -30,10 +30,12 @@ public class CompanyRequestController {
   @Autowired private RoleRepository roleRepository;
   @Autowired private UserRepository userRepository;
 
+  @Autowired private CountryRepository countryRepository;
+
   @GetMapping("/company/request")
-  public Page<CompanyRequest> getRequests(
+  public ResponseEntity<Page<CompanyRequest>> getRequests(
       @RequestAttribute(name = "loggedInUser", required = false) User currentUser,
-      @RequestParam(defaultValue = "0") int page) {
+      @RequestParam(value = "page", defaultValue = "0") int page) {
     if (currentUser == null) {
       return null;
     }
@@ -45,11 +47,12 @@ public class CompanyRequestController {
 
     int pageSize = 3;
     Pageable pageable = PageRequest.of(page, pageSize, sortOder);
-    return repository.findAll(pageable);
+
+    return ResponseEntity.ok(repository.findAll(pageable));
   }
 
   @PostMapping("/company/request")
-  public ResponseEntity createCompanyRequest(
+  public ResponseEntity<CompanyRequest> createCompanyRequest(
       @RequestBody CompanyRequest newCompanyRequest,
       @RequestAttribute(name = "loggedInUser", required = false) User currentUser) {
 
@@ -89,6 +92,15 @@ public class CompanyRequestController {
     // set company request owner
     checkedCompanyRequest.owner = currentUser;
 
+    // Country code, we get the country only using the code
+    String countryCodeInput = newCompanyRequest.country.getCode();
+    Optional<Country> country = countryRepository.findByCode(countryCodeInput);
+    if (country.isPresent()) {
+      checkedCompanyRequest.country = country.get();
+    } else {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
+
     try {
       CompanyRequest savedCompanyRequest = repository.save(checkedCompanyRequest);
       return ResponseEntity.status(HttpStatus.OK).body(savedCompanyRequest);
@@ -123,6 +135,7 @@ public class CompanyRequestController {
     company.setCreatedAt(LocalDate.now());
     company.setOwnerId(companyRequest.owner.id);
     company.setTags(companyRequest.tags);
+    company.setCountry(companyRequest.country);
 
     companyRepository.save(company);
     repository.delete(companyRequest);
