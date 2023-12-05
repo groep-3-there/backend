@@ -32,6 +32,7 @@ public interface ChallengeRepository
       ChallengeVisibility aPublic, ChallengeStatus status, LocalDate createdAtDate);
 
   long count();
+
   long countByStatus(ChallengeStatus status);
 
   Iterable<Object> findChallengesByDepartment_ParentCompanyId(Long companyId);

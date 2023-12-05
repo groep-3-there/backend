@@ -9,5 +9,5 @@ import java.util.List;
 public interface ChallengeInputRepository extends CrudRepository<ChallengeInput, Long> {
   List<ChallengeInput> findAllByChallengeId(Long challengeId);
 
-    Long countByCreatedAtBetween(LocalDate date, LocalDate localDate);
+  Long countByCreatedAtBetween(LocalDate date, LocalDate localDate);
 }
