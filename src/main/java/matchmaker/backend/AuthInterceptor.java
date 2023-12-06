@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /** Adds the current logged in user to every request */
@@ -34,7 +35,7 @@ public class AuthInterceptor implements HandlerInterceptor {
       throws Exception {
     if (request.getUserPrincipal() == null) {
       log.info("[Auth Interceptor] No user principal found");
-      if (environment.getProperty("spring.profiles.active").equals("test")
+      if (Objects.equals(environment.getProperty("spring.profiles.active"), "test")
           && userRepository.existsById(1L)) {
         User testUser = userRepository.findById(1L).get();
         if (request.getParameter("loggedOut") != null) {
