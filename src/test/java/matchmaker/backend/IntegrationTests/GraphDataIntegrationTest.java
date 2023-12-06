@@ -1,33 +1,21 @@
 package matchmaker.backend.IntegrationTests;
 
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.FirebaseAuth;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import matchmaker.backend.AuthInterceptor;
 import matchmaker.backend.constants.ChallengeStatus;
 import matchmaker.backend.constants.ChallengeReactionType;
 import matchmaker.backend.models.*;
 import matchmaker.backend.repositories.*;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.env.Environment;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.Objects;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -58,21 +46,6 @@ public class GraphDataIntegrationTest {
 
     @Autowired
     private CompanyRequestRepository companyRequestRepository;
-
-    @InjectMocks
-    private AuthInterceptor authInterceptor;
-
-    @Mock
-    private UserRepository userRepositoryMock;
-    @Mock
-    private FirebaseApp firebaseApp;
-
-    @Mock
-    private FirebaseAuth firebaseAuth;
-
-    @Mock
-    private Environment environment;
-
 
     private void setup() {
         Optional<Role> matchmaker = roleRepository.findById(5L);
@@ -202,7 +175,7 @@ public class GraphDataIntegrationTest {
     }
 
     @Test
-    public void testGetTotalChallengesByDate() throws Exception {
+    public void testGetTotalChallengesByDate() throws Exception{
         setup();
 
         LocalDate now = LocalDate.now();
@@ -220,7 +193,6 @@ public class GraphDataIntegrationTest {
                             assert response.contains(now.getMonth().name() + "-" + now.getYear() + "\":8");
                         });
     }
-
     @Test
     public void testGetTotalChallengesByStatus() throws Exception {
         setup();
@@ -233,9 +205,7 @@ public class GraphDataIntegrationTest {
                 .andExpect(
                         result -> {
                             String response = result.getResponse().getContentAsString();
-                            assert response.contains("""
-                                    {"OPEN_VOOR_IDEEEN":1,"IN_UITVOERING":1,"AFGEROND":1,"GEARCHIVEERD":1}"""
-                            );
+                            assert response.contains("{\"OPEN_VOOR_IDEEEN\":1,\"IN_UITVOERING\":1,\"AFGEROND\":1,\"GEARCHIVEERD\":1}");
                         });
     }
 
