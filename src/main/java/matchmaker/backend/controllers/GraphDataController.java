@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 @RestController
 public class GraphDataController {
@@ -50,7 +51,7 @@ public class GraphDataController {
   }
 
   @GetMapping("/graph-data/challenges/filter/date")
-  public ResponseEntity<String> getChallengesForRangeOfMonthsFilter(
+  public ResponseEntity<LinkedHashMap<String, Long>> getChallengesForRangeOfMonthsFilter(
       @RequestParam(value = "from") @DateTimeFormat(pattern = "yyyy.MM.dd") LocalDate from,
       @RequestParam(value = "till") @DateTimeFormat(pattern = "yyyy.MM.dd") LocalDate till,
       @RequestAttribute("loggedInUser") User currentUser) {
@@ -59,16 +60,17 @@ public class GraphDataController {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
-    HashMap<String, Long> json = new HashMap<>();
+    LinkedHashMap<String, Long> json = new LinkedHashMap<>();
     // For each month between from and till, get the amount of challenges
     for (LocalDate date = from;
         date.isBefore(till) || date.isEqual(till);
         date = date.plusMonths(1)) {
+      System.out.println(date);
       json.put(
-          date.getMonth().name(),
+              date.getYear() + " " + date.getMonth().name(),
           challengeRepository.countByCreatedAtBetween(date, date.plusMonths(1)));
     }
-    return ResponseEntity.ok(new Gson().toJson(json));
+    return ResponseEntity.ok(json);
   }
 
   @GetMapping("/graph-data/users/total")
