@@ -17,7 +17,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-
 @RestController
 public class CompanyController {
 
@@ -104,11 +103,11 @@ public class CompanyController {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
-    if(company.getBranch() == null){
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    if (company.getBranch() == null) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
-    //Only copy the branch if it exists
-    if(branchRepository.existsById(company.getBranch().getId())) {
+    // Only copy the branch if it exists
+    if (branchRepository.existsById(company.getBranch().getId())) {
       checkedCompany.branch = branchRepository.findById(company.getBranch().getId()).get();
     }
     // set the profile image

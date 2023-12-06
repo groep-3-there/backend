@@ -77,8 +77,9 @@ public class CompanyRequestController {
     if (!branchRepository.existsById(newCompanyRequest.getBranch().getId())) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
-    if(branchRepository.existsById(newCompanyRequest.getBranch().getId())) {
-      checkedCompanyRequest.branch = branchRepository.findById(newCompanyRequest.getBranch().getId()).get();
+    if (branchRepository.existsById(newCompanyRequest.getBranch().getId())) {
+      checkedCompanyRequest.branch =
+          branchRepository.findById(newCompanyRequest.getBranch().getId()).get();
     }
 
     // optional fields that can be null
