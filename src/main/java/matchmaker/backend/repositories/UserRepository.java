@@ -19,5 +19,5 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
   Iterable<User> findAllByDepartment_IdAndRole_IdIsNot(Long id, Long roleId);
 
-    Long countByCreatedAtBetween(LocalDate date, LocalDate localDate);
+  Long countByCreatedAtBetween(LocalDate date, LocalDate localDate);
 }

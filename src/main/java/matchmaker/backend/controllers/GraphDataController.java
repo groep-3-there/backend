@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 @RestController
@@ -36,68 +37,62 @@ public class GraphDataController {
     @Autowired
     private BranchRepository branchRepository;
 
-    @GetMapping("/graph-data/challenges/total")
-    public ResponseEntity<Long> getTotalChallenges(
-            @RequestAttribute("loggedInUser") User currentUser) {
-        if (!currentUser.hasPermissionAtDepartment(
-                Perm.COMPANY_GRADE, currentUser.department.getId())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-        }
-        return ResponseEntity.ok(challengeRepository.count());
+  @GetMapping("/graph-data/challenges/total")
+  public ResponseEntity<Long> getTotalChallenges(
+      @RequestAttribute("loggedInUser") User currentUser) {
+    if (!currentUser.hasPermissionAtDepartment(
+        Perm.COMPANY_GRADE, currentUser.department.getId())) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+    }
+    return ResponseEntity.ok(challengeRepository.count());
+  }
+
+  @GetMapping("/graph-data/challenges/total-by-date")
+  public ResponseEntity<LinkedHashMap<String, Long>> getTotalChallengesByDate(
+      @RequestParam(value = "from") @DateTimeFormat(pattern = "yyyy.MM.dd") LocalDate from,
+      @RequestParam(value = "till") @DateTimeFormat(pattern = "yyyy.MM.dd") LocalDate till,
+      @RequestAttribute("loggedInUser") User currentUser) {
+    if (!currentUser.hasPermissionAtDepartment(
+        Perm.COMPANY_GRADE, currentUser.department.getId())) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
-    @GetMapping("/graph-data/challenges/total-by-date")
-    public ResponseEntity<LinkedHashMap<String, Long>> getTotalChallengesByDate(
-            @RequestParam(value = "from") @DateTimeFormat(pattern = "yyyy.MM.dd") LocalDate from,
-            @RequestParam(value = "till") @DateTimeFormat(pattern = "yyyy.MM.dd") LocalDate till,
-            @RequestAttribute("loggedInUser") User currentUser
-    ) {
-        if (!currentUser.hasPermissionAtDepartment(
-                Perm.COMPANY_GRADE, currentUser.department.getId())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-        }
+    LinkedHashMap<String, Long> json = new LinkedHashMap<>();
 
-        LinkedHashMap<String, Long> json = new LinkedHashMap<>();
+    long total = 0L;
+    for (LocalDate date = from;
+        date.isBefore(till) || date.isEqual(till);
+        date = date.plusMonths(1)) {
+      total += getChallengesByDateCount(date);
+      json.put(date.getMonth().name() + "-" + date.getYear(), total);
+    }
+    return ResponseEntity.ok(json);
+  }
 
-        long total = 0L;
-        for (LocalDate date = from;
-             date.isBefore(till) || date.isEqual(till);
-             date = date.plusMonths(1)) {
-            total += getChallengesByDateCount(date);
-            json.put(
-                    date.getMonth().name() + "-" + date.getYear(),
-                    total
-            );
-        }
-        return ResponseEntity.ok(json);
+  private Long getChallengesByDateCount(LocalDate date) {
+    return challengeRepository.countByCreatedAtBetween(date, date.plusMonths(1));
+  }
+
+  @GetMapping("/graph-data/challenges/status")
+  public ResponseEntity<LinkedHashMap<String, Long>> getChallengesByStatusCount(
+      @RequestAttribute("loggedInUser") User currentUser) {
+    if (!currentUser.hasPermissionAtDepartment(
+        Perm.COMPANY_GRADE, currentUser.department.getId())) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
-    private Long getChallengesByDateCount(LocalDate date) {
-        return challengeRepository.countByCreatedAtBetween(date, date.plusMonths(1));
+    LinkedHashMap<String, Long> json = new LinkedHashMap<>();
+
+    for (ChallengeStatus challengeStatus : ChallengeStatus.values()) {
+      json.put(challengeStatus.name(), getChallengesByStatusCount(challengeStatus));
     }
 
-    @GetMapping("/graph-data/challenges/status")
-    public ResponseEntity<LinkedHashMap<String, Long>> getChallengesByStatusCount(
-            @RequestAttribute("loggedInUser") User currentUser
-    ) {
-        if (!currentUser.hasPermissionAtDepartment(
-                Perm.COMPANY_GRADE, currentUser.department.getId())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-        }
+    return ResponseEntity.ok(json);
+  }
 
-        LinkedHashMap<String, Long> json = new LinkedHashMap<>();
-
-        for (ChallengeStatus challengeStatus : ChallengeStatus.values()
-        ) {
-            json.put(challengeStatus.name(), getChallengesByStatusCount(challengeStatus));
-        }
-
-        return ResponseEntity.ok(json);
-    }
-
-    private Long getChallengesByStatusCount(ChallengeStatus challengeStatus) {
-        return challengeRepository.countByStatus(challengeStatus);
-    }
+  private Long getChallengesByStatusCount(ChallengeStatus challengeStatus) {
+    return challengeRepository.countByStatus(challengeStatus);
+  }
 
     @GetMapping("/graph-data/challenges/filter/date")
     public ResponseEntity<LinkedHashMap<String, Long>> getChallengesForRangeOfMonthsFilter(
@@ -161,8 +156,7 @@ public class GraphDataController {
 
     @GetMapping("/graph-data/companies/total")
     public ResponseEntity<Long> getTotalCompanies(
-            @RequestAttribute("loggedInUser") User currentUser)
-    {
+            @RequestAttribute("loggedInUser") User currentUser) {
         if (!currentUser.hasPermissionAtDepartment(
                 Perm.COMPANY_GRADE, currentUser.department.getId())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);

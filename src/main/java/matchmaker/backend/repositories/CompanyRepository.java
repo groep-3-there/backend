@@ -12,5 +12,5 @@ public interface CompanyRepository extends CrudRepository<Company, Long> {
 
   List<Object> findByName(String graphDataCompany);
 
-    Long countByBranch(Branch branch);
+  Long countByBranch(Branch branch);
 }
