@@ -67,7 +67,7 @@ public class GraphDataController {
         date = date.plusMonths(1)) {
       System.out.println(date);
       json.put(
-              date.getYear() + " " + date.getMonth().name(),
+          date.getYear() + " " + date.getMonth().name(),
           challengeRepository.countByCreatedAtBetween(date, date.plusMonths(1)));
     }
     return ResponseEntity.ok(json);
