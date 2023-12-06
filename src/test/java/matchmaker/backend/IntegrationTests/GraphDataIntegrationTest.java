@@ -202,66 +202,39 @@ public class GraphDataIntegrationTest {
     }
 
     @Test
-    public void testGetTotalChallengesByStatusOPEN_VOOR_IDEEEN() throws Exception {
+    public void testGetTotalChallengesByDate() throws Exception{
         setup();
+
+        LocalDate now = LocalDate.now();
+        String from = now.minusMonths(3).toString();
+        String till = now.toString();
 
         mockMvc
                 .perform(
-                        MockMvcRequestBuilders.get("/graph-data/challenges/OPEN_VOOR_IDEEEN")
+                        MockMvcRequestBuilders.get("/graph-data/challenges/total-by-date" + "?from=" + from + "&till=" + till)
                                 .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andExpect(
                         result -> {
                             String response = result.getResponse().getContentAsString();
-                            assert response.contains("1");
+                            assert response.contains(now.getMonth().name() + "-" + now.getYear() + "\":8");
                         });
     }
-
     @Test
-    public void testGetTotalChallengesByStatusIN_UITVOERING() throws Exception {
+    public void testGetTotalChallengesByStatus() throws Exception {
         setup();
 
         mockMvc
                 .perform(
-                        MockMvcRequestBuilders.get("/graph-data/challenges/IN_UITVOERING")
+                        MockMvcRequestBuilders.get("/graph-data/challenges/status")
                                 .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andExpect(
                         result -> {
                             String response = result.getResponse().getContentAsString();
-                            assert response.contains("1");
-                        });
-    }
-
-    @Test
-    public void testGetTotalChallengesByStatusAFGEROND() throws Exception {
-        setup();
-
-        mockMvc
-                .perform(
-                        MockMvcRequestBuilders.get("/graph-data/challenges/AFGEROND")
-                                .contentType("application/json"))
-                .andExpect(status().isOk())
-                .andExpect(
-                        result -> {
-                            String response = result.getResponse().getContentAsString();
-                            assert response.contains("1");
-                        });
-    }
-
-    @Test
-    public void testGetTotalChallengesByStatusGEARCHIVEERD() throws Exception {
-        setup();
-
-        mockMvc
-                .perform(
-                        MockMvcRequestBuilders.get("/graph-data/challenges/GEARCHIVEERD")
-                                .contentType("application/json"))
-                .andExpect(status().isOk())
-                .andExpect(
-                        result -> {
-                            String response = result.getResponse().getContentAsString();
-                            assert response.contains("1");
+                            assert response.contains("""
+                                    {"OPEN_VOOR_IDEEEN":1,"IN_UITVOERING":1,"AFGEROND":1,"GEARCHIVEERD":1}"""
+                            );
                         });
     }
 
@@ -282,7 +255,7 @@ public class GraphDataIntegrationTest {
                 .andExpect(
                         result -> {
                             String response = result.getResponse().getContentAsString();
-                            assert response.contains(now.getMonth().name() + "\":2");
+                            assert response.contains(now.getMonth().name() + "-" + now.getYear() + "\":2");
                         });
     }
 
@@ -373,7 +346,7 @@ public class GraphDataIntegrationTest {
                 .andExpect(
                         result -> {
                             String response = result.getResponse().getContentAsString();
-                            assert response.contains(now.minusMonths(3).getMonth().name() + "\":1");
+                            assert response.contains(now.minusMonths(3).getMonth().name() + "-" + now.getYear() + "\":1");
                         });
     }
 
