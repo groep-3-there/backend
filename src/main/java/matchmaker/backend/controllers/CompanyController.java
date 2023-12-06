@@ -103,6 +103,17 @@ public class CompanyController {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
+    // get the current profile image if there is one
+    Optional<Image> bannerImage = Optional.empty();
+    if (company.bannerImageId != null) {
+      bannerImage = imageRepository.findById(company.bannerImageId);
+    }
+
+    // check if the image the company wants is in the database
+    if (bannerImage.isEmpty() && company.bannerImageId != null) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
+
     if (company.getBranch() == null) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
@@ -110,8 +121,11 @@ public class CompanyController {
     if (branchRepository.existsById(company.getBranch().getId())) {
       checkedCompany.branch = branchRepository.findById(company.getBranch().getId()).get();
     }
-    // set the profile image
+    // set the companyprofile image
     checkedCompany.setProfileImageId(company.profileImageId);
+
+    //set the companyprofile banner
+    checkedCompany.setBannerImageId(company.bannerImageId);
 
     // save the user to the database
     Company saveCompany = repository.save(checkedCompany);
