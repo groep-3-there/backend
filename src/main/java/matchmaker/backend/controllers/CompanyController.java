@@ -59,7 +59,7 @@ public class CompanyController {
     return ResponseEntity.status(HttpStatus.OK).body(serialized);
   }
 
-  @PutMapping("/company/{id}")
+  @PutMapping("/company2/{id}")
   public ResponseEntity<Company> UpdateCompanyProfile(
           @PathVariable("id") Long id,
           @RequestBody Company company,
