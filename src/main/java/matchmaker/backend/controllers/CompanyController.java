@@ -4,6 +4,7 @@ import matchmaker.backend.constants.Perm;
 import matchmaker.backend.models.Company;
 import matchmaker.backend.models.Image;
 import matchmaker.backend.models.User;
+import matchmaker.backend.repositories.BranchRepository;
 import matchmaker.backend.repositories.CompanyRepository;
 import matchmaker.backend.repositories.ImageRepository;
 import matchmaker.backend.repositories.UserRepository;
@@ -25,6 +26,7 @@ public class CompanyController {
   @Autowired private CompanyRepository repository;
   @Autowired private UserRepository userRepository;
   @Autowired private ImageRepository imageRepository;
+  @Autowired private BranchRepository branchRepository;
 
   @GetMapping("/company")
   public ResponseEntity<Iterable<Company>> getCompanies() {
@@ -59,7 +61,7 @@ public class CompanyController {
     return ResponseEntity.status(HttpStatus.OK).body(serialized);
   }
 
-  @PutMapping("/company2/{id}")
+  @PutMapping("/company/{id}")
   public ResponseEntity<Company> UpdateCompanyProfile(
           @PathVariable("id") Long id,
           @RequestBody Company company,
@@ -104,6 +106,13 @@ public class CompanyController {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
+    if(company.getBranch() == null){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
+    //Only copy the branch if it exists
+    if(branchRepository.existsById(company.getBranch().getId())) {
+      checkedCompany.branch = branchRepository.findById(company.getBranch().getId()).get();
+    }
     // set the profile image
     checkedCompany.setProfileImageId(company.profileImageId);
 
