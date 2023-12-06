@@ -124,7 +124,7 @@ public class CompanyController {
     // set the companyprofile image
     checkedCompany.setProfileImageId(company.profileImageId);
 
-    //set the companyprofile banner
+    // set the companyprofile banner
     checkedCompany.setBannerImageId(company.bannerImageId);
 
     // save the user to the database
