@@ -381,7 +381,6 @@ public class GraphDataIntegrationTest {
     public void testGetTotalCompaniesForEmptyUser() throws Exception {
         setup();
 
-
         MockitoAnnotations.initMocks(this);
 
         mockMvc
