@@ -1,8 +1,11 @@
 package matchmaker.backend.controllers;
 
+import matchmaker.backend.constants.Perm;
 import matchmaker.backend.models.Company;
+import matchmaker.backend.models.Image;
 import matchmaker.backend.models.User;
 import matchmaker.backend.repositories.CompanyRepository;
+import matchmaker.backend.repositories.ImageRepository;
 import matchmaker.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,11 +16,15 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import static matchmaker.backend.constants.Regex.EMAIL;
+import static matchmaker.backend.constants.Regex.PHONENUMBER;
+
 @RestController
 public class CompanyController {
 
   @Autowired private CompanyRepository repository;
   @Autowired private UserRepository userRepository;
+  @Autowired private ImageRepository imageRepository;
 
   @GetMapping("/company")
   public ResponseEntity<Iterable<Company>> getCompanies() {
@@ -50,6 +57,60 @@ public class CompanyController {
     }
 
     return ResponseEntity.status(HttpStatus.OK).body(serialized);
+  }
+
+  @PutMapping("/company/{id}")
+  public ResponseEntity<Company> UpdateCompanyProfile(
+          @PathVariable("id") Long id,
+          @RequestBody Company company,
+          @RequestAttribute(name = "loggedInUser", required = false) User currentUser) {
+    // check if the user can edit the profile
+    if (currentUser == null) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+    }
+    if (!currentUser.hasPermissionAtDepartment(Perm.COMPANY_MANAGE, currentUser.department.id) ) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+    }
+
+    Optional<Company> targetCompany = repository.findById(id);
+
+    if (targetCompany.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    }
+
+    Company checkedCompany = targetCompany.get();
+
+    // check if the name is not blank or null
+    if (company.getName() == null || company.getName().isBlank())
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    checkedCompany.setName(company.name);
+
+    checkedCompany.setInfo(company.info);
+
+    if (company.tags.endsWith(",")) {
+      String tags = company.tags;
+      company.tags = tags.substring(0, tags.length() - 1);
+    }
+    checkedCompany.setTags(company.tags);
+
+    // get the current profile image if there is one
+    Optional<Image> image = Optional.empty();
+    if (company.profileImageId != null) {
+      image = imageRepository.findById(company.profileImageId);
+    }
+
+    // check if the image the company wants is in the database
+    if (image.isEmpty() && company.profileImageId != null) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
+
+    // set the profile image
+    checkedCompany.setProfileImageId(company.profileImageId);
+
+    // save the user to the database
+    Company saveCompany = repository.save(checkedCompany);
+
+    return ResponseEntity.status(HttpStatus.OK).body(saveCompany);
   }
 
   @GetMapping("/company/names")
