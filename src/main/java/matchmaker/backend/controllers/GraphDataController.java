@@ -135,6 +135,7 @@ public class GraphDataController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
 
+
         LinkedHashMap<String, Long> json = new LinkedHashMap<>();
 
         long total = 0L;
