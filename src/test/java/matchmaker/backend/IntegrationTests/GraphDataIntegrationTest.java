@@ -202,7 +202,7 @@ public class GraphDataIntegrationTest {
     }
 
     @Test
-    public void testGetTotalChallengesByDate() throws Exception{
+    public void testGetTotalChallengesByDate() throws Exception {
         setup();
 
         LocalDate now = LocalDate.now();
@@ -220,6 +220,7 @@ public class GraphDataIntegrationTest {
                             assert response.contains(now.getMonth().name() + "-" + now.getYear() + "\":8");
                         });
     }
+
     @Test
     public void testGetTotalChallengesByStatus() throws Exception {
         setup();
