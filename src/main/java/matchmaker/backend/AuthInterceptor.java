@@ -28,18 +28,15 @@ public class AuthInterceptor implements HandlerInterceptor {
   @Autowired private FirebaseApp firebaseApp;
 
   @Autowired private Environment environment;
-  private static final Logger log = LoggerFactory.getLogger(AuthInterceptor.class);
 
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
       throws Exception {
     if (request.getUserPrincipal() == null) {
-      log.info("[Auth Interceptor] No user principal found");
       if (Objects.equals(environment.getProperty("spring.profiles.active"), "test")
           && userRepository.existsById(1L)) {
         User testUser = userRepository.findById(1L).get();
         if (request.getParameter("loggedOut") != null) {
-          log.info("[Auth Interceptor] Forcing Logged out action");
           request.setAttribute("loggedInUser", null);
           return true;
         }
@@ -53,13 +50,11 @@ public class AuthInterceptor implements HandlerInterceptor {
     String firebaseUID = firebaseAuth.getUser(request.getUserPrincipal().getName()).getUid();
     Optional<User> loggedInUser = userRepository.findByFirebaseId(firebaseUID);
     if (loggedInUser.isEmpty()) {
-      log.info("[Auth Interceptor] No matching user found for firebase id " + firebaseUID);
       request.setAttribute("loggedInUser", null);
       return true;
     }
 
     User existingUser = loggedInUser.get();
-    log.info("[Auth Interceptor] Request performed by " + existingUser.name);
     request.setAttribute("loggedInUser", existingUser);
 
     return true; // Continue processing the request
