@@ -42,11 +42,7 @@ public class UserController {
   public ResponseEntity<User> UpdateUserProfile(
       @PathVariable("id") Long id,
       @RequestBody User user,
-      @RequestAttribute(name = "loggedInUser", required = false) User currentUser) {
-    // check if the user can edit the profile
-    if (currentUser == null) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-    }
+      @RequestAttribute(name = "loggedInUser") User currentUser) {
     if (!currentUser.getId().equals(id)) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }

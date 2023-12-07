@@ -29,11 +29,6 @@ public class ChallengeController {
 
   @Autowired private ChallengeRepository repository;
 
-  @GetMapping("/challenge")
-  public Iterable<Challenge> getChallenges() {
-    return repository.findAll();
-  }
-
   @GetMapping("/challenge/{id}")
   public ResponseEntity<Challenge> getChallengeById(
       @PathVariable("id") Long id,
@@ -102,10 +97,7 @@ public class ChallengeController {
   @PostMapping(path = "/challenge")
   public ResponseEntity<Challenge> createChallenge(
       @RequestBody Challenge newChallenge,
-      @RequestAttribute(name = "loggedInUser", required = false) User currentUser) {
-    if (currentUser == null) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-    }
+      @RequestAttribute(name = "loggedInUser") User currentUser) {
     if (!currentUser.isInCompany()) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }

@@ -32,13 +32,11 @@ public class CompanyRequestController {
 
   @Autowired private CountryRepository countryRepository;
 
-  @GetMapping("/company/request")
+  @GetMapping("/company-request")
   public ResponseEntity<Page<CompanyRequest>> getRequests(
-      @RequestAttribute(name = "loggedInUser", required = false) User currentUser,
-      @RequestParam(value = "page", defaultValue = "0") int page) {
-    if (currentUser == null) {
-      return null;
-    }
+      @RequestAttribute("loggedInUser") User currentUser,
+      @RequestParam(value = "page", defaultValue = "0") int page)
+  {
     if (!currentUser.hasPermission(Perm.COMPANY_GRADE)) {
       return null;
     }
@@ -51,14 +49,11 @@ public class CompanyRequestController {
     return ResponseEntity.ok(repository.findAll(pageable));
   }
 
-  @PostMapping("/company/request")
+  @PostMapping("/company-request")
   public ResponseEntity<CompanyRequest> createCompanyRequest(
       @RequestBody CompanyRequest newCompanyRequest,
-      @RequestAttribute(name = "loggedInUser", required = false) User currentUser) {
-
-    if (currentUser == null) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-    }
+      @RequestAttribute("loggedInUser") User currentUser)
+  {
     if (currentUser.isInCompany()) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
@@ -75,7 +70,7 @@ public class CompanyRequestController {
     }
 
     if (!branchRepository.existsById(newCompanyRequest.getBranch().getId())) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
     if (branchRepository.existsById(newCompanyRequest.getBranch().getId())) {
       checkedCompanyRequest.branch =
@@ -106,21 +101,17 @@ public class CompanyRequestController {
 
     try {
       CompanyRequest savedCompanyRequest = repository.save(checkedCompanyRequest);
-      return ResponseEntity.status(HttpStatus.OK).body(savedCompanyRequest);
+      return ResponseEntity.ok(savedCompanyRequest);
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null);
     }
   }
 
-  @PostMapping(path = "/company/request/{id}/accept")
-  public ResponseEntity gradeRequestAccept(
+  @PostMapping(path = "/company-request/{id}/accept")
+  public ResponseEntity<String> gradeRequestAccept(
       @PathVariable("id") Long id,
-      @RequestAttribute(name = "loggedInUser", required = false) User currentUser) {
-
-    // check if the user has permission to accept a request
-    if (currentUser == null) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-    }
+      @RequestAttribute("loggedInUser") User currentUser)
+  {
     if (!currentUser.hasPermission(Perm.COMPANY_GRADE)) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
@@ -164,10 +155,10 @@ public class CompanyRequestController {
     companyRequest.owner.setDepartment(department);
     userRepository.save(companyRequest.owner);
 
-    return ResponseEntity.status(HttpStatus.OK).body(null);
+    return ResponseEntity.ok(null);
   }
 
-  @PostMapping(path = "/company/request/{id}/reject")
+  @PostMapping(path = "/company-request/{id}/reject")
   public ResponseEntity<CompanyRequest> gradeRequestReject(
       @PathVariable("id") Long id,
       @RequestAttribute(name = "loggedInUser", required = false) User currentUser) {
@@ -188,6 +179,6 @@ public class CompanyRequestController {
 
     // delete request
     repository.delete(companyRequest);
-    return ResponseEntity.status(HttpStatus.OK).body(null);
+    return ResponseEntity.ok(null);
   }
 }
