@@ -108,7 +108,7 @@ public class CompanyRequestController {
   }
 
   @PostMapping(path = "/company-request/{id}/accept")
-  public ResponseEntity gradeRequestAccept(
+  public ResponseEntity<String> gradeRequestAccept(
       @PathVariable("id") Long id,
       @RequestAttribute("loggedInUser") User currentUser)
   {
@@ -155,7 +155,7 @@ public class CompanyRequestController {
     companyRequest.owner.setDepartment(department);
     userRepository.save(companyRequest.owner);
 
-    return ResponseEntity.status(HttpStatus.OK).body(null);
+    return ResponseEntity.ok(null);
   }
 
   @PostMapping(path = "/company-request/{id}/reject")
@@ -179,6 +179,6 @@ public class CompanyRequestController {
 
     // delete request
     repository.delete(companyRequest);
-    return ResponseEntity.status(HttpStatus.OK).body(null);
+    return ResponseEntity.ok(null);
   }
 }
