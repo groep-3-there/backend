@@ -25,12 +25,6 @@ public class CompanyController {
   @Autowired private ImageRepository imageRepository;
   @Autowired private BranchRepository branchRepository;
 
-  @GetMapping("/company")
-  public ResponseEntity<Iterable<Company>> getCompanies() {
-    Iterable<Company> company = repository.findAll();
-    return ResponseEntity.status(HttpStatus.OK).body(company);
-  }
-
   @GetMapping("/company/{id}")
   public ResponseEntity<Optional<Company>> getCompanyById(@PathVariable("id") Long id) {
     Optional<Company> company = repository.findById(id);
