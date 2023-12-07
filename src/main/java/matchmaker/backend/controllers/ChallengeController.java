@@ -29,11 +29,6 @@ public class ChallengeController {
 
   @Autowired private ChallengeRepository repository;
 
-  @GetMapping("/challenge")
-  public Iterable<Challenge> getChallenges() {
-    return repository.findAll();
-  }
-
   @GetMapping("/challenge/{id}")
   public ResponseEntity<Challenge> getChallengeById(
       @PathVariable("id") Long id,
