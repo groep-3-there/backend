@@ -114,10 +114,8 @@ public class DepartmentController {
 
   @PostMapping("/department/join/{code}")
   public ResponseEntity<Department> joinDepartment(
-      @PathVariable("code") String code, @RequestAttribute("loggedInUser") User currentUser) {
-    if (currentUser == null) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-    }
+      @PathVariable("code") String code,
+      @RequestAttribute("loggedInUser") User currentUser) {
     if (currentUser.isInCompany()) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
@@ -142,7 +140,7 @@ public class DepartmentController {
     currentUser.setRole(optionalRole.get());
     userRepository.save(currentUser);
 
-    return ResponseEntity.status(HttpStatus.OK).body(departmentCode.department);
+    return ResponseEntity.ok(departmentCode.department);
   }
 
   @GetMapping("/department/{id}/members")
