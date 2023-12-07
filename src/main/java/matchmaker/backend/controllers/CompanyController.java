@@ -56,11 +56,7 @@ public class CompanyController {
   public ResponseEntity<Company> UpdateCompanyProfile(
       @PathVariable("id") Long id,
       @RequestBody Company company,
-      @RequestAttribute(name = "loggedInUser", required = false) User currentUser) {
-    // check if the user can edit the profile
-    if (currentUser == null) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-    }
+      @RequestAttribute(name = "loggedInUser") User currentUser) {
     if (!currentUser.hasPermissionAtDepartment(Perm.COMPANY_MANAGE, currentUser.department.id)) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
