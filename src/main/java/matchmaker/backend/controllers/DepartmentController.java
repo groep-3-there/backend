@@ -76,7 +76,7 @@ public class DepartmentController {
     targetDepartmentAdmin.setRole(departmentAdmin.get());
     userRepository.save(targetDepartmentAdmin);
 
-    return ResponseEntity.status(HttpStatus.OK).body(saved);
+    return ResponseEntity.ok(saved);
   }
 
   @GetMapping("/department/company/{id}")
