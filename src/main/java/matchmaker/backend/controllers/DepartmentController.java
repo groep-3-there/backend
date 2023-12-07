@@ -104,12 +104,12 @@ public class DepartmentController {
   }
 
   @GetMapping("/department/{id}")
-  public ResponseEntity getDepartmentById(@PathVariable("id") Long id) {
+  public ResponseEntity<Department> getDepartmentById(@PathVariable("id") Long id) {
     Optional<Department> optionalDepartment = departmentRepository.findById(id);
     if (optionalDepartment.isEmpty()) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
-    return ResponseEntity.status(HttpStatus.OK).body(optionalDepartment.get());
+    return ResponseEntity.ok(optionalDepartment.get());
   }
 
   @PostMapping("/department/join/{code}")
