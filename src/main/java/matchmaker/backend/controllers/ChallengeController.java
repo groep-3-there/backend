@@ -97,10 +97,7 @@ public class ChallengeController {
   @PostMapping(path = "/challenge")
   public ResponseEntity<Challenge> createChallenge(
       @RequestBody Challenge newChallenge,
-      @RequestAttribute(name = "loggedInUser", required = false) User currentUser) {
-    if (currentUser == null) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-    }
+      @RequestAttribute(name = "loggedInUser") User currentUser) {
     if (!currentUser.isInCompany()) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
