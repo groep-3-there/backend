@@ -13,7 +13,6 @@ import java.util.List;
 @Repository
 public interface ChallengeRepository
     extends CrudRepository<Challenge, Long>, JpaSpecificationExecutor<Challenge> {
-  Iterable<Challenge> findByAuthorId(Long authorId);
 
   Iterable<Challenge> findAllByDepartmentId(Long departmentId);
 
@@ -31,4 +30,12 @@ public interface ChallengeRepository
 
   List<Challenge> findChallengesByVisibilityIsAndStatusIsAndCreatedAt(
       ChallengeVisibility aPublic, ChallengeStatus status, LocalDate createdAtDate);
+
+  long count();
+
+  long countByStatus(ChallengeStatus status);
+
+  Iterable<Object> findChallengesByDepartment_ParentCompanyId(Long companyId);
+
+  Long countByCreatedAtBetween(LocalDate date, LocalDate localDate);
 }
