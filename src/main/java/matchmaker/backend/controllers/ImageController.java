@@ -2,7 +2,6 @@ package matchmaker.backend.controllers;
 
 import matchmaker.backend.models.Image;
 import matchmaker.backend.models.User;
-import matchmaker.backend.repositories.ChallengeRepository;
 import matchmaker.backend.repositories.ImageRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
