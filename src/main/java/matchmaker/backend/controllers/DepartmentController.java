@@ -31,7 +31,7 @@ public class DepartmentController {
   public ResponseEntity<Department> createDepartment(
       @RequestBody CreateDepartmentFields fields,
       @RequestAttribute("loggedInUser") User currentUser) {
-    if (currentUser == null || !currentUser.isInCompany()) {
+    if (!currentUser.isInCompany()) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
