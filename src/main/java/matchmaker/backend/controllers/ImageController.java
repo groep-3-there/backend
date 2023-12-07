@@ -20,7 +20,6 @@ public class ImageController {
 
   private static final Logger log = LoggerFactory.getLogger(ImageController.class);
   @Autowired private ImageRepository imageRepository;
-  @Autowired private ChallengeRepository challengeRepository;
 
   @PostMapping(value = "/image/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public Image uploadImage(
@@ -28,12 +27,12 @@ public class ImageController {
       @RequestAttribute(name = "loggedInUser") User currentUser,
       @RequestParam(name = "imgData", required = false, defaultValue = "0") Boolean withImageData) {
 
-    Image img = null;
+    Image img;
     try {
       img = new Image(multipartFile.getBytes());
       img.author = currentUser;
     } catch (IOException e) {
-      log.warn("Uploading image failed" + e.toString());
+      log.warn("Uploading image failed" + e);
       return null;
     }
     Image m = imageRepository.save(img);
