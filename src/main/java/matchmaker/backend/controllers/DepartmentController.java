@@ -154,21 +154,22 @@ public class DepartmentController {
   public ResponseEntity<Iterable<User>> updateRoles(
       @PathVariable("id") Long departmentId,
       @RequestBody Map<String, List<Map<String, Long>>> requestMap,
-      @RequestAttribute("loggedInUser") User currentUser) {
-    // check if department exists
-    Optional<Department> department = departmentRepository.findById(departmentId);
-    if (department.isEmpty()) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-    }
-
+      @RequestAttribute("loggedInUser") User currentUser)
+  {
     // check if user is logged in and in a company
-    if (currentUser == null || !currentUser.isInCompany()) {
+    if (!currentUser.isInCompany()) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
     // check if user has the permission to update the roles
     if (!currentUser.hasPermissionAtDepartment(Perm.DEPARTMENT_MANAGE, departmentId)) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+    }
+
+    // check if department exists
+    Optional<Department> department = departmentRepository.findById(departmentId);
+    if (department.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 
     List<Map<String, Long>> updates = requestMap.get("updates");
