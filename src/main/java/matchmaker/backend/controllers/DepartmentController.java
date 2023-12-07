@@ -98,11 +98,9 @@ public class DepartmentController {
   public ResponseEntity<Department> getDepartmentByCode(@PathVariable("code") String code) {
     Optional<DepartmentCode> optionalDepartmentCode = departmentCodeRepository.findByCode(code);
     if (optionalDepartmentCode.isEmpty()) {
-      System.out.print("Department code not found");
-      System.out.println(code);
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
-    return ResponseEntity.status(HttpStatus.OK).body(optionalDepartmentCode.get().department);
+    return ResponseEntity.ok(optionalDepartmentCode.get().department);
   }
 
   @GetMapping("/department/{id}")
