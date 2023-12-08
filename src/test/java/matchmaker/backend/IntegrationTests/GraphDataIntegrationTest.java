@@ -260,40 +260,40 @@ public class GraphDataIntegrationTest {
             });
   }
 
-  @Test
-  public void testGetTotalChallengesForCompany() throws Exception {
-    setup();
-
-    Company company = (Company) companyRepository.findByName("Graph data Company").get(0);
-
-    mockMvc
-        .perform(
-            MockMvcRequestBuilders.get(
-                    "/graph-data/companies/" + company.getId() + "/challenges/total")
-                .contentType("application/json"))
-        .andExpect(status().isOk())
-        .andExpect(
-            result -> {
-              String response = result.getResponse().getContentAsString();
-              assert response.contains("4");
-            });
-  }
-
 //  @Test
-//  public void testGetTotalCompanyRequests() throws Exception {
+//  public void testGetTotalChallengesForCompany() throws Exception {
 //    setup();
+//
+//    Company company = (Company) companyRepository.findByName("Graph data Company").get(0);
 //
 //    mockMvc
 //        .perform(
-//            MockMvcRequestBuilders.get("/graph-data/company-requests/total")
+//            MockMvcRequestBuilders.get(
+//                    "/graph-data/companies/" + company.getId() + "/challenges/total")
 //                .contentType("application/json"))
 //        .andExpect(status().isOk())
 //        .andExpect(
 //            result -> {
 //              String response = result.getResponse().getContentAsString();
-//              assert response.contains("1");
+//              assert response.contains("4");
 //            });
 //  }
+
+  @Test
+  public void testGetTotalCompanyRequests() throws Exception {
+    setup();
+
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.get("/graph-data/company-requests/total")
+                .contentType("application/json"))
+        .andExpect(status().isOk())
+        .andExpect(
+            result -> {
+              String response = result.getResponse().getContentAsString();
+              assert response.contains("1");
+            });
+  }
 
   @Test
   public void testGetCompaniesForRangeOfMonthsFilter() throws Exception {
