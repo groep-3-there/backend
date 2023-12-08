@@ -62,7 +62,7 @@ public class GraphDataController {
   }
 
   private Long getChallengesByDateCount(LocalDate date) {
-    return challengeRepository.countByCreatedAtBetween(date, date.plusMonths(1));
+    return challengeRepository.countByCreatedAtBetween(date, date.plusMonths(1).minusDays(1));
   }
 
   @GetMapping("/graph-data/challenges/status")
@@ -103,7 +103,7 @@ public class GraphDataController {
         date = date.plusMonths(1)) {
       json.put(
           date.getMonth().name() + "-" + date.getYear(),
-          challengeRepository.countByCreatedAtBetween(date, date.plusMonths(1)));
+          challengeRepository.countByCreatedAtBetween(date, date.plusMonths(1).minusDays(1)));
     }
     return ResponseEntity.ok(json);
   }
@@ -140,7 +140,7 @@ public class GraphDataController {
   }
 
   private Long getUsersByDateCount(LocalDate date) {
-    return userRepository.countByCreatedAtBetween(date, date.plusMonths(1));
+    return userRepository.countByCreatedAtBetween(date, date.plusMonths(1).minusDays(1));
   }
 
   @GetMapping("/graph-data/companies/total")
@@ -176,7 +176,7 @@ public class GraphDataController {
   }
 
   private Long getCompaniesByDateCount(LocalDate date) {
-    return companyRepository.countByCreatedAtBetween(date, date.plusMonths(1));
+    return companyRepository.countByCreatedAtBetween(date, date.plusMonths(1).minusDays(1));
   }
 
   @GetMapping("/graph-data/companies/{companyId}/challenges/total")
@@ -222,7 +222,7 @@ public class GraphDataController {
         date = date.plusMonths(1)) {
       json.put(
           date.getMonth().name() + "-" + date.getYear(),
-          companyRepository.countByCreatedAtBetween(date, date.plusMonths(1)));
+          companyRepository.countByCreatedAtBetween(date, date.plusMonths(1).minusDays(1)));
     }
     return ResponseEntity.ok(json);
   }
@@ -244,7 +244,7 @@ public class GraphDataController {
         date = date.plusMonths(1)) {
       json.put(
           date.getYear() + " " + date.getMonth().name(),
-          challengeInputRepository.countByCreatedAtBetween(date, date.plusMonths(1)));
+          challengeInputRepository.countByCreatedAtBetween(date, date.plusMonths(1).minusDays(1)));
     }
     return ResponseEntity.ok(json);
   }
