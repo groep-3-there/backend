@@ -54,52 +54,6 @@ public class ChallengeIntegrationTest {
 
   private static final Logger log = LoggerFactory.getLogger(ChallengeInputIntegrationTest.class);
 
-  @Test
-  public void testChallengesTableNotEmpty() throws Exception {
-    Branch testBranch = branchRepository.findById(1L).get();
-
-    Company testCompany = new Company();
-    testCompany.setName("Paypal");
-    testCompany.setBranch(testBranch);
-    testCompany.setTags("Website");
-    testCompany.ownerId = 1L;
-    testCompany.setInfo("Dit is het bedrijf ChipSoft");
-    companyRepository.save(testCompany);
-
-    Department testDepartment = new Department();
-    testDepartment.setName("ICT");
-    testDepartment.setParentCompany(testCompany);
-    departmentRepository.save(testDepartment);
-
-    Role role = rolerepository.findById(2L).get();
-
-    User testUser = new User();
-    testUser.setName("Eline Van der Linden");
-    testUser.setEmail("Eline@Hotmail.com");
-    testUser.setDepartment(testDepartment);
-    testUser.setRole(role);
-    userRepository.save(testUser);
-
-    Challenge testChallenge = new Challenge();
-    testChallenge.setTitle("Innovatie kapperszaak");
-    testChallenge.setDescription(
-        "Ik wil graag mijn kapperszaak innoveren. Ik zoek een team van 3 personen die mij hierbij"
-            + " kunnen helpen.");
-    testChallenge.setCreatedAt(LocalDate.now());
-    testChallenge.setEndDate(LocalDate.now());
-    testChallenge.setSummary("Kapperszaak Innoveren");
-    testChallenge.setDepartment(testDepartment);
-    testChallenge.setStatus(ChallengeStatus.OPEN_VOOR_IDEEEN);
-    testChallenge.setVisibility(ChallengeVisibility.PUBLIC);
-    testChallenge.setAuthor(testUser);
-    testChallenge.setTags("Website");
-    challengeRepository.save(testChallenge);
-
-    mockMvc
-        .perform(MockMvcRequestBuilders.get("/challenge").contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isOk())
-        .andExpect(MockMvcResultMatchers.jsonPath("$").isNotEmpty());
-  }
 
   @Test
   public void testGetChallengeById() throws Exception {

@@ -1,8 +1,12 @@
 package matchmaker.backend.controllers;
 
+import matchmaker.backend.constants.Perm;
 import matchmaker.backend.models.Company;
+import matchmaker.backend.models.Image;
 import matchmaker.backend.models.User;
+import matchmaker.backend.repositories.BranchRepository;
 import matchmaker.backend.repositories.CompanyRepository;
+import matchmaker.backend.repositories.ImageRepository;
 import matchmaker.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,12 +22,8 @@ public class CompanyController {
 
   @Autowired private CompanyRepository repository;
   @Autowired private UserRepository userRepository;
-
-  @GetMapping("/company")
-  public ResponseEntity<Iterable<Company>> getCompanies() {
-    Iterable<Company> company = repository.findAll();
-    return ResponseEntity.status(HttpStatus.OK).body(company);
-  }
+  @Autowired private ImageRepository imageRepository;
+  @Autowired private BranchRepository branchRepository;
 
   @GetMapping("/company/{id}")
   public ResponseEntity<Optional<Company>> getCompanyById(@PathVariable("id") Long id) {
@@ -50,6 +50,77 @@ public class CompanyController {
     }
 
     return ResponseEntity.status(HttpStatus.OK).body(serialized);
+  }
+
+  @PutMapping("/company/{id}")
+  public ResponseEntity<Company> UpdateCompanyProfile(
+      @PathVariable("id") Long id,
+      @RequestBody Company company,
+      @RequestAttribute(name = "loggedInUser") User currentUser) {
+    if (!currentUser.hasPermissionAtDepartment(Perm.COMPANY_MANAGE, currentUser.department.id)) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+    }
+
+    Optional<Company> targetCompany = repository.findById(id);
+
+    if (targetCompany.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    }
+
+    Company checkedCompany = targetCompany.get();
+
+    // check if the name is not blank or null
+    if (company.getName() == null || company.getName().isBlank())
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    checkedCompany.setName(company.name);
+
+    checkedCompany.setInfo(company.info);
+
+    if (company.tags.endsWith(",")) {
+      String tags = company.tags;
+      company.tags = tags.substring(0, tags.length() - 1);
+    }
+    checkedCompany.setTags(company.tags);
+
+    // get the current profile image if there is one
+    Optional<Image> image = Optional.empty();
+    if (company.profileImageId != null) {
+      image = imageRepository.findById(company.profileImageId);
+    }
+
+    // check if the image the company wants is in the database
+    if (image.isEmpty() && company.profileImageId != null) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
+
+    // get the current profile image if there is one
+    Optional<Image> bannerImage = Optional.empty();
+    if (company.bannerImageId != null) {
+      bannerImage = imageRepository.findById(company.bannerImageId);
+    }
+
+    // check if the image the company wants is in the database
+    if (bannerImage.isEmpty() && company.bannerImageId != null) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
+
+    if (company.getBranch() == null) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
+    // Only copy the branch if it exists
+    if (branchRepository.existsById(company.getBranch().getId())) {
+      checkedCompany.branch = branchRepository.findById(company.getBranch().getId()).get();
+    }
+    // set the companyprofile image
+    checkedCompany.setProfileImageId(company.profileImageId);
+
+    // set the companyprofile banner
+    checkedCompany.setBannerImageId(company.bannerImageId);
+
+    // save the user to the database
+    Company saveCompany = repository.save(checkedCompany);
+
+    return ResponseEntity.status(HttpStatus.OK).body(saveCompany);
   }
 
   @GetMapping("/company/names")
