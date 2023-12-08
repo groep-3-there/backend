@@ -4,10 +4,14 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import matchmaker.backend.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.lang.Nullable;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "companies")
@@ -34,10 +38,12 @@ public class Company {
   @ManyToOne public Branch branch;
   public LocalDate createdAt;
 
+  @ElementCollection(fetch = FetchType.EAGER)
+  public List<Long> followerIds;
+
   public Long ownerId;
 
   @ManyToOne public Country country;
-
   public Company() {}
 
   public Company(String name) {

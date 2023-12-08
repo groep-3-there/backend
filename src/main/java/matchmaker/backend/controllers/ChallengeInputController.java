@@ -1,5 +1,6 @@
 package matchmaker.backend.controllers;
 
+import matchmaker.backend.NotificationService;
 import matchmaker.backend.constants.ChallengeReactionType;
 import matchmaker.backend.constants.ChallengeStatus;
 import matchmaker.backend.models.Challenge;
@@ -22,6 +23,8 @@ public class ChallengeInputController {
   @Autowired private ChallengeInputRepository repository;
 
   @Autowired private ChallengeRepository challengeRepository;
+
+  @Autowired private NotificationService notificationService;
 
   @GetMapping("/reaction/challenge/{id}")
   public ResponseEntity<Iterable<ChallengeInput>> getChallengeReactions(
@@ -115,7 +118,7 @@ public class ChallengeInputController {
     repository.save(reaction.get());
     challenge.status = ChallengeStatus.IN_UITVOERING;
     challengeRepository.save(challenge);
-
+    notificationService.sendUsersChosenChallengeNotification(reaction.get());
     return ResponseEntity.status(HttpStatus.OK).body(reaction.get());
   }
 }

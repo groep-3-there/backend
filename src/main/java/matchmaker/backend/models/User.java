@@ -7,6 +7,8 @@ import lombok.Setter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -40,6 +42,9 @@ public class User {
   @ManyToOne public Role role;
 
   @ManyToOne public Department department;
+
+  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  public List<Notification> notifications = new ArrayList<>();
 
   public User(String name) {
     this.name = name;
@@ -109,5 +114,9 @@ public class User {
     }
 
     return copy;
+  }
+
+  public void sendNotification(Notification notification) {
+      this.notifications.add(notification);
   }
 }
