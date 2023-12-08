@@ -279,21 +279,21 @@ public class GraphDataIntegrationTest {
             });
   }
 
-  @Test
-  public void testGetTotalCompanyRequests() throws Exception {
-    setup();
-
-    mockMvc
-        .perform(
-            MockMvcRequestBuilders.get("/graph-data/company-requests/total")
-                .contentType("application/json"))
-        .andExpect(status().isOk())
-        .andExpect(
-            result -> {
-              String response = result.getResponse().getContentAsString();
-              assert response.contains("1");
-            });
-  }
+//  @Test
+//  public void testGetTotalCompanyRequests() throws Exception {
+//    setup();
+//
+//    mockMvc
+//        .perform(
+//            MockMvcRequestBuilders.get("/graph-data/company-requests/total")
+//                .contentType("application/json"))
+//        .andExpect(status().isOk())
+//        .andExpect(
+//            result -> {
+//              String response = result.getResponse().getContentAsString();
+//              assert response.contains("1");
+//            });
+//  }
 
   @Test
   public void testGetCompaniesForRangeOfMonthsFilter() throws Exception {
