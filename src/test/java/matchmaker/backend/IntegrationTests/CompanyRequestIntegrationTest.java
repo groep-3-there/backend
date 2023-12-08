@@ -56,7 +56,7 @@ public class CompanyRequestIntegrationTest {
 
     mockMvc
         .perform(
-            MockMvcRequestBuilders.get("/company/request").contentType(MediaType.APPLICATION_JSON))
+            MockMvcRequestBuilders.get("/company-request").contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(MockMvcResultMatchers.jsonPath("$.content[0].name").value("Kapper Eline"))
         .andExpect(MockMvcResultMatchers.jsonPath("$.content[1].name").value("Bakker Bart"));
@@ -79,7 +79,7 @@ public class CompanyRequestIntegrationTest {
 
     mockMvc
         .perform(
-            MockMvcRequestBuilders.post("/company/request")
+            MockMvcRequestBuilders.post("/company-request")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(companyRequest)))
         .andExpect(status().isOk());
@@ -87,7 +87,7 @@ public class CompanyRequestIntegrationTest {
 
   @Test
   @Transactional
-  public void throwUnauthorizedWithCurrentUserNull() throws Exception {
+  public void throwBadRequestWithCurrentUserNull() throws Exception {
     Branch branch = branchRepository.findById(1L).get();
     Optional<User> user = userRepository.findById(1L);
     User testUser = user.get();
@@ -102,10 +102,10 @@ public class CompanyRequestIntegrationTest {
 
     mockMvc
         .perform(
-            MockMvcRequestBuilders.post("/company/request")
+            MockMvcRequestBuilders.post("/company-request")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(companyRequest)))
-        .andExpect(status().isUnauthorized());
+        .andExpect(status().isBadRequest());
   }
 
   @Test
@@ -121,7 +121,7 @@ public class CompanyRequestIntegrationTest {
 
     mockMvc
         .perform(
-            MockMvcRequestBuilders.post("/company/request")
+            MockMvcRequestBuilders.post("/company-request")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(companyRequest)))
         .andExpect(status().isBadRequest());
@@ -143,7 +143,7 @@ public class CompanyRequestIntegrationTest {
 
     mockMvc
         .perform(
-            MockMvcRequestBuilders.post("/company/request")
+            MockMvcRequestBuilders.post("/company-request")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(companyRequest)))
         .andExpect(status().isBadRequest());
@@ -164,7 +164,7 @@ public class CompanyRequestIntegrationTest {
 
     mockMvc
         .perform(
-            MockMvcRequestBuilders.post("/company/request")
+            MockMvcRequestBuilders.post("/company-request")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(companyRequest)))
         .andExpect(status().isBadRequest());
@@ -172,7 +172,7 @@ public class CompanyRequestIntegrationTest {
 
   @Test
   @Transactional
-  public void throwNotFoundIfBranchDoesNotExist() throws Exception {
+  public void throwBadRequestIfBranchDoesNotExist() throws Exception {
     Optional<User> user = userRepository.findById(1L);
     User testUser = user.get();
     testUser.department = null;
@@ -189,10 +189,10 @@ public class CompanyRequestIntegrationTest {
 
     mockMvc
         .perform(
-            MockMvcRequestBuilders.post("/company/request")
+            MockMvcRequestBuilders.post("/company-request")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(companyRequest)))
-        .andExpect(status().isNotFound());
+        .andExpect(status().isBadRequest());
   }
 
   @Test
@@ -211,7 +211,7 @@ public class CompanyRequestIntegrationTest {
     companyRequestRepository.save(companyRequest);
     mockMvc
         .perform(
-            MockMvcRequestBuilders.post("/company/request/" + companyRequest.id + "/accept")
+            MockMvcRequestBuilders.post("/company-request/" + companyRequest.id + "/accept")
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk());
     assert !companyRequestRepository.existsById(companyRequest.id);
@@ -234,7 +234,7 @@ public class CompanyRequestIntegrationTest {
 
     mockMvc
         .perform(
-            MockMvcRequestBuilders.post("/company/request/" + companyRequest.id + "/reject")
+            MockMvcRequestBuilders.post("/company-request/" + companyRequest.id + "/reject")
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk());
     assert !companyRequestRepository.existsById(companyRequest.id);

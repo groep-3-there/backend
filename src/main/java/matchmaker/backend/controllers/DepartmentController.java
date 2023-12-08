@@ -31,7 +31,7 @@ public class DepartmentController {
   public ResponseEntity<Department> createDepartment(
       @RequestBody CreateDepartmentFields fields,
       @RequestAttribute("loggedInUser") User currentUser) {
-    if (currentUser == null || !currentUser.isInCompany()) {
+    if (!currentUser.isInCompany()) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
@@ -76,7 +76,7 @@ public class DepartmentController {
     targetDepartmentAdmin.setRole(departmentAdmin.get());
     userRepository.save(targetDepartmentAdmin);
 
-    return ResponseEntity.status(HttpStatus.OK).body(saved);
+    return ResponseEntity.ok(saved);
   }
 
   @GetMapping("/department/company/{id}")
@@ -98,28 +98,24 @@ public class DepartmentController {
   public ResponseEntity<Department> getDepartmentByCode(@PathVariable("code") String code) {
     Optional<DepartmentCode> optionalDepartmentCode = departmentCodeRepository.findByCode(code);
     if (optionalDepartmentCode.isEmpty()) {
-      System.out.print("Department code not found");
-      System.out.println(code);
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
-    return ResponseEntity.status(HttpStatus.OK).body(optionalDepartmentCode.get().department);
+    return ResponseEntity.ok(optionalDepartmentCode.get().department);
   }
 
   @GetMapping("/department/{id}")
-  public ResponseEntity getDepartmentById(@PathVariable("id") Long id) {
+  public ResponseEntity<Department> getDepartmentById(@PathVariable("id") Long id) {
     Optional<Department> optionalDepartment = departmentRepository.findById(id);
     if (optionalDepartment.isEmpty()) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
-    return ResponseEntity.status(HttpStatus.OK).body(optionalDepartment.get());
+    return ResponseEntity.ok(optionalDepartment.get());
   }
 
   @PostMapping("/department/join/{code}")
   public ResponseEntity<Department> joinDepartment(
-      @PathVariable("code") String code, @RequestAttribute("loggedInUser") User currentUser) {
-    if (currentUser == null) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-    }
+      @PathVariable("code") String code,
+      @RequestAttribute("loggedInUser") User currentUser) {
     if (currentUser.isInCompany()) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
@@ -144,7 +140,7 @@ public class DepartmentController {
     currentUser.setRole(optionalRole.get());
     userRepository.save(currentUser);
 
-    return ResponseEntity.status(HttpStatus.OK).body(departmentCode.department);
+    return ResponseEntity.ok(departmentCode.department);
   }
 
   @GetMapping("/department/{id}/members")
@@ -158,21 +154,22 @@ public class DepartmentController {
   public ResponseEntity<Iterable<User>> updateRoles(
       @PathVariable("id") Long departmentId,
       @RequestBody Map<String, List<Map<String, Long>>> requestMap,
-      @RequestAttribute("loggedInUser") User currentUser) {
-    // check if department exists
-    Optional<Department> department = departmentRepository.findById(departmentId);
-    if (department.isEmpty()) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-    }
-
+      @RequestAttribute("loggedInUser") User currentUser)
+  {
     // check if user is logged in and in a company
-    if (currentUser == null || !currentUser.isInCompany()) {
+    if (!currentUser.isInCompany()) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
     // check if user has the permission to update the roles
     if (!currentUser.hasPermissionAtDepartment(Perm.DEPARTMENT_MANAGE, departmentId)) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+    }
+
+    // check if department exists
+    Optional<Department> department = departmentRepository.findById(departmentId);
+    if (department.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 
     List<Map<String, Long>> updates = requestMap.get("updates");
