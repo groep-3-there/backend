@@ -21,7 +21,7 @@ public class NotificationService {
         for (Long follower : company.getFollowerIds()) {
             Notification newNotification = new Notification(notification);
             User user = userRepository.findById(follower).get();
-            user.getNotifications().add(newNotification);
+            user.sendNotification(newNotification);
             userRepository.save(user);
         }
     }
@@ -44,7 +44,7 @@ public class NotificationService {
         Iterable<User> users = userRepository.findAll();
         for (User user : users) {
             Notification newNotification = new Notification(notification);
-            user.getNotifications().add(newNotification);
+            user.sendNotification(newNotification);
             userRepository.save(user);
         }
     }
