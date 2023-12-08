@@ -2,7 +2,6 @@ package matchmaker.backend.controllers;
 
 import matchmaker.backend.models.Image;
 import matchmaker.backend.models.User;
-import matchmaker.backend.repositories.ChallengeRepository;
 import matchmaker.backend.repositories.ImageRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,24 +19,19 @@ public class ImageController {
 
   private static final Logger log = LoggerFactory.getLogger(ImageController.class);
   @Autowired private ImageRepository imageRepository;
-  @Autowired private ChallengeRepository challengeRepository;
 
   @PostMapping(value = "/image/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public Image uploadImage(
       @RequestParam("image") MultipartFile multipartFile,
-      @RequestAttribute(name = "loggedInUser", required = false) User currentUser,
+      @RequestAttribute(name = "loggedInUser") User currentUser,
       @RequestParam(name = "imgData", required = false, defaultValue = "0") Boolean withImageData) {
-    if (currentUser == null) {
-      log.warn("Uploading image failed, no user logged in");
-      return null;
-    }
 
-    Image img = null;
+    Image img;
     try {
       img = new Image(multipartFile.getBytes());
       img.author = currentUser;
     } catch (IOException e) {
-      log.warn("Uploading image failed" + e.toString());
+      log.warn("Uploading image failed" + e);
       return null;
     }
     Image m = imageRepository.save(img);

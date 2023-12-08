@@ -3,6 +3,7 @@ package matchmaker.backend.controllers;
 import matchmaker.backend.constants.Perm;
 import matchmaker.backend.models.Department;
 import matchmaker.backend.models.DepartmentCode;
+import matchmaker.backend.models.User;
 import matchmaker.backend.repositories.DepartmentCodeRepository;
 import matchmaker.backend.repositories.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +27,7 @@ public class DepartmentCodeController {
   @GetMapping("/departmentcode/{DepartmentId}")
   public ResponseEntity<DepartmentCode> getDepartmentCode(
       @PathVariable Long DepartmentId,
-      @RequestAttribute("loggedInUser") matchmaker.backend.models.User currentUser) {
-
-    // check if the user is logged in
-    if (currentUser == null) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-    }
+      @RequestAttribute("loggedInUser") User currentUser) {
 
     // check if the user has the permission to see the department code
     if (!currentUser.hasPermissionAtDepartment(Perm.DEPARTMENT_MANAGE, DepartmentId)) {
@@ -42,7 +38,7 @@ public class DepartmentCodeController {
 
     // return code if one exists
     if (code.isPresent()) {
-      return ResponseEntity.status(HttpStatus.OK).body(code.get());
+      return ResponseEntity.ok(code.get());
     }
 
     // check if the department exists
@@ -53,7 +49,7 @@ public class DepartmentCodeController {
 
     // create new code
     DepartmentCode newCode = createDepartmentCode(department.get());
-    return ResponseEntity.status(HttpStatus.OK).body(newCode);
+    return ResponseEntity.ok(newCode);
   }
 
   private DepartmentCode createDepartmentCode(Department department) {
