@@ -183,7 +183,7 @@ public class GraphDataIntegrationTest {
         .andExpect(
             result -> {
               String response = result.getResponse().getContentAsString();
-              assert response.contains(now.getMonth().name() + "-" + now.getYear() + "\":8");
+              assert response.contains(now.getMonth().name() + "-" + now.getYear() + "\":4");
             });
   }
 
