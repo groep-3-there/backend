@@ -149,4 +149,17 @@ public class CompanyController {
         repository.save(targetCompany);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
+
+    //Unfollow
+    @PutMapping("/company/{id}/unfollow")
+    public ResponseEntity unfollowCompany(@PathVariable("id") Long id, @RequestAttribute(name = "loggedInUser") User currentUser){
+        Optional<Company> company = repository.findById(id);
+        if(company.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        Company targetCompany = company.get();
+        targetCompany.followerIds.remove(currentUser.getId());
+        repository.save(targetCompany);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
 }
