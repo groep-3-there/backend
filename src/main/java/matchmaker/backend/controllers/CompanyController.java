@@ -136,4 +136,17 @@ public class CompanyController {
     }
     return ResponseEntity.status(HttpStatus.OK).body(names);
   }
+
+  //Start following the company as the loggedInUser
+    @PutMapping("/company/{id}/follow")
+    public ResponseEntity followCompany(@PathVariable("id") Long id, @RequestAttribute(name = "loggedInUser") User currentUser){
+        Optional<Company> company = repository.findById(id);
+        if(company.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        Company targetCompany = company.get();
+        targetCompany.followerIds.add(currentUser.getId());
+        repository.save(targetCompany);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
 }
