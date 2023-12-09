@@ -30,4 +30,11 @@ public class NotificationController {
         User user = userRepository.findById(1L).get();
         return user.notifications;
     }
+
+    @PutMapping("/notifications/read/{id}")
+    public void readNotification(@PathVariable Long id) {
+        Notification notification = notificationRepository.findById(id).get();
+        notification.setRead(true);
+        notificationRepository.save(notification);
+    }
 }

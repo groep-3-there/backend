@@ -51,23 +51,23 @@ public class NotificationService {
 
     public void sendChallengeCreatedNotificationToAllCompanyFollowers(Challenge challenge) {
         Notification notification = new Notification();
-        notification.setTitle("New Challenge Created by " + challenge.department.parentCompany.getName());
-        notification.setDescription(challenge.getTitle());
+        notification.setTitle(challenge.getDepartment().getParentCompany().getName());
+        notification.setDescription("⭐We created a new challenge!⭐");
         notification.setLink("/challenge/" + challenge.getId());
         sendNotificationToAllFollowers(challenge.getDepartment().getParentCompany(), notification);
     }
 
     public void sendChallengeUpdatedNotificationToAllCompanyFollowers(Challenge challenge) {
         Notification notification = new Notification();
-        notification.setTitle("Challenge Updated by " + challenge.department.parentCompany.getName());
-        notification.setDescription(challenge.getTitle());
+        notification.setTitle(challenge.getDepartment().getParentCompany().getName());
+        notification.setDescription("We updated a challenge!");
         notification.setLink("/challenge/" + challenge.getId());
         sendNotificationToAllFollowers(challenge.getDepartment().getParentCompany(), notification);
     }
 
     public void sendUsersChosenChallengeNotification(ChallengeInput reaction){
         Notification notification = new Notification();
-        notification.setTitle("Your idea has been chosen!");
+        notification.setTitle("✨Your idea has been chosen!✨");
         notification.setDescription("Your idea has been chosen by " + reaction.getChallenge().getDepartment().getParentCompany().getName() + "!");
         notification.setLink("/challenge/" + reaction.getChallenge().getId());
         sendNotificationToUser(reaction.getAuthor(), notification);
