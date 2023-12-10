@@ -2,6 +2,8 @@ package matchmaker.backend.controllers;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.mailjet.client.errors.MailjetException;
+import matchmaker.backend.EmailService;
 import matchmaker.backend.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,12 +16,21 @@ import java.util.HashMap;
 public class RootController {
 
   @Autowired private FirebaseAuth firebaseAuth;
-
+  @Autowired private EmailService emailService;
   @GetMapping("/ping")
   public HashMap<String, String> ping() {
     HashMap<String, String> map = new HashMap<>();
     map.put("ping", "pong");
     return map;
+  }
+  @GetMapping("/sendEmail")
+  public boolean sendEmail() throws MailjetException {
+    try {
+      emailService.sendEmail("rikw2412@gmail.com");
+    } catch (Exception e) {
+      throw e;
+    }
+    return true;
   }
 
   @GetMapping(path = "/whoami")
