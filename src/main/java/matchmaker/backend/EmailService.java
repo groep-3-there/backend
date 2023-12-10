@@ -17,7 +17,7 @@ public class EmailService {
 
     }
 
-    public void sendEmail(String senderEmail) throws MailjetException {
+    public void sendEmail(String targetEmail, String targetName, String title, String subtitle, String buttonText, String buttonClickUrl) throws MailjetException {
         ClientOptions options = ClientOptions.builder()
                 .apiKey("")
                 .apiSecretKey("")
@@ -26,11 +26,11 @@ public class EmailService {
         this.client = new MailjetClient(options);
         TransactionalEmail message1 = TransactionalEmail
                 .builder()
-                .to(new SendContact(senderEmail, "Rik"))
-                .from(new SendContact("matchmakergroep3@gmail.com", "Mailjet integration test"))
+                .to(new SendContact(targetEmail, targetName))
+                .from(new SendContact("matchmakergroep3@gmail.com", "Matchmaker"))
                 .templateID(5427584L)
                 .templateLanguage(true)
-                .variables(Map.of("title", "Mailjet test", "subtitle", "Rik", "ctoText", "klik", "ctoUrl", "https://www.google.com"))
+                .variables(Map.of("title", title, "subtitle", subtitle, "ctoText", buttonText, "ctoUrl", buttonClickUrl))
                 .trackOpens(TrackOpens.ENABLED)
 //                .attachment(Attachment.fromFile(attachmentPath))
                 .header("test-header-key", "test-value")

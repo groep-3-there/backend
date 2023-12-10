@@ -23,14 +23,15 @@ public class RootController {
     map.put("ping", "pong");
     return map;
   }
-  @GetMapping("/sendEmail")
-  public boolean sendEmail() throws MailjetException {
+  @GetMapping("/mailme")
+  public String sendEmail(@RequestAttribute(name = "loggedInUser", required = false) User currentUser) throws MailjetException {
+    if(currentUser == null) return "You are not logged in";
     try {
-      emailService.sendEmail("rikw2412@gmail.com");
+      emailService.sendEmail(currentUser.getEmail(), currentUser.getName(), "Test email", "Dit is een test email", "Klik", "https://matchmakergroep3.nl/");
     } catch (Exception e) {
       throw e;
     }
-    return true;
+    return "verzonden";
   }
 
   @GetMapping(path = "/whoami")
