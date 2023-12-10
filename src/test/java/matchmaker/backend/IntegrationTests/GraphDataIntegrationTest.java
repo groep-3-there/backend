@@ -319,10 +319,17 @@ public class GraphDataIntegrationTest {
   }
 
   @Test
+  @Transactional
   public void testgetChallengesForRangeOfMonthsFilterAndCompanyId() throws Exception {
     setup();
 
+    User user = userRepository.findById(1L).get();
+
     Company company = (Company) companyRepository.findByName("Graph data Company").get(0);
+    Iterable<Department> departments = departmentRepository.findAllByParentCompanyId(company.id);
+
+    departments.forEach(dep -> user.department = dep);
+    userRepository.save(user);
 
     LocalDate now = LocalDate.now();
     String from = now.minusMonths(3).toString();
@@ -342,10 +349,17 @@ public class GraphDataIntegrationTest {
   }
 
   @Test
+  @Transactional
   public void testgetChallengesByStatusCountAndCompanyId() throws Exception {
     setup();
 
+    User user = userRepository.findById(1L).get();
+
     Company company = (Company) companyRepository.findByName("Graph data Company").get(0);
+    Iterable<Department> departments = departmentRepository.findAllByParentCompanyId(company.id);
+
+    departments.forEach(dep -> user.department = dep);
+    userRepository.save(user);
 
     mockMvc
             .perform(
