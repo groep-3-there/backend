@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
+import java.util.Objects;
 
 @RestController
 public class GraphDataController {
@@ -36,7 +37,7 @@ public class GraphDataController {
   public ResponseEntity<Long> getTotalChallenges(
       @RequestAttribute("loggedInUser") User currentUser) {
     if (!currentUser.hasPermissionAtDepartment(
-        Perm.COMPANY_GRADE, currentUser.department.getId())) {
+        Perm.MATCHMAKER_GRAPH_READ, currentUser.department.getId())) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
     return ResponseEntity.ok(challengeRepository.count());
@@ -48,7 +49,7 @@ public class GraphDataController {
       @RequestParam(value = "till") @DateTimeFormat(pattern = "yyyy.MM.dd") LocalDate till,
       @RequestAttribute("loggedInUser") User currentUser) {
     if (!currentUser.hasPermissionAtDepartment(
-        Perm.COMPANY_GRADE, currentUser.department.getId())) {
+        Perm.MATCHMAKER_GRAPH_READ, currentUser.department.getId())) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
@@ -72,7 +73,7 @@ public class GraphDataController {
   public ResponseEntity<LinkedHashMap<String, Long>> getChallengesByStatusCount(
       @RequestAttribute("loggedInUser") User currentUser) {
     if (!currentUser.hasPermissionAtDepartment(
-        Perm.COMPANY_GRADE, currentUser.department.getId())) {
+        Perm.MATCHMAKER_GRAPH_READ, currentUser.department.getId())) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
@@ -91,7 +92,7 @@ public class GraphDataController {
       @RequestParam(value = "till") @DateTimeFormat(pattern = "yyyy.MM.dd") LocalDate till,
       @RequestAttribute("loggedInUser") User currentUser) {
     if (!currentUser.hasPermissionAtDepartment(
-        Perm.COMPANY_GRADE, currentUser.department.getId())) {
+        Perm.MATCHMAKER_GRAPH_READ, currentUser.department.getId())) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
@@ -110,7 +111,7 @@ public class GraphDataController {
   @GetMapping("/graph-data/users/total")
   public ResponseEntity<Long> getTotalUsers(@RequestAttribute("loggedInUser") User currentUser) {
     if (!currentUser.hasPermissionAtDepartment(
-        Perm.COMPANY_GRADE, currentUser.department.getId())) {
+        Perm.MATCHMAKER_GRAPH_READ, currentUser.department.getId())) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
     return ResponseEntity.ok(userRepository.count());
@@ -122,7 +123,7 @@ public class GraphDataController {
       @RequestParam(value = "till") @DateTimeFormat(pattern = "yyyy.MM.dd") LocalDate till,
       @RequestAttribute("loggedInUser") User currentUser) {
     if (!currentUser.hasPermissionAtDepartment(
-        Perm.COMPANY_GRADE, currentUser.department.getId())) {
+        Perm.MATCHMAKER_GRAPH_READ, currentUser.department.getId())) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
@@ -146,7 +147,7 @@ public class GraphDataController {
   public ResponseEntity<Long> getTotalCompanies(
       @RequestAttribute("loggedInUser") User currentUser) {
     if (!currentUser.hasPermissionAtDepartment(
-        Perm.COMPANY_GRADE, currentUser.department.getId())) {
+        Perm.MATCHMAKER_GRAPH_READ, currentUser.department.getId())) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
     return ResponseEntity.ok(companyRepository.count());
@@ -158,7 +159,7 @@ public class GraphDataController {
       @RequestParam(value = "till") @DateTimeFormat(pattern = "yyyy.MM.dd") LocalDate till,
       @RequestAttribute("loggedInUser") User currentUser) {
     if (!currentUser.hasPermissionAtDepartment(
-        Perm.COMPANY_GRADE, currentUser.department.getId())) {
+        Perm.MATCHMAKER_GRAPH_READ, currentUser.department.getId())) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
@@ -182,7 +183,7 @@ public class GraphDataController {
   public ResponseEntity<Long> getTotalCompanyRequests(
       @RequestAttribute("loggedInUser") User currentUser) {
     if (!currentUser.hasPermissionAtDepartment(
-        Perm.COMPANY_MANAGE, currentUser.department.getId())) {
+        Perm.MATCHMAKER_GRAPH_READ, currentUser.department.getId())) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
     return ResponseEntity.ok(companyRequestRepository.count());
@@ -194,7 +195,7 @@ public class GraphDataController {
       @RequestParam(value = "till") @DateTimeFormat(pattern = "yyyy.MM.dd") LocalDate till,
       @RequestAttribute("loggedInUser") User currentUser) {
     if (!currentUser.hasPermissionAtDepartment(
-        Perm.COMPANY_GRADE, currentUser.department.getId())) {
+        Perm.MATCHMAKER_GRAPH_READ, currentUser.department.getId())) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
@@ -216,7 +217,7 @@ public class GraphDataController {
       @RequestParam(value = "till") @DateTimeFormat(pattern = "yyyy.MM.dd") LocalDate till,
       @RequestAttribute("loggedInUser") User currentUser) {
     if (!currentUser.hasPermissionAtDepartment(
-        Perm.COMPANY_GRADE, currentUser.department.getId())) {
+        Perm.MATCHMAKER_GRAPH_READ, currentUser.department.getId())) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
@@ -236,7 +237,7 @@ public class GraphDataController {
   public ResponseEntity<LinkedHashMap<String, Long>> getTotalCompaniesByBranch(
       @RequestAttribute("loggedInUser") User currentUser) {
     if (!currentUser.hasPermissionAtDepartment(
-        Perm.COMPANY_GRADE, currentUser.department.getId())) {
+        Perm.MATCHMAKER_GRAPH_READ, currentUser.department.getId())) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
@@ -258,9 +259,14 @@ public class GraphDataController {
           @RequestParam(value = "till") @DateTimeFormat(pattern = "yyyy.MM.dd") LocalDate till,
           @RequestAttribute("loggedInUser") User currentUser) {
     if (!currentUser.hasPermissionAtDepartment(
-            Perm.COMPANY_MANAGE, currentUser.department.getId())) {
+            Perm.COMPANY_GRAPH_READ, currentUser.department.getId())) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
+
+    if(!Objects.equals(currentUser.department.parentCompany.id, companyId)){
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+    }
+
     LinkedHashMap<String, Long> json = new LinkedHashMap<>();
     // For each month between from and till, get the amount of challenges
     for (LocalDate date = from;
@@ -279,7 +285,11 @@ public class GraphDataController {
           @PathVariable("companyId") Long companyId,
           @RequestAttribute("loggedInUser") User currentUser) {
     if (!currentUser.hasPermissionAtDepartment(
-            Perm.COMPANY_MANAGE, currentUser.department.getId())) {
+            Perm.COMPANY_GRAPH_READ, currentUser.department.getId())) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+    }
+
+    if(!Objects.equals(currentUser.department.parentCompany.id, companyId)){
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
@@ -298,7 +308,11 @@ public class GraphDataController {
           @RequestParam(value = "till") @DateTimeFormat(pattern = "yyyy.MM.dd") LocalDate till,
           @RequestAttribute("loggedInUser") User currentUser) {
     if (!currentUser.hasPermissionAtDepartment(
-            Perm.COMPANY_MANAGE, currentUser.department.getId())) {
+            Perm.COMPANY_GRAPH_READ, currentUser.department.getId())) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+    }
+
+    if(!Objects.equals(currentUser.department.parentCompany.id, companyId)){
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
@@ -319,7 +333,11 @@ public class GraphDataController {
           @PathVariable("companyId") Long companyId,
           @RequestAttribute("loggedInUser") User currentUser) {
     if (!currentUser.hasPermissionAtDepartment(
-            Perm.COMPANY_MANAGE, currentUser.department.getId())) {
+            Perm.COMPANY_GRAPH_READ, currentUser.department.getId())) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+    }
+
+    if(!Objects.equals(currentUser.department.parentCompany.id, companyId)){
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
