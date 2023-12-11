@@ -24,15 +24,17 @@ public class NotificationService {
     public void sendNotificationToUser(User user, Notification notification) {
         Notification newNotification = new Notification(notification);
         user.sendNotification(newNotification);
-        //Don't send email to test users
-        if(user.email == null || !user.email.contains("@email")){
-            try {
-                emailService.sendEmail(user.getEmail(), user.getName(), notification.getTitle(), notification.getDescription(), "Bekijk", "https://matchmakergroep3.nl" + notification.getLink());
-            } catch (MailjetException e) {
-                e.printStackTrace();
-            }
-        }
         userRepository.save(user);
+        //Don't send email to test users
+        if( user.email == null || user.email.contains("@email")){
+            return;
+        }
+
+        try {
+            emailService.sendEmail(user.getEmail(), user.getName(), notification.getTitle(), notification.getDescription(), "Bekijk", "https://matchmakergroep3.nl" + notification.getLink());
+        } catch (MailjetException e) {
+            e.printStackTrace();
+        }
     }
 
     public void sendSuccesfulCompanyGradeNotificationForOwner(User user){

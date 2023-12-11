@@ -47,7 +47,7 @@ public class ChallengeInputIntegrationTest {
 
   @Mock private Environment environment;
 
-  @Mock private UserRepository userRepository;
+  @Autowired private UserRepository userRepository;
 
   private Logger log = LoggerFactory.getLogger(ChallengeInputIntegrationTest.class);
   @Autowired private UserController userController;
@@ -156,14 +156,19 @@ public class ChallengeInputIntegrationTest {
   public void createReactionOnChallengeSuccesful() throws Exception {
     ChallengeInput input = new ChallengeInput("Challenge reaction");
     Challenge challenge = new Challenge("Reaction creation");
+    User u = new User();
+    u.name = "Test user";
+
+    User saved = userRepository.save(u);
+    challenge.setAuthor(saved);
     challenge.setVisibility(ChallengeVisibility.PUBLIC);
     challenge.setStatus(ChallengeStatus.OPEN_VOOR_IDEEEN);
     input.setText("Reaction!");
     input.setType(ChallengeReactionType.FEEDBACK);
-    challengeRepository.save(challenge);
+    Challenge savedChallenge = challengeRepository.save(challenge);
     mockMvc
         .perform(
-            MockMvcRequestBuilders.post("/reaction/create/" + challenge.getId())
+            MockMvcRequestBuilders.post("/reaction/create/" + savedChallenge.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(input)))
         .andExpect(status().isOk());
