@@ -35,7 +35,9 @@ public interface ChallengeRepository
 
   long countByStatus(ChallengeStatus status);
 
-  Iterable<Object> findChallengesByDepartment_ParentCompanyId(Long companyId);
+  long countByStatusAndDepartment_ParentCompanyId(ChallengeStatus status, Long companyId);
 
   Long countByCreatedAtBetween(LocalDate date, LocalDate localDate);
+
+  Long countByCreatedAtBetweenAndDepartment_ParentCompanyId(LocalDate date, LocalDate localDate, Long companyId);
 }
