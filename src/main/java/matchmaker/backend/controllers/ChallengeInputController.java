@@ -90,6 +90,7 @@ public class ChallengeInputController {
     checked.challenge = filledChallenge;
     checked.text = inputReaction.text;
     ChallengeInput created = repository.save(checked);
+    notificationService.sendAuthorNewReactionNotification(created);
     return ResponseEntity.status(HttpStatus.OK).body(created);
   }
 
