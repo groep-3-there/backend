@@ -25,7 +25,7 @@ public class NotificationService {
         Notification newNotification = new Notification(notification);
         user.sendNotification(newNotification);
         //Don't send email to test users
-        if(!user.email.contains("@email")){
+        if(user.email == null || !user.email.contains("@email")){
             try {
                 emailService.sendEmail(user.getEmail(), user.getName(), notification.getTitle(), notification.getDescription(), "Bekijk", "https://matchmakergroep3.nl" + notification.getLink());
             } catch (MailjetException e) {
