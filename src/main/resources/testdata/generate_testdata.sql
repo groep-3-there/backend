@@ -43,7 +43,9 @@ values (1, 'CHALLENGE_READ', 'Het bekijken van een challenge en reacties achterl
        (5, 'DEPARTMENT_CREATE', 'Het creeeren van een department', 'Creeer department'),
        (6, 'COMPANY_MANAGE', 'Het bewerken van een bedrijf', 'Bewerk bedrijf'),
        (7, 'COMPANY_GRADE', 'Het goedkeuren van een bedrijfsaanvraag', 'Goedkeuren bedrijfsaanvraag'),
-       (8, 'DEPARTMENT_MANAGE', 'Het beheren van en afdeling', 'Afdeling beheren');
+       (8, 'DEPARTMENT_MANAGE', 'Het beheren van en afdeling', 'Afdeling beheren'),
+       (9, 'COMPANY_GRAPH_READ', 'Het bekijken van grafieken binnen een bedrijf', 'Bedrijfsgrafieken bekijken'),
+       (10, 'MATCHMAKER_GRAPH_READ', 'Het bekijken van grafieken voor de beheerder van het platform', 'MatchMaker grafieken bekijken');
 
 
 insert into roles (id, created_at, is_matchmaker, name, is_department_admin, is_assignable)
@@ -64,19 +66,23 @@ values
 (3, 1),
 (3, 3),
 (3, 8),
+(3, 9),
 --     Company beheerder (heeft alles van department beheerder ook)
 (4, 1),
 (4, 3),
 (4, 5),
 (4, 6),
 (4, 8),
+(4, 9),
 -- Matchmaker
 (5, 1),
 (5, 3),
 (5, 5),
 (5, 6),
 (5, 7),
-(5, 8);
+(5, 8),
+(5, 9),
+(5, 10);
 
 insert into companies (banner_image_id, branch_id, created_at, id, owner_id, profile_image_id, info, name, tags, country_code)
 values (null, 7, '2020-01-01', 1, null, null,

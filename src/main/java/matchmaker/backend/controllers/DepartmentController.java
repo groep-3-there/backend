@@ -81,7 +81,7 @@ public class DepartmentController {
 
   @GetMapping("/department/company/{id}")
   public Iterable<Department> getAllDepartmentsForCompanyById(@PathVariable("id") Long id) {
-    // Get all the departments where partenCompany is equal to the id
+    // Get all the departments where parentCompany is equal to the id
     return departmentRepository.findAllByParentCompanyId(id);
   }
 

@@ -32,6 +32,8 @@ public class CompanyRequestController {
   @Autowired private UserRepository userRepository;
 
   @Autowired private CountryRepository countryRepository;
+  
+  @Autowired private NotificationService notificationService;
 
   @Autowired private NotificationService notificationService;
 
