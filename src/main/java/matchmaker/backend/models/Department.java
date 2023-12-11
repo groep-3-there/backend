@@ -5,8 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.lang.Nullable;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "departments")
@@ -24,7 +27,6 @@ public class Department {
 
   @ManyToOne public Company parentCompany;
   public LocalDate createdAt;
-
   public Department() {}
 
   public Department(String name, Company parentCompany) {
