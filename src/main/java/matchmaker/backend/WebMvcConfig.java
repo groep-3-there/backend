@@ -6,6 +6,8 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.List;
+
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
@@ -35,6 +37,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
             "https://www.matchmakergroep3.nl",
             "https://matchmakergroep3.nl",
             "https://groep-3-there.github.io")
-        .allowedMethods("*");
+        .allowedMethods("GET,POST,PUT,DELETE,OPTIONS");
   }
 }

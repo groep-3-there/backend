@@ -3,6 +3,7 @@ package matchmaker.backend.controllers;
 import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
+import matchmaker.backend.NotificationService;
 import matchmaker.backend.constants.ChallengeStatus;
 import matchmaker.backend.constants.Perm;
 import matchmaker.backend.models.*;
@@ -28,6 +29,9 @@ import java.util.Optional;
 public class ChallengeController {
 
   @Autowired private ChallengeRepository repository;
+
+  @Autowired
+  private NotificationService notificationService;
 
   @GetMapping("/challenge/{id}")
   public ResponseEntity<Challenge> getChallengeById(
@@ -83,6 +87,9 @@ public class ChallengeController {
     challengeInDatabase.imageAttachmentsIds = challengeToUpdate.imageAttachmentsIds;
 
     Challenge saved = repository.save(challengeInDatabase);
+
+    notificationService.sendChallengeUpdatedNotificationToAllCompanyFollowers(saved);
+
     return ResponseEntity.status(HttpStatus.OK).body(saved);
   }
 
@@ -163,6 +170,9 @@ public class ChallengeController {
 
     try {
       Challenge savedChallenge = repository.save(checkedChallenge);
+
+      notificationService.sendChallengeCreatedNotificationToAllCompanyFollowers(savedChallenge);
+
       return ResponseEntity.status(HttpStatus.OK).body(savedChallenge);
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);

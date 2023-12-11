@@ -1,5 +1,6 @@
 package matchmaker.backend.controllers;
 
+import matchmaker.backend.NotificationService;
 import matchmaker.backend.constants.DefaultRoleId;
 import matchmaker.backend.constants.Perm;
 import matchmaker.backend.models.*;
@@ -31,6 +32,8 @@ public class CompanyRequestController {
   @Autowired private UserRepository userRepository;
 
   @Autowired private CountryRepository countryRepository;
+  
+  @Autowired private NotificationService notificationService;
 
   @GetMapping("/company-request")
   public ResponseEntity<Page<CompanyRequest>> getRequests(
@@ -40,7 +43,6 @@ public class CompanyRequestController {
     if (!currentUser.hasPermission(Perm.COMPANY_GRADE)) {
       return null;
     }
-
     Sort sortOder = Sort.by("requestedAt").ascending();
 
     int pageSize = 3;
@@ -155,6 +157,8 @@ public class CompanyRequestController {
     companyRequest.owner.setDepartment(department);
     userRepository.save(companyRequest.owner);
 
+    notificationService.sendSuccesfulCompanyGradeNotificationForOwner(companyRequest.getOwner());
+
     return ResponseEntity.ok(null);
   }
 
@@ -176,6 +180,7 @@ public class CompanyRequestController {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
     CompanyRequest companyRequest = request.get();
+    notificationService.sendRejectedCompanyGradeNotificationForOwner(companyRequest.getOwner());
 
     // delete request
     repository.delete(companyRequest);

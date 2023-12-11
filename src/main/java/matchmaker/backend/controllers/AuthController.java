@@ -3,6 +3,7 @@ package matchmaker.backend.controllers;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
+import matchmaker.backend.NotificationService;
 import matchmaker.backend.RequestBodies.CreateUserFields;
 import matchmaker.backend.constants.DefaultRoleId;
 import matchmaker.backend.models.User;
@@ -27,6 +28,8 @@ public class AuthController {
 
   private Logger log = LoggerFactory.getLogger(AuthController.class);
   @Autowired private RoleRepository roleRepository;
+
+  @Autowired private NotificationService notificationService;
 
   @GetMapping("/auth/user")
   public User getLoggedInUser(
@@ -70,6 +73,7 @@ public class AuthController {
       checked.firebaseId = createReq.getUid();
 
       User saved = userRepository.save(checked);
+      notificationService.sendAccountCreatedNotification(saved);
       return ResponseEntity.ok().body(saved);
     } catch (FirebaseAuthException e) {
       throw new RuntimeException(e);
