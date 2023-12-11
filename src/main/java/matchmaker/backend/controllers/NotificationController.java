@@ -25,16 +25,19 @@ public class NotificationController {
     @Autowired
     private NotificationService notificationService;
 
-    @GetMapping("/notifications/matchmaker")
-    public Iterable<Notification> getNotifications(User currentUser) {
-        User user = userRepository.findById(1L).get();
-        return user.notifications;
-    }
-
     @PutMapping("/notifications/read/{id}")
-    public void readNotification(@PathVariable Long id) {
+    public boolean readNotification(@PathVariable Long id,@RequestAttribute(name = "loggedInUser") User currentUser) {
         Notification notification = notificationRepository.findById(id).get();
-        notification.setRead(true);
-        notificationRepository.save(notification);
+        if(currentUser == null) {
+            return false;
+        }
+        currentUser.notifications.forEach((n) -> {
+            if(n.id.equals(id)) {
+                notification.setRead(true);
+                notificationRepository.save(notification);
+            }
+        });
+        return true;
+
     }
 }

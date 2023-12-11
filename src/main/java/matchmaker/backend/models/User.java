@@ -38,6 +38,7 @@ public class User {
   public LocalDate acceptedTosDate;
   public String email;
   public String phoneNumber;
+  public boolean allowEmailNotifications;
 
   @ManyToOne public Role role;
 
@@ -89,6 +90,7 @@ public class User {
     this.phoneNumber = u.phoneNumber;
     this.role = u.role;
     this.department = u.department;
+    this.allowEmailNotifications = u.allowEmailNotifications;
   }
 
   public boolean hasPermission(String codename) {
