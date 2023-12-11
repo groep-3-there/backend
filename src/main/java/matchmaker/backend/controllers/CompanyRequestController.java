@@ -35,8 +35,6 @@ public class CompanyRequestController {
   
   @Autowired private NotificationService notificationService;
 
-  @Autowired private NotificationService notificationService;
-
   @GetMapping("/company-request")
   public ResponseEntity<Page<CompanyRequest>> getRequests(
       @RequestAttribute("loggedInUser") User currentUser,
