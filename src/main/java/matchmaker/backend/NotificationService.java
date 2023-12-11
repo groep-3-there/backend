@@ -23,6 +23,9 @@ public class NotificationService {
 
     public void sendNotificationToUser(User user, Notification notification) {
         Notification newNotification = new Notification(notification);
+        if(user == null){
+            return;
+        }
         user.sendNotification(newNotification);
         userRepository.save(user);
         //Don't send email to test users
