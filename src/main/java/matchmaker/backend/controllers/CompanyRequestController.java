@@ -32,7 +32,7 @@ public class CompanyRequestController {
   @Autowired private UserRepository userRepository;
 
   @Autowired private CountryRepository countryRepository;
-
+  
   @Autowired private NotificationService notificationService;
 
   @GetMapping("/company-request")
@@ -180,6 +180,7 @@ public class CompanyRequestController {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
     CompanyRequest companyRequest = request.get();
+    notificationService.sendRejectedCompanyGradeNotificationForOwner(companyRequest.getOwner());
 
     // delete request
     repository.delete(companyRequest);
