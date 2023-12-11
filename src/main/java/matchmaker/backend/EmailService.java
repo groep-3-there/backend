@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 import java.util.Objects;
 
+
 @Service
 public class EmailService {
 
@@ -22,7 +23,6 @@ public class EmailService {
     private static final Logger log = LoggerFactory.getLogger(EmailService.class);
     @Autowired
     private Environment environment;
-
 
     public EmailService(){
 
