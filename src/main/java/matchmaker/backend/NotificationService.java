@@ -21,14 +21,6 @@ public class NotificationService {
     @Autowired
     private EmailService emailService;
 
-    public void sendNotificationToAllFollowers(Company company, Notification notification) {
-        for (Long follower : company.getFollowerIds()) {
-            Notification newNotification = new Notification(notification);
-            User user = userRepository.findById(follower).get();
-            sendNotificationToUser(user, newNotification);
-        }
-    }
-
     public void sendNotificationToUser(User user, Notification notification) {
         Notification newNotification = new Notification(notification);
         user.sendNotification(newNotification);
@@ -40,7 +32,6 @@ public class NotificationService {
                 e.printStackTrace();
             }
         }
-
         userRepository.save(user);
     }
 
@@ -70,10 +61,17 @@ public class NotificationService {
 
     public void sendChallengeCreatedNotificationToAllCompanyFollowers(Challenge challenge) {
         Notification notification = new Notification();
-        notification.setTitle("🌟Nieuwe challenge van " + challenge.getDepartment().getParentCompany().getName());
+        notification.setTitle("✨Nieuwe challenge van " + challenge.getDepartment().getParentCompany().getName());
         notification.setDescription(challenge.department.parentCompany.getName() + " heeft een nieuwe challenge geplaatst!");
         notification.setLink("/challenge/" + challenge.getId());
-        sendNotificationToAllFollowers(challenge.getDepartment().getParentCompany(), notification);
+        for (Long follower : challenge.getDepartment().getParentCompany().getFollowerIds()) {
+            User user = userRepository.findById(follower).get();
+            Notification newNotificationForUser = new Notification(notification);
+            //Only send notification to users who are allowed see the challenge
+            if(challenge.canBeSeenBy(user)){
+                sendNotificationToUser(user, newNotificationForUser);
+            }
+        }
     }
 
     public void sendChallengeUpdatedNotificationToAllCompanyFollowers(Challenge challenge) {
@@ -81,7 +79,14 @@ public class NotificationService {
         notification.setTitle(challenge.getDepartment().getParentCompany().getName() + " heeft een challenge bijgewerkt");
         notification.setDescription("✒️De challenge \"" + challenge.getTitle() + "\" is bijgewerkt!");
         notification.setLink("/challenge/" + challenge.getId());
-        sendNotificationToAllFollowers(challenge.getDepartment().getParentCompany(), notification);
+        for (Long follower : challenge.getDepartment().getParentCompany().getFollowerIds()) {
+            User user = userRepository.findById(follower).get();
+            Notification newNotificationForUser = new Notification(notification);
+            //Only send notification to users who are allowed see the challenge
+            if(challenge.canBeSeenBy(user)){
+                sendNotificationToUser(user, newNotificationForUser);
+            }
+        }
     }
 
     public void sendUsersChosenChallengeNotification(ChallengeInput reaction){
@@ -90,5 +95,21 @@ public class NotificationService {
         notification.setDescription(reaction.getChallenge().getDepartment().getParentCompany().getName() + " heeft uw reactie verkozen als antwoord!");
         notification.setLink("/challenge/" + reaction.getChallenge().getId());
         sendNotificationToUser(reaction.getAuthor(), notification);
+    }
+
+    public void sendAuthorNewReactionNotification(ChallengeInput reaction){
+        Notification notification = new Notification();
+        notification.setTitle("✨Nieuwe reactie op jouw challenge");
+        notification.setDescription(reaction.getAuthor().getName() + " heeft gereageerd op jouw challenge!");
+        notification.setLink("/challenge/" + reaction.getChallenge().getId());
+        sendNotificationToUser(reaction.getChallenge().getAuthor(), notification);
+    }
+
+    public void sendAccountCreatedNotification(User user){
+        Notification notification = new Notification();
+        notification.setTitle("✨Welkom bij het MatchMaker platform!");
+        notification.setDescription("Wij zijn blij dat u gekozen heeft voor MatchMaker, heeft u al een leuke challenge gevonden?");
+        notification.setLink("/challenges");
+        sendNotificationToUser(user, notification);
     }
 }
