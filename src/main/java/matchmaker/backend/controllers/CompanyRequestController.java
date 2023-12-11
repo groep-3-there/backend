@@ -32,7 +32,7 @@ public class CompanyRequestController {
   @Autowired private UserRepository userRepository;
 
   @Autowired private CountryRepository countryRepository;
-
+  
   @Autowired private NotificationService notificationService;
 
   @GetMapping("/company-request")
