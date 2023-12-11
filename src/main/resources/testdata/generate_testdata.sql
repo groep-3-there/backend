@@ -98,18 +98,18 @@ values ('2020-01-01', 1, 1, 'Management'),
        ('2023-01-01', 3, 3, 'MatchMaker Admins');
 
 insert into users (is_email_public, is_phone_number_public, accepted_tos_date, avatar_image_id, created_at,
-                   department_id, id, last_seen, role_id, email, firebase_id, info, name, phone_number, tags)
+                   department_id, id, last_seen, role_id, email, firebase_id, info, name, phone_number, tags, allow_email_notifications)
 values (true, true, '2020-01-01', null, '2020-01-01', 3, 1, null, 5, 'matchmaker@mail.com',
         '9qhopxJIdmUjwbBuQHIYPOeheQh2', 'Ik ben de beheerder van Matchmaker', 'Martin Molema', '0630384453',
-        'admin,matchmaker,platform'),
+        'admin,matchmaker,platform', true),
        (true, true, '2020-01-01', null, '2020-01-01', 1, 2, null, 2, 'challenger@kapper.nl',
         '9gJQuvQ2h8PxIvVPae8oTN9ukMW2', 'Hoiii ik ben Eline, enthousiaste kapster.', 'Eline de Groot', '0630384453',
-        'kapper,technologie,innovatie'),
+        'kapper,technologie,innovatie', true),
        (true, true, '2020-01-01', null, '2020-01-01', 1, 3, null, 3, 'medewerker@kapper.nl',
         'SR3TD4Jf2RZ5qbNNF8kcIBu6kjl1', 'Hallo ik ben Jelle, en loop sinds kort stage bij Kapper Eline', 'Jelle Jacobs',
-        '0630384453', 'stage,kapper,enthousiast,technologie'),
+        '0630384453', 'stage,kapper,enthousiast,technologie', true),
        (true, true, '2020-01-01', null, '2020-01-01', 1, 4, null, 4, 'admin@kapper.nl', 'ULQK7SLhTbNZERR3jFk0hSlRtub2',
-        'Ik doe beheerzaken voor Eline haar kapperszaak', 'Adminline', '0630384453', 'kappers');
+        'Ik doe beheerzaken voor Eline haar kapperszaak', 'Adminline', '0630384453', 'kappers', true);
 
 
 update companies

@@ -1,6 +1,5 @@
 package matchmaker.backend;
 
-
 import com.mailjet.client.errors.MailjetException;
 import matchmaker.backend.models.*;
 import matchmaker.backend.repositories.CompanyRepository;
@@ -99,7 +98,8 @@ public class NotificationService {
         Notification notification = new Notification();
         notification.setTitle("📖Jouw idee is gekozen door " + reaction.getChallenge().getDepartment().getParentCompany().getName());
         notification.setDescription(reaction.getChallenge().getDepartment().getParentCompany().getName() + " heeft uw reactie verkozen als antwoord!");
-        notification.setLink("/challenge/" + reaction.getChallenge().getId());
+        notification.setLink("/challenge/" + reaction.getChallenge().getId() + "?scrollTo=" + reaction.getId());
+
         sendNotificationToUser(reaction.getAuthor(), notification);
     }
 
@@ -107,7 +107,7 @@ public class NotificationService {
         Notification notification = new Notification();
         notification.setTitle("✨Nieuwe reactie op jouw challenge");
         notification.setDescription(reaction.getAuthor().getName() + " heeft gereageerd op jouw challenge!");
-        notification.setLink("/challenge/" + reaction.getChallenge().getId());
+        notification.setLink("/challenge/" + reaction.getChallenge().getId() + "?scrollTo=" + reaction.getId());
         sendNotificationToUser(reaction.getChallenge().getAuthor(), notification);
     }
 

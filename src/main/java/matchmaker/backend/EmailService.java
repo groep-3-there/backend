@@ -5,22 +5,37 @@ import com.mailjet.client.MailjetClient;
 import com.mailjet.client.errors.MailjetException;
 import com.mailjet.client.transactional.*;
 import com.mailjet.client.transactional.response.SendEmailsResponse;
+import matchmaker.backend.models.Challenge;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class EmailService {
 
     MailjetClient client;
+    private static final Logger log = LoggerFactory.getLogger(EmailService.class);
+    @Autowired
+    private Environment environment;
+
+
     public EmailService(){
 
     }
 
     public void sendEmail(String targetEmail, String targetName, String title, String subtitle, String buttonText, String buttonClickUrl) throws MailjetException {
+        if (Objects.equals(environment.getProperty("spring.profiles.active"), "test")){
+            log.warn("EmailService.sendEmail() called in test environment, not sending email");
+            return;
+        }
         ClientOptions options = ClientOptions.builder()
-                .apiKey("7dcdd090e3db1ec214d8e7c71d82006e")
-                .apiSecretKey("f66b5514baaf89d83588fde64717d4e4")
+                .apiKey("")
+                .apiSecretKey("")
                 .build();
 
         this.client = new MailjetClient(options);

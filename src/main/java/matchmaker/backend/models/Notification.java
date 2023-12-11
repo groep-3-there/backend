@@ -18,7 +18,7 @@ public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "notification_id")
     @TableGenerator(name = "notification_id", initialValue = 1000)
-    private Long id;
+    public Long id;
 
     public String title;
     public String description;
