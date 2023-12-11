@@ -10,4 +10,6 @@ public interface ChallengeInputRepository extends CrudRepository<ChallengeInput,
   List<ChallengeInput> findAllByChallengeId(Long challengeId);
 
   Long countByCreatedAtBetween(LocalDate date, LocalDate localDate);
+
+  Long countByCreatedAtBetweenAndChallenge_Department_ParentCompanyId(LocalDate date, LocalDate localDate, Long companyId);
 }

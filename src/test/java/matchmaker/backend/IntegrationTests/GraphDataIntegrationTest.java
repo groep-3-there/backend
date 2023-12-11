@@ -1,7 +1,9 @@
 package matchmaker.backend.IntegrationTests;
 
+import com.rometools.utils.Lists;
 import matchmaker.backend.constants.ChallengeStatus;
 import matchmaker.backend.constants.ChallengeReactionType;
+import matchmaker.backend.constants.Perm;
 import matchmaker.backend.models.*;
 import matchmaker.backend.repositories.*;
 import org.junit.jupiter.api.Test;
@@ -14,6 +16,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -38,6 +42,8 @@ public class GraphDataIntegrationTest {
   @Autowired private ChallengeInputRepository challengeInputRepository;
 
   @Autowired private CompanyRequestRepository companyRequestRepository;
+
+  @Autowired private PermissionRepository permissionRepository;
 
   private void setup() {
     Optional<Role> matchmaker = roleRepository.findById(5L);
@@ -261,25 +267,6 @@ public class GraphDataIntegrationTest {
   }
 
   @Test
-  public void testGetTotalChallengesForCompany() throws Exception {
-    setup();
-
-    Company company = (Company) companyRepository.findByName("Graph data Company").get(0);
-
-    mockMvc
-        .perform(
-            MockMvcRequestBuilders.get(
-                    "/graph-data/companies/" + company.getId() + "/challenges/total")
-                .contentType("application/json"))
-        .andExpect(status().isOk())
-        .andExpect(
-            result -> {
-              String response = result.getResponse().getContentAsString();
-              assert response.contains("4");
-            });
-  }
-
-  @Test
   public void testGetTotalCompanyRequests() throws Exception {
     setup();
 
@@ -329,5 +316,110 @@ public class GraphDataIntegrationTest {
                 .contentType("application/json")
                 .param("loggedOut", "true"))
         .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @Transactional
+  public void testgetChallengesForRangeOfMonthsFilterAndCompanyId() throws Exception {
+    setup();
+
+    User user = userRepository.findById(1L).get();
+
+    Company company = (Company) companyRepository.findByName("Graph data Company").get(0);
+    Iterable<Department> departments = departmentRepository.findAllByParentCompanyId(company.id);
+
+    departments.forEach(dep -> user.department = dep);
+    userRepository.save(user);
+
+    LocalDate now = LocalDate.now();
+    String from = now.minusMonths(3).toString();
+    String till = now.toString();
+
+    mockMvc
+            .perform(
+                    MockMvcRequestBuilders.get(
+                                    "/graph-data/company/" + company.getId() + "/challenges/filter/date" + "?from=" + from + "&till=" + till)
+                            .contentType("application/json"))
+            .andExpect(status().isOk())
+            .andExpect(
+                    result -> {
+                      String response = result.getResponse().getContentAsString();
+                      assert response.contains(now.minusMonths(3).getMonth().name() + "-" + now.getYear() + "\":2");
+                    });
+  }
+
+  @Test
+  @Transactional
+  public void testgetChallengesByStatusCountAndCompanyId() throws Exception {
+    setup();
+
+    User user = userRepository.findById(1L).get();
+
+    Company company = (Company) companyRepository.findByName("Graph data Company").get(0);
+    Iterable<Department> departments = departmentRepository.findAllByParentCompanyId(company.id);
+
+    departments.forEach(dep -> user.department = dep);
+    userRepository.save(user);
+
+    mockMvc
+            .perform(
+                    MockMvcRequestBuilders.get(
+                                    "/graph-data/company/" + company.getId() + "/challenges/status")
+                            .contentType("application/json"))
+            .andExpect(status().isOk())
+            .andExpect(
+                    result -> {
+                      String response = result.getResponse().getContentAsString();
+                      assert response.contains("{\"OPEN_VOOR_IDEEEN\":1,\"IN_UITVOERING\":1,\"AFGEROND\":1,\"GEARCHIVEERD\":1}");
+                    });
+  }
+
+  @Test
+  @Transactional
+  public void getUsersByDepartmentsAndCompanyId() throws Exception {
+    setup();
+
+    User user = userRepository.findById(1L).get();
+
+    Company company = (Company) companyRepository.findByName("Graph data Company").get(0);
+    Iterable<Department> departments = departmentRepository.findAllByParentCompanyId(company.id);
+
+    departments.forEach(dep -> user.department = dep);
+    userRepository.save(user);
+
+    mockMvc
+            .perform(
+                    MockMvcRequestBuilders.get(
+                                    "/graph-data/company/" + company.getId() + "/departments/users")
+                            .contentType("application/json"))
+            .andExpect(status().isOk())
+            .andExpect(
+                    result -> {
+                      String response = result.getResponse().getContentAsString();
+                      assert response.contains("{\"Graph data Department\":1}");
+                    });
+  }
+  @Test
+  @Transactional
+  public void getUsersByDepartmentsAndCompanyIdWhenNoPermission() throws Exception {
+    setup();
+
+    User user = userRepository.findById(1L).get();
+    user.role.permissions = new ArrayList<>();
+    user.role.isMatchmaker = false;
+
+    Company company = (Company) companyRepository.findByName("Graph data Company").get(0);
+    Iterable<Department> departments = departmentRepository.findAllByParentCompanyId(company.id);
+
+    departments.forEach(dep -> user.department = dep);
+    userRepository.save(user);
+
+    mockMvc
+            .perform(
+                    MockMvcRequestBuilders.get(
+                                    "/graph-data/company/" + company.getId() + "/departments/users")
+                            .contentType("application/json"))
+            .andExpect(status().isUnauthorized());
+
   }
 }
