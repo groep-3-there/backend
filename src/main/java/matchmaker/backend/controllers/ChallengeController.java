@@ -259,9 +259,10 @@ public class ChallengeController {
       if (currentUser == null) {
         predicates.add(builder.equal(root.get("visibility"), 2));
       } else {
-        Predicate visibilityPredicate = builder.equal(root.get("visibility"), 2);
+        Predicate visibilityPredicate1 = builder.equal(root.get("visibility"), 1);
+        Predicate visibilityPredicate2 = builder.equal(root.get("visibility"), 2);
         Predicate departmentPredicate = builder.equal(root.get("department"), currentUser.department);
-        predicates.add(builder.or(visibilityPredicate, departmentPredicate));
+        predicates.add(builder.or(visibilityPredicate1, visibilityPredicate2, departmentPredicate));
       }
 
       return builder.and(predicates.toArray(new Predicate[0]));
