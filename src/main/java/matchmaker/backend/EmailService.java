@@ -34,8 +34,8 @@ public class EmailService {
             return;
         }
         ClientOptions options = ClientOptions.builder()
-                .apiKey("7dcdd090e3db1ec214d8e7c71d82006e")
-                .apiSecretKey("f66b5514baaf89d83588fde64717d4e4")
+                .apiKey(System.getenv("MAILJET_API_KEY"))
+                .apiSecretKey(System.getenv("MAILJET_API_SECRET"))
                 .build();
 
         this.client = new MailjetClient(options);
