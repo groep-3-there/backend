@@ -32,6 +32,9 @@ public class NotificationService {
         if( user.email == null || user.email.contains("@email")){
             return;
         }
+        if(!user.allowEmailNotifications){
+            return;
+        }
 
         try {
             emailService.sendEmail(user.getEmail(), user.getName(), notification.getTitle(), notification.getDescription(), "Bekijk", "https://matchmakergroep3.nl" + notification.getLink());

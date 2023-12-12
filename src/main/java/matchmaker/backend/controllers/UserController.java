@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 
 import static matchmaker.backend.constants.Regex.EMAIL;
@@ -36,6 +37,30 @@ public class UserController {
     }
     User privacyChecked = user.get().viewAs(currentUser);
     return ResponseEntity.ok(privacyChecked);
+  }
+
+  @PutMapping("/user/{id}/notificationPreferences")
+  public ResponseEntity<User> updateUserNotificationPreference(
+      @PathVariable("id") Long id,
+      @RequestBody Map<String, Object> preferences,
+      @RequestAttribute(name = "loggedInUser") User currentUser) {
+    if (currentUser == null || !currentUser.getId().equals(id)) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+    }
+
+    Optional<User> targetUser = userRepository.findById(id);
+    if (targetUser.isEmpty()) { //this should never happen because we checked if the user is logged in
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    }
+    User checkedUser = targetUser.get();
+    if(preferences.get("email") == null){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
+    checkedUser.allowEmailNotifications = preferences.get("email").equals(true);
+    // save the user to the database
+    User saveUser = userRepository.save(checkedUser);
+
+    return ResponseEntity.status(HttpStatus.OK).body(saveUser);
   }
 
   @PutMapping("/user/{id}")
