@@ -14,8 +14,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.support.PageableExecutionUtils;
-import org.springframework.data.util.Streamable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -191,7 +189,7 @@ public class ChallengeController {
    * @param page - the page number to return / if empty, the first page (0) will be returned
    */
   @GetMapping("/challenge/search")
-  public Streamable<Challenge> search(
+  public Page<Challenge> search(
       @RequestParam(value = "query", required = false) String query,
       @RequestParam(value = "company", required = false) List<String> company,
       @RequestParam(value = "branche", required = false) List<String> branche,
@@ -199,11 +197,10 @@ public class ChallengeController {
       @RequestParam(value = "includeArchived", required = false) boolean includeArchived,
       @RequestParam(value = "page", defaultValue = "0") int page,
       @RequestAttribute(name = "loggedInUser", required = false) User currentUser) {
-    Specification<Challenge> specification =
-        getSpecification(query, company, branche, includeArchived);
 
-    // sort the results in this order: the most recent ones and the ones where the deadline is
-    // closest
+    Specification<Challenge> specification = getSpecification(query, company, branche, includeArchived, currentUser);
+
+    //sort the results in this order: the most recent ones and the ones where the deadline is closest
     Sort sortOrder = Sort.by(Sort.Direction.ASC, "createdAt");
 
     if ("Newest_first".equalsIgnoreCase(sort)) {
@@ -217,36 +214,16 @@ public class ChallengeController {
     // Create a Pageable object to control pagination
     Pageable pageable = PageRequest.of(page, pageSize, sortOrder); // Page size is set to 10
 
-    // Use a repository method to find challenges with the criteria, sorted and paginated
-    Iterable<Challenge> challenges = repository.findAll(specification);
-    Streamable<Challenge> filteredForUser =
-        Streamable.of(challenges).filter(challenge -> challenge.canBeSeenBy(currentUser));
-    Page<Challenge> pageFilled =
-        PageableExecutionUtils.getPage(
-            filteredForUser.toList(), pageable, () -> Streamable.of(challenges).toList().size());
-    return pageFilled;
-  }
-
-  /**
-   * gets the amount of results for the search criteria (filters)
-   *
-   * @param query - words to search for in the title, tags, description and summary
-   * @param company - the company name to search for
-   */
-  @GetMapping("/challenge/search/count")
-  public long searchCount(
-      @RequestParam(value = "query", required = false) String query,
-      @RequestParam(value = "company", required = false) List<String> company,
-      @RequestParam(value = "includeArchived", required = false) boolean includeArchived,
-      @RequestParam(value = "branche", required = false) List<String> branche) {
-    Specification<Challenge> specification =
-        getSpecification(query, company, branche, includeArchived);
-    return repository.findAll(specification).size();
+    return repository.findAll(specification, pageable);
   }
 
   /** / Private method to create a Specification object based on the search criteria (filters) */
   private Specification<Challenge> getSpecification(
-      String query, List<String> company, List<String> branche, boolean includeArchived) {
+      String query,
+      List<String> company,
+      List<String> branche,
+      boolean includeArchived,
+      User currentUser) {
     return (root, query1, builder) -> {
       List<Predicate> predicates = new ArrayList<>();
 
@@ -277,6 +254,15 @@ public class ChallengeController {
 
       if (!includeArchived) {
         predicates.add(builder.notEqual(root.get("status"), ChallengeStatus.GEARCHIVEERD));
+      }
+
+      if (currentUser == null) {
+        predicates.add(builder.equal(root.get("visibility"), 2));
+      } else {
+        Predicate visibilityPredicate1 = builder.equal(root.get("visibility"), 1);
+        Predicate visibilityPredicate2 = builder.equal(root.get("visibility"), 2);
+        Predicate departmentPredicate = builder.equal(root.get("department"), currentUser.department);
+        predicates.add(builder.or(visibilityPredicate1, visibilityPredicate2, departmentPredicate));
       }
 
       return builder.and(predicates.toArray(new Predicate[0]));
