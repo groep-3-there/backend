@@ -68,7 +68,6 @@ public class RssFeedView extends AbstractRssFeedView {
               item.setExpirationDate(
                 Date.from(challenge.getEndDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
           }
-          System.out.println(item.getExpirationDate());
           item.setAuthor(challenge.getAuthor().getName());
           Description description = new Description();
           description.setValue(challenge.getSummary());
