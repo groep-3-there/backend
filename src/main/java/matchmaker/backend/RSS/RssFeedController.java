@@ -27,8 +27,8 @@ public class RssFeedController {
       @RequestParam(value = "status", required = false) ChallengeStatus status,
       @RequestParam(value = "created", required = false) @DateTimeFormat(pattern = "yyyy.MM.dd")
           LocalDate created) {
-    if(created != null) {
-      created = created.minusDays(1);
+    if(created != null){
+        created = created.minusDays(1);
     }
     rssFeedView.setStatus(status);
     rssFeedView.setCreated(created);
