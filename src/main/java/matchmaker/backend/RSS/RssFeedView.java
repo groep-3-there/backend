@@ -64,8 +64,10 @@ public class RssFeedView extends AbstractRssFeedView {
           item.setLink("http://matchmakergroep3.nl/challenge/" + challenge.getId());
           item.setPubDate(
               Date.from(challenge.getEndDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
-          item.setExpirationDate(
-              Date.from(challenge.getEndDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+          if(challenge.getEndDate() != null){
+              item.setExpirationDate(
+                Date.from(challenge.getEndDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+          }
           item.setAuthor(challenge.getAuthor().getName());
           Description description = new Description();
           description.setValue(challenge.getSummary());
