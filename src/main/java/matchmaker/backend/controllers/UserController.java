@@ -93,8 +93,9 @@ public class UserController {
     checkedUser.setEmail(user.email);
 
     // check if the phoneNumber is not blank or null or valid
-    if (user.getPhoneNumber() == null || !PHONENUMBER.matcher(user.getPhoneNumber()).matches())
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    if (user.getPhoneNumber() != null && !PHONENUMBER.matcher(user.getPhoneNumber()).matches()){
+      checkedUser.phoneNumber = user.phoneNumber;
+    }
     checkedUser.setPhoneNumber(user.phoneNumber);
 
     checkedUser.setInfo(user.info);
