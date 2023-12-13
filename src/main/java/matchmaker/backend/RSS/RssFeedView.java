@@ -63,7 +63,7 @@ public class RssFeedView extends AbstractRssFeedView {
           item.setTitle(challenge.getTitle());
           item.setLink("http://matchmakergroep3.nl/challenge/" + challenge.getId());
           item.setPubDate(
-              Date.from(challenge.getEndDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+              Date.from(challenge.getCreatedAt().atStartOfDay(ZoneId.systemDefault()).toInstant()));
           if(challenge.getEndDate() != null){
               item.setExpirationDate(
                 Date.from(challenge.getEndDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
