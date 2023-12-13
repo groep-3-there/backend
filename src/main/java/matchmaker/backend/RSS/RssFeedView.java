@@ -50,11 +50,11 @@ public class RssFeedView extends AbstractRssFeedView {
               ChallengeVisibility.PUBLIC, status);
     } else if (created != null && status == null) {
       challenges =
-          challengeRepository.findChallengesByVisibilityIsAndCreatedAt(
+          challengeRepository.findChallengesByVisibilityIsAndCreatedAtAfter(
               ChallengeVisibility.PUBLIC, created);
     } else {
       challenges =
-          challengeRepository.findChallengesByVisibilityIsAndStatusIsAndCreatedAt(
+          challengeRepository.findChallengesByVisibilityIsAndStatusIsAndCreatedAtAfter(
               ChallengeVisibility.PUBLIC, status, created);
     }
     challenges.forEach(
@@ -68,6 +68,7 @@ public class RssFeedView extends AbstractRssFeedView {
               item.setExpirationDate(
                 Date.from(challenge.getEndDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
           }
+          System.out.println(item.getExpirationDate());
           item.setAuthor(challenge.getAuthor().getName());
           Description description = new Description();
           description.setValue(challenge.getSummary());
