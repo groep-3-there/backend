@@ -25,10 +25,10 @@ public interface ChallengeRepository
   List<Challenge> findChallengesByVisibilityIsAndStatusIs(
       ChallengeVisibility aPublic, ChallengeStatus status);
 
-  List<Challenge> findChallengesByVisibilityIsAndCreatedAt(
+  List<Challenge> findChallengesByVisibilityIsAndCreatedAtAfter(
       ChallengeVisibility aPublic, LocalDate createdAtDate);
 
-  List<Challenge> findChallengesByVisibilityIsAndStatusIsAndCreatedAt(
+  List<Challenge> findChallengesByVisibilityIsAndStatusIsAndCreatedAtAfter(
       ChallengeVisibility aPublic, ChallengeStatus status, LocalDate createdAtDate);
 
   long count();
