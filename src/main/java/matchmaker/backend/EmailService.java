@@ -43,8 +43,8 @@ public class EmailService {
         TransactionalEmail message1 = TransactionalEmail
                 .builder()
                 .to(new SendContact(targetEmail, targetName))
-                .from(new SendContact("matchmakergroep3@gmail.com", "Matchmaker"))
-                .templateID(5427584L)
+                .from(new SendContact("eelco224@hotmail.com", "Matchmaker"))
+                .templateID(5441264L)
                 .templateLanguage(true)
                 .variables(Map.of("title", title, "subtitle", subtitle, "ctoText", buttonText, "ctoUrl", buttonClickUrl))
                 .trackOpens(TrackOpens.ENABLED)
