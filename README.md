@@ -2,4 +2,4 @@
 
 Backend applicatie voor project groep 3.
 
-Copyright Florijn Munster, Eelco Jansma, Luke van de Pol, Tjerk Venema & Rik Wildschut
+Copyright Florijn Munster, Eelco Jansma, Luke van de Pol, Jelle Blaeser, Tjerk Venema & Rik Wildschut
