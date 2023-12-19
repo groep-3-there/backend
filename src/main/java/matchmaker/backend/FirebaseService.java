@@ -16,12 +16,12 @@ public class FirebaseService {
 
   @Bean
   public FirebaseApp firebaseApp() throws IOException {
-    InputStream serviceAccount = this.getClass().getResourceAsStream("/firebase_config.json");
+    InputStream serviceAccount = this.getClass().getResourceAsStream("");
 
     FirebaseOptions options =
         new FirebaseOptions.Builder()
             .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-            .setDatabaseUrl("https://your-database-url.firebaseio.com")
+            .setDatabaseUrl("")
             .build();
 
     return FirebaseApp.initializeApp(options);
