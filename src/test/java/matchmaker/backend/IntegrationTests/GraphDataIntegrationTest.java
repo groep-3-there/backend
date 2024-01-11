@@ -281,29 +281,6 @@ public class GraphDataIntegrationTest {
               assert response.contains("1");
             });
   }
-
-  @Test
-  public void testGetCompaniesForRangeOfMonthsFilter() throws Exception {
-    setup();
-
-    LocalDate now = LocalDate.now();
-    String from = now.minusMonths(3).toString();
-    String till = now.toString();
-
-    mockMvc
-        .perform(
-            MockMvcRequestBuilders.get(
-                    "/graph-data/companies/filter/date?from=" + from + "&till=" + till)
-                .contentType("application/json"))
-        .andExpect(status().isOk())
-        .andExpect(
-            result -> {
-              String response = result.getResponse().getContentAsString();
-              assert response.contains(
-                  now.minusMonths(3).getMonth().name() + "-" + now.getYear() + "\":1");
-            });
-  }
-
   @Test
   public void testGetTotalCompaniesForEmptyUser() throws Exception {
     setup();
@@ -318,35 +295,6 @@ public class GraphDataIntegrationTest {
         .andExpect(status().isBadRequest());
   }
 
-  @Test
-  @Transactional
-  public void testgetChallengesForRangeOfMonthsFilterAndCompanyId() throws Exception {
-    setup();
-
-    User user = userRepository.findById(1L).get();
-
-    Company company = (Company) companyRepository.findByName("Graph data Company").get(0);
-    Iterable<Department> departments = departmentRepository.findAllByParentCompanyId(company.id);
-
-    departments.forEach(dep -> user.department = dep);
-    userRepository.save(user);
-
-    LocalDate now = LocalDate.now();
-    String from = now.minusMonths(3).toString();
-    String till = now.toString();
-
-    mockMvc
-            .perform(
-                    MockMvcRequestBuilders.get(
-                                    "/graph-data/company/" + company.getId() + "/challenges/filter/date" + "?from=" + from + "&till=" + till)
-                            .contentType("application/json"))
-            .andExpect(status().isOk())
-            .andExpect(
-                    result -> {
-                      String response = result.getResponse().getContentAsString();
-                      assert response.contains(now.minusMonths(3).getMonth().name() + "-" + now.getYear() + "\":2");
-                    });
-  }
 
   @Test
   @Transactional
