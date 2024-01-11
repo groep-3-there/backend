@@ -16,12 +16,6 @@ public class LoadDatabase implements CommandLineRunner {
 
   @Autowired private JdbcTemplate jdbcTemplate;
 
-  @Autowired private RoleRepository roleRepository;
-
-  @Autowired private UserRepository userRepository;
-
-  @Autowired private PermissionRepository permissionRepository;
-
   @Override
   public void run(String... args) throws Exception {
     if (!testDataExists()) {

@@ -67,6 +67,4 @@ public class RoleController {
         Role saved = roleRepository.save(role);
         return ResponseEntity.ok(saved);
     }
-
-
 }
